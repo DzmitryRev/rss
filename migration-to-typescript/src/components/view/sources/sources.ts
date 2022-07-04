@@ -1,7 +1,7 @@
 import { SourcesType } from "../../controller/controller";
 import "./sources.css";
 
-interface ISources {
+export interface ISources {
     draw(data: SourcesType[]): void;
 }
 
