@@ -1,18 +1,26 @@
-import AppController from "../controller/controller";
+import AppController, { IAppController } from "../controller/controller";
 import { AppView } from "../view/appView";
 
-class App {
+interface IApp {
+    controller: IAppController;
+    view: any;
+    start(): void;
+}
+
+class App implements IApp {
+    controller: IAppController;
+    view: any;
     constructor() {
         this.controller = new AppController();
         this.view = new AppView();
     }
 
-    start() {
-        document
-            .querySelector(".sources")
-            .addEventListener("click", (e) =>
-                this.controller.getNews(e, (data) => this.view.drawNews(data))
-            );
+    start(): void {
+        const sources: Element | null = document.querySelector(".sources");
+
+        sources?.addEventListener("click", (e) =>
+            this.controller.getNews(e, (data) => this.view.drawNews(data))
+        );
         this.controller.getSources((data) => this.view.drawSources(data));
     }
 }

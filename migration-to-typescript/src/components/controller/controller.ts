@@ -1,6 +1,6 @@
 import AppLoader from "./appLoader";
 
-interface IAppController {
+export interface IAppController {
     getSources(callback: (data?: any) => void): void;
     getNews(e: Event, callback: (data?: any) => void): void;
 }
