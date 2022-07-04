@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
         "module": "ES6",
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "strict": true,
-        "noEmitOnError": true,
+        "noEmitOnError": false,
         "allowJs": true
     },
     "include": ["src"]
