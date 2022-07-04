@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
+        "module": "ES6",
         "noImplicitAny": true,
         "strict": true,
-        "noEmitOnError": true
-    }
+        "noEmitOnError": true,
+        "allowJs": true
+    },
+    "include": ["src"]
 }
