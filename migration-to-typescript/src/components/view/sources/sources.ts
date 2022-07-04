@@ -1,9 +1,9 @@
 import "./sources.css";
 
 class Sources {
-    draw(data) {
-        const fragment = document.createDocumentFragment();
-        const sourceItemTemp = document.querySelector("#sourceItemTemp");
+    draw(data: any) {
+        const fragment: DocumentFragment = document.createDocumentFragment();
+        const sourceItemTemp: Element | null = document.querySelector("#sourceItemTemp");
 
         data.forEach((item) => {
             const sourceClone = sourceItemTemp.content.cloneNode(true);

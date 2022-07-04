@@ -1,5 +1,37 @@
 import AppLoader from "./appLoader";
 
+type SourcesType = {
+    category: string;
+    country: string;
+    description: string;
+    id: string;
+    language: string;
+    name: string;
+    url: string;
+};
+
+type SourcesDataType = {
+    status: string;
+    sources: SourcesType[];
+};
+
+type NewsType = {
+    author: string;
+    content: string;
+    description: string;
+    publishedAt: string;
+    source: { id: string; name: string };
+    title: string;
+    url: string;
+    urlToImage: string;
+};
+
+type NewsDataType = {
+    status: string;
+    articles: NewsType[];
+    totalResults: number;
+};
+
 export interface IAppController {
     getSources(callback: (data?: any) => void): void;
     getNews(e: Event, callback: (data?: any) => void): void;
@@ -7,7 +39,7 @@ export interface IAppController {
 
 class AppController extends AppLoader implements IAppController {
     getSources(callback: (data?: any) => void): void {
-        super.getResp(
+        super.getResp<SourcesDataType>(
             {
                 endpoint: "sources",
             },
@@ -23,7 +55,7 @@ class AppController extends AppLoader implements IAppController {
                 const sourceId: string | null = target.getAttribute("data-source-id");
                 if (newsContainer?.getAttribute("data-source") !== sourceId) {
                     newsContainer?.setAttribute("data-source", sourceId as string);
-                    super.getResp(
+                    super.getResp<NewsDataType>(
                         {
                             endpoint: "everything",
                             options: {

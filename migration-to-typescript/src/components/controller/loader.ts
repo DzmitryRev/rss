@@ -13,7 +13,6 @@ type GetRespSettingsType = {
 
 type CallbackType = (data?: any) => void;
 
-// TODO: data types
 
 interface ILoader {
     baseLink: string;
@@ -38,13 +37,13 @@ class Loader implements ILoader {
         this.options = options;
     }
 
-    getResp(
+    getResp<T>(
         { endpoint, options = {} }: GetRespSettingsType,
         callback: CallbackType = () => {
             console.error("No callback for GET response");
         }
     ): void {
-        this.load("GET", endpoint, callback, options);
+        this.load<T>("GET", endpoint, callback, options);
     }
 
     errorHandler(res: Response): Response {
@@ -75,7 +74,7 @@ class Loader implements ILoader {
         return url.slice(0, -1);
     }
 
-    load(
+    load<T>(
         method: string,
         endpoint: string,
         callback: CallbackType,
@@ -84,7 +83,10 @@ class Loader implements ILoader {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler.bind(this))
             .then((res: Response) => res.json())
-            .then((data) => callback(data))
+            .then((data: T) => {
+                console.log(data);
+                return callback(data);
+            })
             .catch((err) => console.error(err));
     }
 }
