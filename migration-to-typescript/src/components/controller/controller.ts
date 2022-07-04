@@ -1,29 +1,33 @@
-import AppLoader from './appLoader';
+import AppLoader from "./appLoader";
 
-class AppController extends AppLoader {
-    getSources(callback) {
+interface IAppController {
+    getSources(callback: (data?: any) => void): void;
+    getNews(e: Event, callback: (data?: any) => void): void;
+}
+
+class AppController extends AppLoader implements IAppController {
+    getSources(callback: (data?: any) => void): void {
         super.getResp(
             {
-                endpoint: 'sources',
+                endpoint: "sources",
             },
             callback
         );
     }
 
-    getNews(e, callback) {
-        let target = e.target;
-        const newsContainer = e.currentTarget;
-
+    getNews(e: Event, callback: (data?: any) => void): void {
+        let target = <Element | null>e.target;
+        const newsContainer = <Element | null>e.currentTarget;
         while (target !== newsContainer) {
-            if (target.classList.contains('source__item')) {
-                const sourceId = target.getAttribute('data-source-id');
-                if (newsContainer.getAttribute('data-source') !== sourceId) {
-                    newsContainer.setAttribute('data-source', sourceId);
+            if (target?.classList.contains("source__item")) {
+                const sourceId: string | null = target.getAttribute("data-source-id");
+                if (newsContainer?.getAttribute("data-source") !== sourceId) {
+                    newsContainer?.setAttribute("data-source", sourceId as string);
                     super.getResp(
                         {
-                            endpoint: 'everything',
+                            endpoint: "everything",
                             options: {
-                                sources: sourceId,
+                                sources: sourceId as string | undefined,
                             },
                         },
                         callback
@@ -31,7 +35,7 @@ class AppController extends AppLoader {
                 }
                 return;
             }
-            target = target.parentNode;
+            target = <Element | null>target?.parentNode;
         }
     }
 }

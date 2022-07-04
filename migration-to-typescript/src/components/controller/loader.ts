@@ -8,7 +8,7 @@ type GetRespOptionsType = {
 
 type GetRespSettingsType = {
     endpoint: string;
-    options: GetRespOptionsType;
+    options?: GetRespOptionsType;
 };
 
 type CallbackType = (data?: any) => void;
