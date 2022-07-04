@@ -42,7 +42,7 @@ export interface IAppController {
 }
 
 class AppController extends AppLoader implements IAppController {
-    getSources(callback: (data?: any) => void): void {
+    getSources(callback: (data?: SourcesDataType) => void): void {
         super.getResp<SourcesDataType>(
             {
                 endpoint: "sources",
@@ -51,7 +51,7 @@ class AppController extends AppLoader implements IAppController {
         );
     }
 
-    getNews(e: Event, callback: (data?: any) => void): void {
+    getNews(e: Event, callback: (data?: NewsDataType) => void): void {
         let target = <Element | null>e.target;
         const newsContainer = <Element | null>e.currentTarget;
         while (target !== newsContainer) {

@@ -2,7 +2,7 @@ import { NewsDataType, SourcesDataType } from "../controller/controller";
 import News, { INews } from "./news/news";
 import Sources, { ISources } from "./sources/sources";
 
-interface IAppView {
+export interface IAppView {
     news: INews;
     sources: ISources;
     drawNews(data: NewsDataType): void;
