@@ -1,6 +1,8 @@
 import AppLoader from "./appLoader";
 
-type SourcesType = {
+// Type for data from sources fetching
+
+export type SourcesType = {
     category: string;
     country: string;
     description: string;
@@ -10,12 +12,14 @@ type SourcesType = {
     url: string;
 };
 
-type SourcesDataType = {
+export type SourcesDataType = {
     status: string;
     sources: SourcesType[];
 };
 
-type NewsType = {
+// Type for data from news fetching
+
+export type NewsType = {
     author: string;
     content: string;
     description: string;
@@ -26,7 +30,7 @@ type NewsType = {
     urlToImage: string;
 };
 
-type NewsDataType = {
+export type NewsDataType = {
     status: string;
     articles: NewsType[];
     totalResults: number;

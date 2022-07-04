@@ -13,7 +13,6 @@ type GetRespSettingsType = {
 
 type CallbackType = (data?: any) => void;
 
-
 interface ILoader {
     baseLink: string;
     options: OptionsType;
@@ -83,10 +82,7 @@ class Loader implements ILoader {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler.bind(this))
             .then((res: Response) => res.json())
-            .then((data: T) => {
-                console.log(data);
-                return callback(data);
-            })
+            .then((data: T) => callback(data))
             .catch((err) => console.error(err));
     }
 }

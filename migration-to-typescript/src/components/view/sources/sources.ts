@@ -1,20 +1,32 @@
+import { SourcesType } from "../../controller/controller";
 import "./sources.css";
 
-class Sources {
-    draw(data: any) {
+interface ISources {
+    draw(data: SourcesType[]): void;
+}
+
+class Sources implements ISources {
+    draw(data: SourcesType[]) {
         const fragment: DocumentFragment = document.createDocumentFragment();
-        const sourceItemTemp: Element | null = document.querySelector("#sourceItemTemp");
+        const sourceItemTemp: HTMLTemplateElement | null = document.querySelector(
+            "#sourceItemTemp"
+        );
 
-        data.forEach((item) => {
-            const sourceClone = sourceItemTemp.content.cloneNode(true);
+        data.forEach((item: SourcesType) => {
+            const sourceClone = <HTMLTemplateElement | null>sourceItemTemp?.content.cloneNode(true);
+            const sourceItemName = <HTMLSpanElement>(
+                sourceClone?.querySelector(".source__item-name")
+            );
+            const sourceItem = <HTMLDivElement>sourceClone?.querySelector(".source__item");
 
-            sourceClone.querySelector(".source__item-name").textContent = item.name;
-            sourceClone.querySelector(".source__item").setAttribute("data-source-id", item.id);
+            sourceItemName.textContent = item.name;
+            sourceItem.setAttribute("data-source-id", item.id);
 
-            fragment.append(sourceClone);
+            fragment.append(sourceClone as string | Node);
         });
 
-        document.querySelector(".sources").append(fragment);
+        const sources = <HTMLDivElement>document?.querySelector(".sources");
+        sources.append(fragment);
     }
 }
 
