@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "module": "ES6",
+        "noImplicitAny": false,
+        "strict": true,
+        "noEmitOnError": false,
+        "allowJs": true
+    },
+    "include": ["src"]
+}
