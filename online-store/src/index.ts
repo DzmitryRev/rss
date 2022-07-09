@@ -1,4 +1,7 @@
+// styles
 import "./scss/index.scss";
+// images
+import "./assets/card-icon.svg";
 
 let a: number;
 
