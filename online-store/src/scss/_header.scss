@@ -20,12 +20,16 @@
     &__card {
         width: 30px;
         height: 30px;
-        & > svg {
-            cursor: pointer;
-        }
         &-icon {
             fill: $primary-grey;
             cursor: pointer;
+            transition: fill 0.2s ease-in-out;
+        }
+        &:hover {
+            .header__card-icon {
+                fill: rgb(6, 134, 93);
+                transition: fill 0.2s ease-in-out;
+            }
         }
     }
 }
