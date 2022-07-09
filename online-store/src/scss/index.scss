@@ -1,3 +1,8 @@
+@import "header.scss";
+
+
+// fonts
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap');
 
 *,
 *::after,
@@ -16,5 +21,4 @@ body {
     height: 100%;
     margin: 0 auto;
     padding: 0 40px;
-    background-color: aqua;
 }

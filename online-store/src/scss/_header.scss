@@ -10,4 +10,11 @@
         justify-content: space-between;
         align-items: center;
     }
+    &__logo {
+        font-family: "PT Sans", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 3px;
+        color: rgb(62, 61, 61);
+    }
 }
