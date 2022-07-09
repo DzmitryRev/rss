@@ -1,3 +1,5 @@
+import "./scss/index.scss";
+
 let a: number;
 
 a = 15;
