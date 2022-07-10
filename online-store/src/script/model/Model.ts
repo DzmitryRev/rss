@@ -30,14 +30,16 @@ export class Model implements IModel {
         const product: ProductType | undefined = this.findProduct(productId);
         const newCard: ProductType[] = [...this.card];
         if (newCard.filter((item) => item.id === productId).length > 0 || !product) return;
-
         newCard.push(product);
         localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
         this.refreshCard();
         callback();
     }
 
-    removeFromCard(product: ProductType, callback: () => void) {
-        console.log("remove from card");
+    removeFromCard(productId: string, callback: () => void) {
+        const newCard: ProductType[] = this.card.filter((item) => item.id !== productId);
+        localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
+        this.refreshCard();
+        callback();
     }
 }
