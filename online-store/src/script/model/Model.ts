@@ -3,7 +3,7 @@ import { products, ProductType } from "../../data/products";
 export interface IModel {
     products: ProductType[];
     card: ProductType[];
-    getCardFromLocalStorage(): void;
+    refreshCard(): void;
     addToCard(productId: string, callback: () => void): void;
 }
 
@@ -14,14 +14,14 @@ export class Model implements IModel {
     constructor() {
         this.products = products;
         this.card = [];
-        this.getCardFromLocalStorage();
+        this.refreshCard();
     }
 
-    findProduct(id: string): ProductType | undefined {
+    private findProduct(id: string): ProductType | undefined {
         return this.products.find((item) => item.id === id);
     }
 
-    getCardFromLocalStorage(): void {
+    refreshCard(): void {
         this.card =
             <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) || [];
     }
@@ -33,7 +33,7 @@ export class Model implements IModel {
 
         newCard.push(product);
         localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
-        this.getCardFromLocalStorage();
+        this.refreshCard();
         callback();
     }
 
