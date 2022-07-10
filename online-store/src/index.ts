@@ -16,13 +16,18 @@ test?.addEventListener("click", () => {
 const model: IStoreModel = new StoreModel();
 
 document.querySelector("#test2")?.addEventListener("click", () => {
-    model.addToCard({
-        id: 1,
-        title: "apple",
-        manufacturer: "aaaa",
-        year: "aaa",
-        color: "aaa",
-        price: "aaa",
-    });
+    model.addToCard(
+        {
+            id: 1,
+            title: "apple",
+            manufacturer: "aaaa",
+            year: "aaa",
+            color: "aaa",
+            price: "aaa",
+        },
+        () => {
+            console.log("aaa");
+        }
+    );
     console.log(model);
 });
