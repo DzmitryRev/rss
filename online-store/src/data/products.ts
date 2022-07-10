@@ -1,4 +1,5 @@
 export type ProductType = {
+    id: number;
     title: string;
     manufacturer: string;
     year: string;
@@ -8,6 +9,7 @@ export type ProductType = {
 
 export const products: ProductType[] = [
     {
+        id: 1,
         title: "Iphone 12",
         manufacturer: "Apple",
         year: "2021",
