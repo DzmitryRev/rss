@@ -1,4 +1,4 @@
-import { products, ProductType } from "../data/products";
+import { products, ProductType } from "../../data/products";
 
 export interface IModel {
     products: ProductType[];
