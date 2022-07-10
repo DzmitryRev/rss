@@ -1,0 +1,39 @@
+.content {
+    min-height: 100vh;
+    padding: 80px 0 0;
+
+    &__container {
+        padding: 20px 0 0;
+        display: flex;
+    }
+    &__settings-container {
+        height: 500px;
+        flex: 0 0 200px;
+        padding: 0 15px;
+        border: 1px solid black;
+    }
+    &__products-container {
+        height: 500px;
+        flex: 1 1 auto;
+        padding: 0 15px;
+        border: 1px solid black;
+    }
+    &__filter-button-container {
+        display: none;
+        padding: 20px 0 0;
+    }
+    &__filter-button {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .content {
+        &__settings-container {
+            display: none;
+        }
+        &__filter-button-container {
+            display: block;
+        }
+    }
+}

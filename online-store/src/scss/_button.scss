@@ -1,0 +1,16 @@
+.button {
+    border: none;
+    border-radius: 0;
+    background-color: $primary-green;
+    color: #fff;
+    font-family: "Nunito", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    &:hover {
+        background-color: $hover-green;
+        transition: background-color 0.2s ease-in-out;
+    }
+}
