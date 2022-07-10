@@ -1,5 +1,11 @@
 import { ProductType } from "../../data/products";
 
+export interface IView {
+    container: HTMLElement | null;
+    createElement(tag: string, className?: string): HTMLElement;
+    displayProducts(products: ProductType[]): void;
+}
+
 export class View {
     container: HTMLElement | null;
     constructor() {
@@ -12,7 +18,7 @@ export class View {
         }
         return el;
     }
-    displayProducts(products: ProductType[]) {
+    displayProducts(products: ProductType[]): void {
         products.forEach((product) => {
             const productEl = `
             <div class="product">
