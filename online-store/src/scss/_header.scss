@@ -27,7 +27,7 @@
         }
         &:hover {
             .header__card-icon {
-                fill: rgb(6, 134, 93);
+                fill: $hover-green;
                 transition: fill 0.2s ease-in-out;
             }
         }
