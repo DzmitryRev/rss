@@ -2,6 +2,7 @@
 import "./scss/index.scss";
 // images
 import "./assets/card-icon.svg";
+import "./assets/iphone-12-test.png";
 
 let a: number;
 
