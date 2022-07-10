@@ -20,34 +20,50 @@ export class View {
     }
     displayProducts(products: ProductType[]): void {
         products.forEach((product) => {
-            const productEl = `
-            <div class="product">
-                <div class="product__image-container">
-                    <img
-                        class="product__image"
-                        src="${product.image}"
-                        alt=""
-                    />
-                </div>
-                <div class="product__description">
-                    <span class="product__manufacturer">${product.manufacturer}</span>
-                    <span class="product__title">${product.title}</span>
-                    <p>
-                        Год: <span class="product__year">${product.year}</span>
-                    </p>
-                    <p>
-                        Цвет: <span class="product__color">${product.color}</span>
-                    </p>
-                </div>
-                <div class="product__footer">
-                    <span class="product__price">${product.price}$</span>
-                    <button id="test2" class="button">
-                        В корзину
-                    </button>
-                </div>
-            </div>
-            `;
-            this.container?.insertAdjacentHTML("beforeend", productEl);
+            const productContainer = <HTMLDivElement>this.createElement("div", "product");
+            const productImageContainer = <HTMLDivElement>(
+                this.createElement("div", "product__image-container")
+            );
+            const productImage = <HTMLImageElement>this.createElement("img", "product__image");
+            productImage.src = product.image;
+            productImageContainer.insertAdjacentElement("beforeend", productImage);
+            const productDescription = <HTMLDivElement>(
+                this.createElement("div", "product__description")
+            );
+            const productManufacturer = <HTMLSpanElement>(
+                this.createElement("span", "product__manufacturer")
+            );
+            productManufacturer.innerText = product.manufacturer + " ";
+            const productTitle = <HTMLSpanElement>this.createElement("span", "product__title");
+            productTitle.innerText = product.title;
+            const productYearContainer = <HTMLParagraphElement>this.createElement("p");
+            const productYear = <HTMLSpanElement>this.createElement("span", "product__year");
+            productYear.innerText = "Год: " + product.year;
+            productYearContainer.insertAdjacentElement("beforeend", productYear);
+
+            const productColorContainer = <HTMLParagraphElement>this.createElement("p");
+            const productColor = <HTMLSpanElement>this.createElement("span", "product__color");
+            productColor.innerText = "Цвет: " + product.color;
+            productColorContainer.insertAdjacentElement("beforeend", productColor);
+
+            productDescription.insertAdjacentElement("beforeend", productManufacturer);
+            productDescription.insertAdjacentElement("beforeend", productTitle);
+            productDescription.insertAdjacentElement("beforeend", productYearContainer);
+            productDescription.insertAdjacentElement("beforeend", productColorContainer);
+
+            const productFooter = <HTMLDivElement>this.createElement("div", "product__footer");
+            const productPrice = <HTMLSpanElement>this.createElement("span", "product__price");
+            productPrice.innerText = product.price  + "$";
+            const button = <HTMLButtonElement>this.createElement("button", "button");
+            button.innerText = "В корзину";
+            productFooter.insertAdjacentElement("beforeend", productPrice);
+            productFooter.insertAdjacentElement("beforeend", button);
+
+            productContainer.insertAdjacentElement("beforeend", productImageContainer);
+            productContainer.insertAdjacentElement("beforeend", productDescription);
+            productContainer.insertAdjacentElement("beforeend", productFooter);
+
+            this.container?.insertAdjacentElement("beforeend", productContainer);
         });
     }
 }
