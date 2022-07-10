@@ -3,14 +3,20 @@ import { ProductType } from "../../data/products";
 export interface IView {
     container: HTMLElement | null;
     createElement(tag: string, className?: string): HTMLElement;
-    displayProducts(products: ProductType[]): void;
+    buttonAddToCard: HTMLButtonElement[] | null;
+    displayProducts(products: ProductType[], container: HTMLElement | null): void;
+    addToCardEvent(handler: (id: string) => void): void;
+    render(products: ProductType[]): void;
 }
 
 export class View {
     container: HTMLElement | null;
+    buttonAddToCard: HTMLButtonElement[] | null;
     constructor() {
         this.container = document.querySelector(".content__products-container");
+        this.buttonAddToCard = null;
     }
+
     createElement(tag: string, className?: string): HTMLElement {
         const el: HTMLElement = document.createElement(tag);
         if (className) {
@@ -18,7 +24,12 @@ export class View {
         }
         return el;
     }
-    displayProducts(products: ProductType[]): void {
+
+    render(products: ProductType[]) {
+        this.displayProducts(products, this.container);
+    }
+
+    displayProducts(products: ProductType[], container: HTMLElement | null): void {
         products.forEach((product) => {
             const productContainer = <HTMLDivElement>this.createElement("div", "product");
             const productImageContainer = <HTMLDivElement>(
@@ -53,9 +64,12 @@ export class View {
 
             const productFooter = <HTMLDivElement>this.createElement("div", "product__footer");
             const productPrice = <HTMLSpanElement>this.createElement("span", "product__price");
-            productPrice.innerText = product.price  + "$";
+            productPrice.innerText = product.price + "$";
             const button = <HTMLButtonElement>this.createElement("button", "button");
             button.innerText = "В корзину";
+            button.setAttribute("id", (product.id as unknown) as string);
+            this.buttonAddToCard?.push(button);
+
             productFooter.insertAdjacentElement("beforeend", productPrice);
             productFooter.insertAdjacentElement("beforeend", button);
 
@@ -63,7 +77,17 @@ export class View {
             productContainer.insertAdjacentElement("beforeend", productDescription);
             productContainer.insertAdjacentElement("beforeend", productFooter);
 
-            this.container?.insertAdjacentElement("beforeend", productContainer);
+            container?.insertAdjacentElement("beforeend", productContainer);
+        });
+    }
+
+    addToCardEvent(handler: (id: string) => void) {
+        this.container?.addEventListener("click", (e) => {
+            const target = <HTMLElement>e.target;
+            if (target?.className === "button") {
+                const id = target.getAttribute("id");
+                if (id) handler(id);
+            }
         });
     }
 }

@@ -4,7 +4,7 @@ export interface IModel {
     products: ProductType[];
     card: ProductType[];
     getCardFromLocalStorage(): void;
-    addToCard(product: ProductType, callback: () => void): void;
+    addToCard(productId: string, callback: () => void): void;
 }
 
 export class Model implements IModel {
@@ -22,13 +22,18 @@ export class Model implements IModel {
             <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) || [];
     }
 
-    addToCard(product: ProductType, callback: () => void): void {
+    addToCard(productId: string, callback: () => void): void {
         const newCard: ProductType[] = [...this.card];
-        if (newCard.filter((item) => item.id === product.id).length === 0) {
-            newCard.push(product);
-            localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
-            this.getCardFromLocalStorage();
-            callback();
+        if (newCard.filter((item) => item.id === productId).length === 0) {
+            const product: ProductType | undefined = this.products.find(
+                (item) => item.id === productId
+            );
+            if (product) {
+                newCard.push(product);
+                localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
+                this.getCardFromLocalStorage();
+                callback();
+            }
         } else {
             console.log("Такой товар уже добавлен");
         }
