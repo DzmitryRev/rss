@@ -40,7 +40,7 @@ export class View {
                     </p>
                 </div>
                 <div class="product__footer">
-                    <span class="product__price">${product.price}</span>
+                    <span class="product__price">${product.price}$</span>
                     <button id="test2" class="button">
                         В корзину
                     </button>
