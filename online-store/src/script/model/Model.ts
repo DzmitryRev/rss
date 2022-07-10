@@ -17,26 +17,24 @@ export class Model implements IModel {
         this.getCardFromLocalStorage();
     }
 
+    findProduct(id: string): ProductType | undefined {
+        return this.products.find((item) => item.id === id);
+    }
+
     getCardFromLocalStorage(): void {
         this.card =
             <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) || [];
     }
 
     addToCard(productId: string, callback: () => void): void {
+        const product: ProductType | undefined = this.findProduct(productId);
         const newCard: ProductType[] = [...this.card];
-        if (newCard.filter((item) => item.id === productId).length === 0) {
-            const product: ProductType | undefined = this.products.find(
-                (item) => item.id === productId
-            );
-            if (product) {
-                newCard.push(product);
-                localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
-                this.getCardFromLocalStorage();
-                callback();
-            }
-        } else {
-            console.log("Такой товар уже добавлен");
-        }
+        if (newCard.filter((item) => item.id === productId).length > 0 || !product) return;
+
+        newCard.push(product);
+        localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
+        this.getCardFromLocalStorage();
+        callback();
     }
 
     removeFromCard(product: ProductType, callback: () => void) {
