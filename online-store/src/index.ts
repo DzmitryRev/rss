@@ -14,24 +14,4 @@ test?.addEventListener("click", () => {
     el?.classList.toggle("open");
 });
 
-// const model: IModel = new Model();
-
-// document.querySelector("#test2")?.addEventListener("click", () => {
-//     model.addToCard(
-//         {
-//             id: 1,
-//             title: "apple",
-//             manufacturer: "aaaa",
-//             year: "aaa",
-//             color: "aaa",
-//             price: "aaa",
-//             image: "sss"
-//         },
-//         () => {
-//             console.log("aaa");
-//         }
-//     );
-//     console.log(model);
-// });
-
 const app = new Controller(new Model(), new View());
