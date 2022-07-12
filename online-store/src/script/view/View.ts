@@ -26,10 +26,17 @@ export class View {
     }
 
     render(products: ProductType[]) {
+        console.log("render")
         this.displayProducts(products, this.container);
+        this.displayCard();
+    }
+
+    displayCard() {
+        console.log("render card");
     }
 
     displayProducts(products: ProductType[], container: HTMLElement | null): void {
+        console.log("render products")
         products.forEach((product) => {
             const productContainer = <HTMLDivElement>this.createElement("div", "product");
             const productImageContainer = <HTMLDivElement>(
