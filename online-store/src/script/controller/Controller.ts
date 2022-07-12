@@ -32,6 +32,7 @@ export class Controller {
         this.view.displayProducts(this.model.products, this.model.card);
         this.view.displayCard(this.model.card);
     }
+    //
     hanlerAddToCard(id: string) {
         console.log("add to card");
         this.model.addToCard(

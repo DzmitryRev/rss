@@ -28,11 +28,6 @@ export class View {
         return el;
     }
 
-    render(products: ProductType[], card: ProductType[]): void {
-        this.displayProducts(products, card);
-        this.displayCard(card);
-    }
-
     displayCard(card: ProductType[]): void {
         if (this.cardCountRootElement) {
             this.cardCountRootElement.innerText = (card.length as unknown) as string;
