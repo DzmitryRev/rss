@@ -31,8 +31,13 @@ export class View {
     }
     // TODO: add logic for displaing products in card
     renderCard(card: ProductType[]): void {
-        if (this.cardCountRootElement) {
-            this.cardCountRootElement.innerText = (card.length as unknown) as string;
+        if (card.length === 0) {
+            this.cardCountRootElement?.classList.add("display-none");
+        } else {
+            this.cardCountRootElement?.classList.remove("display-none");
+            if (this.cardCountRootElement) {
+                this.cardCountRootElement.innerText = (card.length as unknown) as string;
+            }
         }
     }
     // finish
@@ -79,7 +84,6 @@ export class View {
         const buttonAddToCard = <HTMLButtonElement>(
             document.querySelector(`.button-add-to-card[product-id='${productId}']`)
         );
-        console.log(buttonAddToCard);
         const buttonRemoveFromCard = <HTMLButtonElement>(
             document.querySelector(`.button-remove-from-card[product-id='${productId}']`)
         );
