@@ -38,21 +38,15 @@ export class Controller implements IController {
     }
     //
     hanlerAddToCard(id: string) {
-        this.model.addToCard(
-            id,
-            (products: ProductType[], card: ProductType[], productId: string) => {
-                this.view.renderCard(card);
-                this.view.renderProductFooter(productId);
-            }
-        );
+        this.model.addToCard(id, (card: ProductType[], productId: string) => {
+            this.view.renderCard(card);
+            this.view.renderProductFooter(productId);
+        });
     }
     hanlerRemoveFromCard(id: string) {
-        this.model.removeFromCard(
-            id,
-            (products: ProductType[], card: ProductType[], productId: string) => {
-                this.view.renderCard(card);
-                this.view.renderProductFooter(productId);
-            }
-        );
+        this.model.removeFromCard(id, (card: ProductType[], productId: string) => {
+            this.view.renderCard(card);
+            this.view.renderProductFooter(productId);
+        });
     }
 }
