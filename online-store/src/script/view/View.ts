@@ -3,11 +3,14 @@ import { ProductType } from "../../data/products";
 export interface IView {
     productsRootElement: HTMLDivElement | null;
     cardCountRootElement: HTMLDivElement | null;
+    // root
     createElement(tag: string, className?: string): HTMLElement;
-    displayProducts(products: ProductType[], card: ProductType[]): void;
-    renderCard(card: ProductType[]): void;
+    // events
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
+    // renders
+    renderProducts(products: ProductType[], card: ProductType[]): void;
+    renderCard(card: ProductType[]): void;
     renderProductFooter(productId: string): void;
 }
 
@@ -33,7 +36,7 @@ export class View {
         }
     }
 
-    displayProducts(products: ProductType[], card: ProductType[]): void {
+    renderProducts(products: ProductType[], card: ProductType[]): void {
         if (this.productsRootElement) this.productsRootElement.innerHTML = "";
         products.forEach((product) => {
             const isInCard = card.find((item) => item.id === product.id);

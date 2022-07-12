@@ -29,7 +29,7 @@ export class Controller {
     }
     // render All
     render() {
-        this.view.displayProducts(this.model.products, this.model.card);
+        this.view.renderProducts(this.model.products, this.model.card);
         this.view.renderCard(this.model.card);
     }
     //
