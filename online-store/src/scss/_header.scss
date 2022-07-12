@@ -19,10 +19,27 @@
     &__card {
         width: 30px;
         height: 30px;
+        position: relative;
         &-icon {
             fill: $primary-grey;
             cursor: pointer;
             transition: fill 0.2s ease-in-out;
+        }
+        &-count {
+            width: 18px;
+            height: 18px;
+            border-radius: 100%;
+            font-size: 10px;
+            z-index: -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            background-color: $primary-red;
         }
         &:hover {
             .header__card-icon {
