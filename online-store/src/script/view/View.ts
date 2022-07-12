@@ -89,7 +89,7 @@ export class View {
                 button.innerText = "В корзину";
             }
 
-            button.setAttribute("id", (product.id as unknown) as string);
+            button.setAttribute("product-id", (product.id as unknown) as string);
             this.buttonAddToCard?.push(button);
 
             productFooter.insertAdjacentElement("beforeend", productPrice);
@@ -102,6 +102,10 @@ export class View {
             this.container?.insertAdjacentElement("beforeend", productContainer);
         });
     }
+
+    // renderProductFooter(productId) {
+    //     // document
+    // }
 
     addToCardEvent(handler: (id: string) => void): void {
         this.container?.addEventListener("click", (e) => {
@@ -116,7 +120,7 @@ export class View {
         this.container?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-remove-from-card")) {
-                const id = target.getAttribute("id");
+                const id = target.getAttribute("product-id");
                 if (id) handler(id);
             }
         });
