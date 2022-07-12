@@ -10,11 +10,14 @@ export class Controller {
         this.view.addToCardEvent((id: string) => {
             this.hanlerAddToCard(id);
         });
+        // init card local storage
+        this.model.refreshCard();
+        // init render
         this.view.render(this.model.products);
     }
     hanlerAddToCard(id: string) {
         this.model.addToCard(id, () => {
-            console.log(" ")
+            console.log(" ");
         });
     }
 }

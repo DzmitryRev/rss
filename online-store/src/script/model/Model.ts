@@ -14,7 +14,6 @@ export class Model implements IModel {
     constructor() {
         this.products = products;
         this.card = [];
-        this.refreshCard();
     }
 
     private findProduct(id: string): ProductType | undefined {
