@@ -2,12 +2,20 @@ import { ProductType } from "../../data/products";
 import { IModel } from "../model/Model";
 import { IView } from "../view/View";
 
+// interface IController {
+//     model: IModel
+//     view: IView
+// }
+
 export class Controller {
     model: IModel;
     view: IView;
     constructor(model: IModel, view: IView) {
         this.model = model;
         this.view = view;
+    }
+    start() {
+        // set up events
         this.view.addToCardEvent((id: string) => {
             this.hanlerAddToCard(id);
         });
@@ -17,7 +25,12 @@ export class Controller {
         // init card local storage
         this.model.refreshCard();
         // init render
-        this.view.render(this.model.products, this.model.card);
+        this.render();
+    }
+    // render All
+    render() {
+        this.view.displayProducts(this.model.products, this.model.card);
+        this.view.displayCard(this.model.card);
     }
     hanlerAddToCard(id: string) {
         console.log("add to card");
