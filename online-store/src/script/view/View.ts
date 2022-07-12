@@ -4,16 +4,20 @@ export interface IView {
     container: HTMLElement | null;
     createElement(tag: string, className?: string): HTMLElement;
     buttonAddToCard: HTMLButtonElement[] | null;
-    displayProducts(products: ProductType[], container: HTMLElement | null): void;
+    displayProducts(products: ProductType[], card: ProductType[]): void;
+    displayCard(card: ProductType[]): void;
     addToCardEvent(handler: (id: string) => void): void;
-    render(products: ProductType[]): void;
+    removeFromCardEvent(handler: (id: string) => void): void;
+    render(products: ProductType[], card: ProductType[]): void;
 }
 
 export class View {
     container: HTMLElement | null;
     buttonAddToCard: HTMLButtonElement[] | null;
+    cardCount: HTMLElement | null;
     constructor() {
         this.container = document.querySelector(".content__products-container");
+        this.cardCount = document.querySelector("#card-count");
         this.buttonAddToCard = null;
     }
 
@@ -25,18 +29,22 @@ export class View {
         return el;
     }
 
-    render(products: ProductType[]) {
-        console.log("render")
-        this.displayProducts(products, this.container);
-        this.displayCard();
+    render(products: ProductType[], card: ProductType[]): void {
+        console.log("render");
+        this.displayProducts(products, card);
+        this.displayCard(card);
     }
 
-    displayCard() {
+    displayCard(card: ProductType[]): void {
         console.log("render card");
+        if (this.cardCount) {
+            this.cardCount.innerText = (card.length as unknown) as string;
+        }
     }
 
-    displayProducts(products: ProductType[], container: HTMLElement | null): void {
-        console.log("render products")
+    displayProducts(products: ProductType[], card: ProductType[]): void {
+        console.log("render products");
+        if (this.container) this.container.innerHTML = "";
         products.forEach((product) => {
             const productContainer = <HTMLDivElement>this.createElement("div", "product");
             const productImageContainer = <HTMLDivElement>(
@@ -73,7 +81,14 @@ export class View {
             const productPrice = <HTMLSpanElement>this.createElement("span", "product__price");
             productPrice.innerText = product.price + "$";
             const button = <HTMLButtonElement>this.createElement("button", "button");
-            button.innerText = "В корзину";
+            if (card.find((item) => item.id === product.id)) {
+                button.classList.add("button-remove-from-card");
+                button.innerText = "Удалить из корзины";
+            } else {
+                button.classList.add("button-add-to-card");
+                button.innerText = "В корзину";
+            }
+
             button.setAttribute("id", (product.id as unknown) as string);
             this.buttonAddToCard?.push(button);
 
@@ -84,14 +99,23 @@ export class View {
             productContainer.insertAdjacentElement("beforeend", productDescription);
             productContainer.insertAdjacentElement("beforeend", productFooter);
 
-            container?.insertAdjacentElement("beforeend", productContainer);
+            this.container?.insertAdjacentElement("beforeend", productContainer);
         });
     }
 
-    addToCardEvent(handler: (id: string) => void) {
+    addToCardEvent(handler: (id: string) => void): void {
         this.container?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
-            if (target?.className === "button") {
+            if (target?.classList.contains("button-add-to-card")) {
+                const id = target.getAttribute("id");
+                if (id) handler(id);
+            }
+        });
+    }
+    removeFromCardEvent(handler: (id: string) => void): void {
+        this.container?.addEventListener("click", (e) => {
+            const target = <HTMLElement>e.target;
+            if (target?.classList.contains("button-remove-from-card")) {
                 const id = target.getAttribute("id");
                 if (id) handler(id);
             }
