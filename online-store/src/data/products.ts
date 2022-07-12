@@ -114,3 +114,28 @@ export const products: ProductType[] = [
             "https://mobillife.by/images/virtuemart/product/samsung_galaxy_s22_ultra_5g_%D0%B3%D0%BE%D0%BB%D1%83%D0%B1%D0%BE%D0%B913.jpg",
     },
 ];
+
+
+// TODO: add 14 products
+
+// color:
+    // зеленый - 3
+    // белый - 3
+    // голубой - 4
+    // черный - 1
+// year:
+    // 2020 - 3
+    // 2021 - 4 
+    // 2022 - 4
+// manuf: 
+    // apple - 5 // TODO: add 3 
+    // xiaomi - 1 // TODO: add 4
+    // samsung - 2 // TODO: add 5
+    // google - 1 // TODO: add 2
+    // onePlus - 2 
+// memory: 
+    // 
+// price: 
+    // any price
+// quantity: 
+    // any count from 1 to 
