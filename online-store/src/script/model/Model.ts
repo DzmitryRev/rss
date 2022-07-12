@@ -6,11 +6,11 @@ export interface IModel {
     refreshCard(): void;
     addToCard(
         productId: string,
-        callback: (products: ProductType[], card: ProductType[]) => void
+        callback: (products: ProductType[], card: ProductType[], productId: string) => void
     ): void;
     removeFromCard(
         productId: string,
-        callback: (products: ProductType[], card: ProductType[]) => void
+        callback: (products: ProductType[], card: ProductType[], productId: string) => void
     ): void;
 }
 
@@ -34,7 +34,7 @@ export class Model implements IModel {
 
     addToCard(
         productId: string,
-        callback: (products: ProductType[], card: ProductType[]) => void
+        callback: (products: ProductType[], card: ProductType[], productId: string) => void
     ): void {
         const product: ProductType | undefined = this.findProduct(productId);
         const newCard: ProductType[] = [...this.card];
@@ -42,13 +42,16 @@ export class Model implements IModel {
         newCard.push(product);
         localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
         this.refreshCard();
-        callback(this.products, this.card);
+        callback(this.products, this.card, productId);
     }
 
-    removeFromCard(productId: string, callback: (products: ProductType[], card: ProductType[]) => void) {
+    removeFromCard(
+        productId: string,
+        callback: (products: ProductType[], card: ProductType[], productId: string) => void
+    ) {
         const newCard: ProductType[] = this.card.filter((item) => item.id !== productId);
         localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
         this.refreshCard();
-        callback(this.products, this.card);
+        callback(this.products, this.card, productId);
     }
 }

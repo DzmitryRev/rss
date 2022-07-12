@@ -9,6 +9,7 @@ export interface IView {
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
     render(products: ProductType[], card: ProductType[]): void;
+    renderProductFooter(productId: string): void;
 }
 
 export class View {
@@ -80,20 +81,26 @@ export class View {
             const productFooter = <HTMLDivElement>this.createElement("div", "product__footer");
             const productPrice = <HTMLSpanElement>this.createElement("span", "product__price");
             productPrice.innerText = product.price + "$";
-            const button = <HTMLButtonElement>this.createElement("button", "button");
-            if (card.find((item) => item.id === product.id)) {
-                button.classList.add("button-remove-from-card");
-                button.innerText = "Удалить из корзины";
-            } else {
-                button.classList.add("button-add-to-card");
-                button.innerText = "В корзину";
-            }
+            const buttonAddToCard = <HTMLButtonElement>this.createElement("button", "button");
+            buttonAddToCard.innerText = "В корзину";
+            const buttonRemoveFromCard = <HTMLButtonElement>this.createElement("button", "button");
+            buttonRemoveFromCard.innerText = "Удалить из корзины";
+            buttonRemoveFromCard.classList.add("button-remove-from-card");
+            buttonAddToCard.classList.add("button-add-to-card");
 
-            button.setAttribute("product-id", (product.id as unknown) as string);
-            this.buttonAddToCard?.push(button);
+            console.log(card.find((item) => item.id === product.id));
+            if (card.find((item) => item.id === product.id)) {
+                buttonAddToCard.classList.add("button-display-none");
+            } else {
+                buttonRemoveFromCard.classList.add("button-display-none");
+            }
+            buttonAddToCard.setAttribute("product-id", (product.id as unknown) as string);
+            buttonRemoveFromCard.setAttribute("product-id", (product.id as unknown) as string);
+            // this.buttonAddToCard?.push(button);
 
             productFooter.insertAdjacentElement("beforeend", productPrice);
-            productFooter.insertAdjacentElement("beforeend", button);
+            productFooter.insertAdjacentElement("beforeend", buttonAddToCard);
+            productFooter.insertAdjacentElement("beforeend", buttonRemoveFromCard);
 
             productContainer.insertAdjacentElement("beforeend", productImageContainer);
             productContainer.insertAdjacentElement("beforeend", productDescription);
@@ -103,15 +110,37 @@ export class View {
         });
     }
 
-    // renderProductFooter(productId) {
-    //     // document
-    // }
+    renderProductFooter(productId: string) {
+        const buttonAddToCard = <HTMLButtonElement>(
+            document.querySelector(`.button-add-to-card[product-id='${productId}']`)
+        );
+        const buttonRemoveFromCard = <HTMLButtonElement>(
+            document.querySelector(`.button-remove-from-card[product-id='${productId}']`)
+        );
+        if (buttonAddToCard.classList.contains("button-display-none")) {
+            buttonAddToCard.classList.remove("button-display-none");
+            buttonRemoveFromCard.classList.add("button-display-none");
+        } else {
+            buttonAddToCard.classList.add("button-display-none");
+            buttonRemoveFromCard.classList.remove("button-display-none");
+        }
+        // if (button?.classList.contains("button-add-to-card")) {
+        //     button.classList.add("button-display-none");
+        //     button.classList.remove("button-add-to-card");
+        //     return;
+        // } else if (button?.classList.contains("button-remove-from-card")) {
+        //     button.classList.add("button-add-to-card");
+        //     button.innerText = "В корзину";
+        //     button.classList.remove("button-remove-from-card");
+        //     return;
+        // }
+    }
 
     addToCardEvent(handler: (id: string) => void): void {
         this.container?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-add-to-card")) {
-                const id = target.getAttribute("id");
+                const id = target.getAttribute("product-id");
                 if (id) handler(id);
             }
         });

@@ -20,13 +20,23 @@ export class Controller {
         this.view.render(this.model.products, this.model.card);
     }
     hanlerAddToCard(id: string) {
-        this.model.addToCard(id, (products: ProductType[], card: ProductType[]) => {
-            this.view.render(products, card);
-        });
+        console.log("add to card");
+        this.model.addToCard(
+            id,
+            (products: ProductType[], card: ProductType[], productId: string) => {
+                this.view.displayCard(card);
+                this.view.renderProductFooter(productId);
+            }
+        );
     }
     hanlerRemoveFromCard(id: string) {
-        this.model.removeFromCard(id, (products: ProductType[], card: ProductType[]) => {
-            this.view.render(products, card);
-        });
+        console.log("remove from card");
+        this.model.removeFromCard(
+            id,
+            (products: ProductType[], card: ProductType[], productId: string) => {
+                this.view.displayCard(card);
+                this.view.renderProductFooter(productId);
+            }
+        );
     }
 }
