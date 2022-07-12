@@ -21,7 +21,7 @@ export class View {
         this.productsRootElement = document.querySelector("#products-root-elem");
         this.cardCountRootElement = document.querySelector("#card-count-root-elem");
     }
-
+    // finish
     createElement(tag: string, className?: string): HTMLElement {
         const el: HTMLElement = document.createElement(tag);
         if (className) {
@@ -29,13 +29,13 @@ export class View {
         }
         return el;
     }
-
+    // TODO: add logic for displaing products in card
     renderCard(card: ProductType[]): void {
         if (this.cardCountRootElement) {
             this.cardCountRootElement.innerText = (card.length as unknown) as string;
         }
     }
-
+    // finish
     renderProducts(products: ProductType[], card: ProductType[]): void {
         if (this.productsRootElement) this.productsRootElement.innerHTML = "";
         products.forEach((product) => {
@@ -74,9 +74,8 @@ export class View {
             this.productsRootElement?.insertAdjacentHTML("beforeend", template);
         });
     }
-
-    renderProductFooter(productId: string) {
-        console.log("Eee");
+    // finish
+    renderProductFooter(productId: string): void {
         const buttonAddToCard = <HTMLButtonElement>(
             document.querySelector(`.button-add-to-card[product-id='${productId}']`)
         );
@@ -95,7 +94,7 @@ export class View {
             priceSpan?.classList.add("display-none");
         }
     }
-
+    // finish
     addToCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
@@ -105,6 +104,7 @@ export class View {
             }
         });
     }
+    // finish
     removeFromCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;

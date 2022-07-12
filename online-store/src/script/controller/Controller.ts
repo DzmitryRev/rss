@@ -18,6 +18,7 @@ export class Controller implements IController {
         this.model = model;
         this.view = view;
     }
+    // finish
     start() {
         // set up events
         this.view.addToCardEvent((id: string) => {
@@ -32,17 +33,19 @@ export class Controller implements IController {
         this.render();
     }
     // render All
+    // finish
     render() {
         this.view.renderProducts(this.model.products, this.model.card);
         this.view.renderCard(this.model.card);
     }
-    //
+    // finish
     hanlerAddToCard(id: string) {
         this.model.addToCard(id, (card: ProductType[], productId: string) => {
             this.view.renderCard(card);
             this.view.renderProductFooter(productId);
         });
     }
+    // finish
     hanlerRemoveFromCard(id: string) {
         this.model.removeFromCard(id, (card: ProductType[], productId: string) => {
             this.view.renderCard(card);
@@ -50,3 +53,13 @@ export class Controller implements IController {
         });
     }
 }
+
+
+// TODO: 
+    // 1. Стилизовать CardCount
+    // 2. Добавить логику открытия бокового меню
+    // 3. Сортировка
+    // 4. Фильтрация
+    // 5. Поиск
+    // 6. Корзина???
+    
