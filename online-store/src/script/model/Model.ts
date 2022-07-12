@@ -3,6 +3,7 @@ import { products, ProductType } from "../../data/products";
 export interface IModel {
     products: ProductType[];
     card: ProductType[];
+    findProduct(id: string): void;
     refreshCard(): void;
     addToCard(productId: string, callback: (card: ProductType[], productId: string) => void): void;
     removeFromCard(
@@ -19,16 +20,16 @@ export class Model implements IModel {
         this.products = products;
         this.card = [];
     }
-
-    private findProduct(id: string): ProductType | undefined {
+    // finish
+    findProduct(id: string): ProductType | undefined {
         return this.products.find((item) => item.id === id);
     }
-
+    // finish
     refreshCard(): void {
         this.card =
             <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) || [];
     }
-
+    // finish
     addToCard(productId: string, callback: (card: ProductType[], productId: string) => void): void {
         const product: ProductType | undefined = this.findProduct(productId);
         const newCard: ProductType[] = [...this.card];
@@ -38,7 +39,7 @@ export class Model implements IModel {
         this.refreshCard();
         callback(this.card, productId);
     }
-
+    // finish
     removeFromCard(productId: string, callback: (card: ProductType[], productId: string) => void) {
         const newCard: ProductType[] = this.card.filter((item) => item.id !== productId);
         localStorage.setItem("revchenko-store-card", JSON.stringify(newCard));
