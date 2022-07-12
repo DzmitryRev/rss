@@ -30,7 +30,7 @@ export class Controller {
     // render All
     render() {
         this.view.displayProducts(this.model.products, this.model.card);
-        this.view.displayCard(this.model.card);
+        this.view.renderCard(this.model.card);
     }
     //
     hanlerAddToCard(id: string) {
@@ -38,7 +38,7 @@ export class Controller {
         this.model.addToCard(
             id,
             (products: ProductType[], card: ProductType[], productId: string) => {
-                this.view.displayCard(card);
+                this.view.renderCard(card);
                 this.view.renderProductFooter(productId);
             }
         );
@@ -48,7 +48,7 @@ export class Controller {
         this.model.removeFromCard(
             id,
             (products: ProductType[], card: ProductType[], productId: string) => {
-                this.view.displayCard(card);
+                this.view.renderCard(card);
                 this.view.renderProductFooter(productId);
             }
         );

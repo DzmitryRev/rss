@@ -5,10 +5,9 @@ export interface IView {
     cardCountRootElement: HTMLDivElement | null;
     createElement(tag: string, className?: string): HTMLElement;
     displayProducts(products: ProductType[], card: ProductType[]): void;
-    displayCard(card: ProductType[]): void;
+    renderCard(card: ProductType[]): void;
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
-    render(products: ProductType[], card: ProductType[]): void;
     renderProductFooter(productId: string): void;
 }
 
@@ -28,7 +27,7 @@ export class View {
         return el;
     }
 
-    displayCard(card: ProductType[]): void {
+    renderCard(card: ProductType[]): void {
         if (this.cardCountRootElement) {
             this.cardCountRootElement.innerText = (card.length as unknown) as string;
         }
