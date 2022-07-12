@@ -137,29 +137,138 @@ export const products: ProductType[] = [
         image:
             "https://mobillife.by/images/virtuemart/product/samsung_galaxy_s22_ultra_5g_%D0%B3%D0%BE%D0%BB%D1%83%D0%B1%D0%BE%D0%B913.jpg",
     },
+    {
+        id: "12",
+        title: "Iphone 13 mini",
+        manufacturer: "Apple",
+        year: "2021",
+        price: "390",
+        memory: 256,
+        quantity: 14,
+        color: "Черный",
+        image: "https://mobillife.by/images/virtuemart/product/30059011b1.jpg",
+    },
+    {
+        id: "13",
+        title: "Iphone 12 mini",
+        manufacturer: "Apple",
+        year: "2020",
+        price: "320",
+        memory: 64,
+        quantity: 6,
+        color: "Белый",
+        image: "https://mobillife.by/images/virtuemart/product/30052886b.jpg",
+    },
+    {
+        id: "14",
+        title: "Iphone 13 pro",
+        manufacturer: "Apple",
+        year: "2021",
+        price: "650",
+        memory: 256,
+        quantity: 9,
+        color: "Голубой",
+        image: "https://mobillife.by/images/virtuemart/product/30059062b1.jpg",
+    },
+    {
+        id: "15",
+        title: "12 lite",
+        manufacturer: "Xiaomi",
+        year: "2022",
+        price: "290",
+        memory: 128,
+        quantity: 20,
+        color: "Голубой",
+        image: "https://mobillife.by/images/virtuemart/product/Xiaomi%2012%20lite%20green16.jpg",
+    },
+    {
+        id: "16",
+        title: "Redmi 10C",
+        manufacturer: "Xiaomi",
+        year: "2020",
+        price: "190",
+        memory: 64,
+        quantity: 11,
+        color: "Зеленый",
+        image:
+            "https://mobillife.by/images/virtuemart/product/redmi_10c_4gb_128gb_myatnyiy_(mejdunarodnaya_versiya)_183.jpg",
+    },
+    {
+        id: "17",
+        title: "12 lite",
+        manufacturer: "Xiaomi",
+        year: "2022",
+        price: "290",
+        memory: 128,
+        quantity: 16,
+        color: "Черный",
+        image: "https://mobillife.by/images/virtuemart/product/Xiaomi%2012%20lite.jpg",
+    },
+    {
+        id: "18",
+        title: "Redmi note 11",
+        manufacturer: "Xiaomi",
+        year: "2022",
+        price: "230",
+        memory: 128,
+        quantity: 10,
+        color: "Белый",
+        image: "https://mobillife.by/images/virtuemart/product/Redmi_Note_11_chernyy_2.jpg",
+    },
+    {
+        id: "19",
+        title: "Galaxy S22",
+        manufacturer: "Samsung",
+        year: "2022",
+        price: "610",
+        memory: 256,
+        quantity: 4,
+        color: "Зеленый",
+        image:
+            "https://mobillife.by/images/virtuemart/product/samsung_galaxy_s22_5g_%D0%B7%D0%B5%D0%BB%D0%B5%D0%BD%D1%8B%D0%B91761.jpg",
+    },
+    {
+        id: "20",
+        title: "Galaxy Z Flip3",
+        manufacturer: "Samsung",
+        year: "2021",
+        price: "600",
+        memory: 256,
+        quantity: 3,
+        color: "Черный",
+        image: "https://mobillife.by/images/virtuemart/product/19288.jpg",
+    },
+    {
+        id: "21",
+        title: "Galaxy A33",
+        manufacturer: "Samsung",
+        year: "2021",
+        price: "270",
+        memory: 64,
+        quantity: 8,
+        color: "Белый",
+        image: "https://mobillife.by/images/virtuemart/product/galaxy-a33-white.jpg",
+    },
+    {
+        id: "22",
+        title: "Pixel 5a",
+        manufacturer: "Google",
+        year: "2021",
+        price: "320",
+        memory: 128,
+        quantity: 2,
+        color: "Черный",
+        image: "https://5zv.by/image/cache/foto_edit/pixel_5a%20(1)-1000x1000.jpg",
+    },
+    {
+        id: "23",
+        title: "Pixel 5",
+        manufacturer: "Google",
+        year: "2020",
+        price: "265",
+        memory: 64,
+        quantity: 6,
+        color: "Зеленый",
+        image: "https://it-m.by/upload/iblock/fb4/ixumxdhc21prnrgjlfbur028e50n3d02.jpg",
+    },
 ];
-
-// TODO: add 14 products
-
-// color:
-// зеленый - 3
-// белый - 3
-// голубой - 4
-// черный - 1
-// year:
-// 2020 - 3
-// 2021 - 4
-// 2022 - 4
-// manuf:
-// apple - 5 // TODO: add 3
-// xiaomi - 1 // TODO: add 4
-// samsung - 2 // TODO: add 5
-// google - 1 // TODO: add 2
-// onePlus - 2
-// memory:
-// 64 - 4
-// 128 - 3
-// 256 - 4
-
-// quantity:
-// any count from 1 to
