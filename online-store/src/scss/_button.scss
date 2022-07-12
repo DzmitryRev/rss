@@ -13,8 +13,13 @@
         background-color: $hover-green;
         transition: background-color 0.2s ease-in-out;
     }
-}
 
-.button-display-none {
-    display: none;
+    &-remove-from-card {
+        width: 100%;
+        background-color: $primary-red;
+        &:hover {
+            background-color: $hover-red;
+            transition: background-color 0.2s ease-in-out;
+        }
+    }
 }

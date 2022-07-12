@@ -90,9 +90,11 @@ export class View {
 
             console.log(card.find((item) => item.id === product.id));
             if (card.find((item) => item.id === product.id)) {
-                buttonAddToCard.classList.add("button-display-none");
+                buttonAddToCard.classList.add("display-none");
+                productPrice.classList.add("display-none");
             } else {
-                buttonRemoveFromCard.classList.add("button-display-none");
+                buttonRemoveFromCard.classList.add("display-none");
+                productPrice.classList.remove("display-none");
             }
             buttonAddToCard.setAttribute("product-id", (product.id as unknown) as string);
             buttonRemoveFromCard.setAttribute("product-id", (product.id as unknown) as string);
@@ -117,23 +119,16 @@ export class View {
         const buttonRemoveFromCard = <HTMLButtonElement>(
             document.querySelector(`.button-remove-from-card[product-id='${productId}']`)
         );
-        if (buttonAddToCard.classList.contains("button-display-none")) {
-            buttonAddToCard.classList.remove("button-display-none");
-            buttonRemoveFromCard.classList.add("button-display-none");
+        const priceSpan = buttonAddToCard.parentElement?.querySelector(".product__price");
+        if (buttonAddToCard.classList.contains("display-none")) {
+            buttonAddToCard.classList.remove("display-none");
+            buttonRemoveFromCard.classList.add("display-none");
+            priceSpan?.classList.remove("display-none");
         } else {
-            buttonAddToCard.classList.add("button-display-none");
-            buttonRemoveFromCard.classList.remove("button-display-none");
+            buttonAddToCard.classList.add("display-none");
+            buttonRemoveFromCard.classList.remove("display-none");
+            priceSpan?.classList.add("display-none");
         }
-        // if (button?.classList.contains("button-add-to-card")) {
-        //     button.classList.add("button-display-none");
-        //     button.classList.remove("button-add-to-card");
-        //     return;
-        // } else if (button?.classList.contains("button-remove-from-card")) {
-        //     button.classList.add("button-add-to-card");
-        //     button.innerText = "В корзину";
-        //     button.classList.remove("button-remove-from-card");
-        //     return;
-        // }
     }
 
     addToCardEvent(handler: (id: string) => void): void {
