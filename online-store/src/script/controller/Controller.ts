@@ -2,12 +2,16 @@ import { ProductType } from "../../data/products";
 import { IModel } from "../model/Model";
 import { IView } from "../view/View";
 
-// interface IController {
-//     model: IModel
-//     view: IView
-// }
+export interface IController {
+    model: IModel;
+    view: IView;
+    start(): void;
+    render(): void;
+    hanlerAddToCard(id: string): void;
+    hanlerRemoveFromCard(id: string): void;
+}
 
-export class Controller {
+export class Controller implements IController {
     model: IModel;
     view: IView;
     constructor(model: IModel, view: IView) {
@@ -34,7 +38,6 @@ export class Controller {
     }
     //
     hanlerAddToCard(id: string) {
-        console.log("add to card");
         this.model.addToCard(
             id,
             (products: ProductType[], card: ProductType[], productId: string) => {
@@ -44,7 +47,6 @@ export class Controller {
         );
     }
     hanlerRemoveFromCard(id: string) {
-        console.log("remove from card");
         this.model.removeFromCard(
             id,
             (products: ProductType[], card: ProductType[], productId: string) => {
