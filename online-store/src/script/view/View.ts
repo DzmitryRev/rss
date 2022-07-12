@@ -1,7 +1,8 @@
 import { ProductType } from "../../data/products";
 
 export interface IView {
-    container: HTMLElement | null;
+    productsRootElement: HTMLDivElement | null;
+    cardCountRootElement: HTMLDivElement | null;
     createElement(tag: string, className?: string): HTMLElement;
     displayProducts(products: ProductType[], card: ProductType[]): void;
     displayCard(card: ProductType[]): void;
@@ -12,11 +13,11 @@ export interface IView {
 }
 
 export class View {
-    container: HTMLElement | null;
-    cardCount: HTMLElement | null;
+    productsRootElement: HTMLDivElement | null;
+    cardCountRootElement: HTMLDivElement | null;
     constructor() {
-        this.container = document.querySelector(".content__products-container");
-        this.cardCount = document.querySelector("#card-count");
+        this.productsRootElement = document.querySelector("#products-root-elem");
+        this.cardCountRootElement = document.querySelector("#card-count-root-elem");
     }
 
     createElement(tag: string, className?: string): HTMLElement {
@@ -33,15 +34,13 @@ export class View {
     }
 
     displayCard(card: ProductType[]): void {
-        console.log("render card");
-        if (this.cardCount) {
-            this.cardCount.innerText = (card.length as unknown) as string;
+        if (this.cardCountRootElement) {
+            this.cardCountRootElement.innerText = (card.length as unknown) as string;
         }
     }
 
     displayProducts(products: ProductType[], card: ProductType[]): void {
-        console.log("render products");
-        if (this.container) this.container.innerHTML = "";
+        if (this.productsRootElement) this.productsRootElement.innerHTML = "";
         products.forEach((product) => {
             const isInCard = card.find((item) => item.id === product.id);
             const template = `
@@ -75,7 +74,7 @@ export class View {
                     </div>
                 </div>
             `;
-            this.container?.insertAdjacentHTML("beforeend", template);
+            this.productsRootElement?.insertAdjacentHTML("beforeend", template);
         });
     }
 
@@ -101,7 +100,7 @@ export class View {
     }
 
     addToCardEvent(handler: (id: string) => void): void {
-        this.container?.addEventListener("click", (e) => {
+        this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-add-to-card")) {
                 const id = target.getAttribute("product-id");
@@ -110,7 +109,7 @@ export class View {
         });
     }
     removeFromCardEvent(handler: (id: string) => void): void {
-        this.container?.addEventListener("click", (e) => {
+        this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-remove-from-card")) {
                 const id = target.getAttribute("product-id");

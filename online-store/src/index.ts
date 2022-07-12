@@ -3,7 +3,7 @@ import "./scss/index.scss";
 // images
 import "./assets/card-icon.svg";
 //
-import { IModel, Model } from "./script/model/Model";
+import { Model } from "./script/model/Model";
 import { Controller } from "./script/controller/Controller";
 import { View } from "./script/view/View";
 
