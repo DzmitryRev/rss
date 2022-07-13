@@ -1,10 +1,13 @@
 import { ProductType } from "../../data/products";
+import { ProductsModule } from "./modules/ProductsModule";
 import { SettingsModule } from "./modules/SettingsModule";
 
 export interface IView {
     productsRootElement: HTMLDivElement | null;
     cardCountRootElement: HTMLDivElement | null;
     settingsRootElement: HTMLDivElement | null;
+    settingsBlock: SettingsModule;
+    productsBlock: ProductsModule;
     // root
     createElement(tag: string, className?: string): HTMLElement;
     // events
@@ -12,10 +15,9 @@ export interface IView {
     removeFromCardEvent(handler: (id: string) => void): void;
     colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
     // renders
-    renderProducts(products: ProductType[], card: ProductType[]): void;
+    // renderProducts(products: ProductType[], card: ProductType[]): void;
     renderCard(card: ProductType[]): void;
     renderProductFooter(productId: string): void;
-    settingsBlock: SettingsModule;
 }
 
 export class View {
@@ -23,11 +25,13 @@ export class View {
     cardCountRootElement: HTMLDivElement | null;
     settingsRootElement: HTMLDivElement | null;
     settingsBlock: SettingsModule;
+    productsBlock: ProductsModule;
     constructor() {
         this.productsRootElement = document.querySelector("#products-root-elem");
         this.cardCountRootElement = document.querySelector("#card-count-root-elem");
         this.settingsRootElement = document.querySelector("#settings-root-element");
         this.settingsBlock = new SettingsModule(this.settingsRootElement);
+        this.productsBlock = new ProductsModule(this.productsRootElement);
     }
     // finish
     createElement(tag: string, className?: string): HTMLElement {
@@ -49,45 +53,6 @@ export class View {
         }
     }
 
-    // finish
-    renderProducts(products: ProductType[], card: ProductType[]): void {
-        if (this.productsRootElement) this.productsRootElement.innerHTML = "";
-        products.forEach((product) => {
-            const isInCard = card.find((item) => item.id === product.id);
-            const template = `
-                <div class="product">
-                    <div class="product__image-container">
-                        <img
-                            class="product__image"
-                            src="${product.image}"
-                            alt="${product.title}"
-                        />
-                    </div>
-                    <div class="product__description">
-                        <span class="product__manufacturer">${product.manufacturer}</span>
-                        <span class="product__title">${product.title}</span>
-                        <p>Год: <span class="product__year">${product.year}</span></p>
-                        <p>Цвет: <span class="product__color">${product.color}</span></p>
-                    </div>
-                    <div class="product__footer">
-                        <span class="product__price ${isInCard ? "display-none" : ""}">
-                        ${product.price}$</span>
-                        <button id="test2" 
-                                class="button button-add-to-card ${isInCard ? "display-none" : ""}"
-                                product-id='${product.id}'
-                                >В корзину</button>
-                        <button id="test2" 
-                                class="button button-remove-from-card ${
-                                    isInCard ? "" : "display-none"
-                                }"
-                                product-id='${product.id}'
-                                >Убрать из корзины</button>
-                    </div>
-                </div>
-            `;
-            this.productsRootElement?.insertAdjacentHTML("beforeend", template);
-        });
-    }
     // finish
     renderProductFooter(productId: string): void {
         const buttonAddToCard = <HTMLButtonElement>(

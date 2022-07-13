@@ -3,7 +3,7 @@ import { ProductType } from "../../../data/products";
 export interface IViewModule {
     createElement(tag: string, className?: string): HTMLElement;
     root: HTMLElement | null;
-    render(products: ProductType[]): void;
+    render(products: ProductType[], card?: ProductType[]): void;
 }
 
 export class ViewModule implements IViewModule {

@@ -38,7 +38,7 @@ export class Controller implements IController {
     // render All
     // finish
     render() {
-        this.view.renderProducts(this.model.filter(), this.model.card);
+        this.view.productsBlock.render(this.model.filter(), this.model.card);
         this.view.settingsBlock.render(this.model._products);
         this.view.renderCard(this.model.card);
     }
@@ -58,7 +58,7 @@ export class Controller implements IController {
     }
     handleColorFilter(method: "ADD" | "DELETE", value: string) {
         this.model.toggleColor(method, value, (products, card) => {
-            this.view.renderProducts(products, card);
+            this.view.productsBlock.render(products, card);
         });
     }
 }
