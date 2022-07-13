@@ -1,14 +1,9 @@
 import { products, ProductType } from "../../data/products";
-interface IFilters {
-    color: string[];
-    memory: string[];
-    manufacturer: string[];
-}
+import { CheckboxFilter } from "../utils/CheckboxFilter";
 
 export interface IModel {
     _products: ProductType[];
     card: ProductType[];
-    filters: IFilters;
     filter(): ProductType[];
     findProduct(id: string): void;
     refreshCard(): void;
@@ -17,98 +12,44 @@ export interface IModel {
         productId: string,
         callback: (card: ProductType[], productId: string) => void
     ): void;
-    changeFilter(
+    toggleColor(
         method: "ADD" | "DELETE",
-        key: string,
         value: string,
         callback: (products: ProductType[], card: ProductType[]) => void
     ): void;
 }
 
-// sort = ["price", "quantity", "year", "memory"]
-// if(!sort.length) return
-// filters [
-// price: {from: 0, to: 300}, // later
-// year: {from: 2019, to: 2022}, // later
-// color: [...all colors]
-// memory: [... all memories]
-//
-// ]
-
-//
-
-enum Colors {
-    white = "белый",
-}
-
 export class Model implements IModel {
     _products: ProductType[];
     card: ProductType[];
-    filters: IFilters;
-
+    colorFilter: CheckboxFilter;
     constructor() {
         this._products = products;
         this.card = [];
-        this.filters = {
-            color: [],
-            memory: [],
-            manufacturer: [],
-            // price: { from: "0", to: "2000" },
-        };
+        this.colorFilter = new CheckboxFilter();
     }
 
     // finish
     findProduct(id: string): ProductType | undefined {
         return this._products.find((item) => item.id === id);
     }
+
     filter(): ProductType[] {
         const filtredProducts = this._products.filter((item) => {
-            return (
-                (!this.filters.color.length || this.filters.color.includes(item.color)) &&
-                (!this.filters.memory.length ||
-                    this.filters.memory.includes((item.memory as unknown) as string)) &&
-                (!this.filters.manufacturer.length ||
-                    this.filters.manufacturer.includes(item.manufacturer))
-                //     &&
-                // Number(item.price) >= Number(filters.price.from) &&
-                // Number(item.price) <= Number(filters.price.to)
-            );
+            return !this.colorFilter.values.length || this.colorFilter.values.includes(item.color);
         });
         return filtredProducts;
     }
-    changeFilter(
+
+    toggleColor(
         method: "ADD" | "DELETE",
-        key: string,
         value: string,
         callback: (products: ProductType[], card: ProductType[]) => void
     ) {
-        const a = Object.keys(this.filters);
-        switch (method) {
-            case "ADD": {
-                a.forEach((item) => {
-                    if (item === key) {
-                        this.filters[item as keyof typeof this.filters].push(value);
-                    }
-                });
-                callback(this.filter(), this.card);
-                break;
-            }
-            case "DELETE": {
-                a.forEach((item) => {
-                    if (item === key) {
-                        this.filters[item as keyof typeof this.filters].filter((item) => {
-                            item !== value;
-                        });
-                    }
-                });
-                callback(this.filter(), this.card);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
+        this.colorFilter.toggleValue(method, value);
+        callback(this.filter(), this.card);
     }
+
     // finish
     refreshCard(): void {
         this.card =

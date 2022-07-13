@@ -27,6 +27,9 @@ export class Controller implements IController {
         this.view.removeFromCardEvent((id: string) => {
             this.hanlerRemoveFromCard(id);
         });
+        this.view.colorFilterEvent((method: "ADD" | "DELETE", value: string) => {
+            this.handleColorFilter(method, value);
+        });
         // init card local storage
         this.model.refreshCard();
         // init render
@@ -36,6 +39,7 @@ export class Controller implements IController {
     // finish
     render() {
         this.view.renderProducts(this.model.filter(), this.model.card);
+        this.view.renderSettings(this.model._products);
         this.view.renderCard(this.model.card);
     }
     // finish
@@ -50,6 +54,11 @@ export class Controller implements IController {
         this.model.removeFromCard(id, (card: ProductType[], productId: string) => {
             this.view.renderCard(card);
             this.view.renderProductFooter(productId);
+        });
+    }
+    handleColorFilter(method: "ADD" | "DELETE", value: string) {
+        this.model.toggleColor(method, value, (products, card) => {
+            this.view.renderProducts(products, card);
         });
     }
 }
