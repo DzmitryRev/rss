@@ -31,6 +31,10 @@ export class Model implements IModel {
     }
     // finish
     addToCard(productId: string, callback: (card: ProductType[], productId: string) => void): void {
+        if(this.card.length >= 20) {
+            alert("Не больше 20 товаров!")
+            return
+        }
         const product: ProductType | undefined = this.findProduct(productId);
         const newCard: ProductType[] = [...this.card];
         if (newCard.filter((item) => item.id === productId).length > 0 || !product) return;

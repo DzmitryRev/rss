@@ -56,7 +56,7 @@ export class Controller implements IController {
 
 
 // TODO: 
-    // 1. Стилизовать CardCount
+    // 1. Стилизовать CardCount // +
     // 1.1 Не больше 20 товаров в корзине!
     // 2. Добавить логику открытия бокового меню
     // 3. Сортировка

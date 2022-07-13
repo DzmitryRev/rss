@@ -72,7 +72,7 @@ export class View {
                                     isInCard ? "" : "display-none"
                                 }"
                                 product-id='${product.id}'
-                                >В корзину</button>
+                                >Убрать из корзины</button>
                     </div>
                 </div>
             `;
