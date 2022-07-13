@@ -39,7 +39,7 @@ export class Controller implements IController {
     // finish
     render() {
         this.view.renderProducts(this.model.filter(), this.model.card);
-        this.view.renderSettings(this.model._products);
+        this.view.settingsBlock.render(this.model._products);
         this.view.renderCard(this.model.card);
     }
     // finish
