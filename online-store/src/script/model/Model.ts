@@ -1,7 +1,8 @@
 import { products, ProductType } from "../../data/products";
 
 export interface IModel {
-    products: ProductType[];
+    _products: ProductType[];
+    filter(): ProductType[];
     card: ProductType[];
     findProduct(id: string): void;
     refreshCard(): void;
@@ -12,17 +13,63 @@ export interface IModel {
     ): void;
 }
 
+// sort = ["price", "quantity", "year", "memory"]
+// if(!sort.length) return
+// filters [
+// price: {from: 0, to: 300}, // later
+// year: {from: 2019, to: 2022}, // later
+// color: [...all colors]
+// memory: [... all memories]
+//
+// ]
+
+//
+
+interface IFilters {
+    color: string[];
+    memory: number[];
+    manufacturer: string[];
+}
+enum Colors {
+    white = "белый",
+}
+
 export class Model implements IModel {
-    products: ProductType[];
+    _products: ProductType[];
     card: ProductType[];
 
     constructor() {
-        this.products = products;
+        this._products = products;
         this.card = [];
     }
+
     // finish
     findProduct(id: string): ProductType | undefined {
-        return this.products.find((item) => item.id === id);
+        return this._products.find((item) => item.id === id);
+    }
+    filter(): ProductType[] {
+        const filters: {
+            color: string[];
+            memory: number[];
+            manufacturer: string[];
+            price: { from: string; to: string };
+        } = {
+            color: [],
+            memory: [],
+            manufacturer: [],
+            price: { from: "0", to: "2000" },
+        };
+        const filtredProducts = this._products.filter((item) => {
+            return (
+                (!filters.color.length || filters.color.includes(item.color)) &&
+                (!filters.memory.length || filters.memory.includes(item.memory)) &&
+                (!filters.manufacturer.length ||
+                    filters.manufacturer.includes(item.manufacturer)) &&
+                Number(item.price) >= Number(filters.price.from) &&
+                Number(item.price) <= Number(filters.price.to)
+            );
+        });
+        return filtredProducts;
     }
     // finish
     refreshCard(): void {
@@ -31,9 +78,9 @@ export class Model implements IModel {
     }
     // finish
     addToCard(productId: string, callback: (card: ProductType[], productId: string) => void): void {
-        if(this.card.length >= 20) {
-            alert("Не больше 20 товаров!")
-            return
+        if (this.card.length >= 20) {
+            alert("Не больше 20 товаров!");
+            return;
         }
         const product: ProductType | undefined = this.findProduct(productId);
         const newCard: ProductType[] = [...this.card];

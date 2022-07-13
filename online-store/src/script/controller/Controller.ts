@@ -35,7 +35,7 @@ export class Controller implements IController {
     // render All
     // finish
     render() {
-        this.view.renderProducts(this.model.products, this.model.card);
+        this.view.renderProducts(this.model.filter(), this.model.card);
         this.view.renderCard(this.model.card);
     }
     // finish
@@ -54,13 +54,11 @@ export class Controller implements IController {
     }
 }
 
-
-// TODO: 
-    // 1. Стилизовать CardCount // +
-    // 1.1 Не больше 20 товаров в корзине!
-    // 2. Добавить логику открытия бокового меню
-    // 3. Сортировка
-    // 4. Фильтрация
-    // 5. Поиск
-    // 6. Корзина???
-    
+// TODO:
+// 1. Стилизовать CardCount // +
+// 1.1 Не больше 20 товаров в корзине!
+// 2. Добавить логику открытия бокового меню
+// 3. Сортировка
+// 4. Фильтрация
+// 5. Поиск
+// 6. Корзина???

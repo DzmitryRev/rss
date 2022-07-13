@@ -4,7 +4,8 @@
         "noImplicitAny": false,
         "strict": true,
         "noEmitOnError": false,
-        "allowJs": true
+        "allowJs": true,
+        "target": "ES5"
     },
     "include": ["src"]
 }
