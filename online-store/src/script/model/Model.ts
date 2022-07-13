@@ -17,6 +17,12 @@ export interface IModel {
         productId: string,
         callback: (card: ProductType[], productId: string) => void
     ): void;
+    changeFilter(
+        method: "ADD" | "DELETE",
+        key: string,
+        value: string,
+        callback: (products: ProductType[], card: ProductType[]) => void
+    ): void;
 }
 
 // sort = ["price", "quantity", "year", "memory"]
@@ -70,7 +76,12 @@ export class Model implements IModel {
         });
         return filtredProducts;
     }
-    changeFilter(method: "ADD" | "DELETE", key: string, value: string) {
+    changeFilter(
+        method: "ADD" | "DELETE",
+        key: string,
+        value: string,
+        callback: (products: ProductType[], card: ProductType[]) => void
+    ) {
         const a = Object.keys(this.filters);
         switch (method) {
             case "ADD": {
@@ -79,6 +90,7 @@ export class Model implements IModel {
                         this.filters[item as keyof typeof this.filters].push(value);
                     }
                 });
+                callback(this.filter(), this.card);
                 break;
             }
             case "DELETE": {
@@ -89,6 +101,7 @@ export class Model implements IModel {
                         });
                     }
                 });
+                callback(this.filter(), this.card);
                 break;
             }
             default: {
