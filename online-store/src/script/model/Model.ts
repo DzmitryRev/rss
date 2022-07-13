@@ -1,9 +1,15 @@
 import { products, ProductType } from "../../data/products";
+interface IFilters {
+    color: string[];
+    memory: string[];
+    manufacturer: string[];
+}
 
 export interface IModel {
     _products: ProductType[];
-    filter(): ProductType[];
     card: ProductType[];
+    filters: IFilters;
+    filter(): ProductType[];
     findProduct(id: string): void;
     refreshCard(): void;
     addToCard(productId: string, callback: (card: ProductType[], productId: string) => void): void;
@@ -25,11 +31,6 @@ export interface IModel {
 
 //
 
-interface IFilters {
-    color: string[];
-    memory: number[];
-    manufacturer: string[];
-}
 enum Colors {
     white = "белый",
 }
@@ -37,10 +38,17 @@ enum Colors {
 export class Model implements IModel {
     _products: ProductType[];
     card: ProductType[];
+    filters: IFilters;
 
     constructor() {
         this._products = products;
         this.card = [];
+        this.filters = {
+            color: [],
+            memory: [],
+            manufacturer: [],
+            // price: { from: "0", to: "2000" },
+        };
     }
 
     // finish
@@ -48,28 +56,45 @@ export class Model implements IModel {
         return this._products.find((item) => item.id === id);
     }
     filter(): ProductType[] {
-        const filters: {
-            color: string[];
-            memory: number[];
-            manufacturer: string[];
-            price: { from: string; to: string };
-        } = {
-            color: [],
-            memory: [],
-            manufacturer: [],
-            price: { from: "0", to: "2000" },
-        };
         const filtredProducts = this._products.filter((item) => {
             return (
-                (!filters.color.length || filters.color.includes(item.color)) &&
-                (!filters.memory.length || filters.memory.includes(item.memory)) &&
-                (!filters.manufacturer.length ||
-                    filters.manufacturer.includes(item.manufacturer)) &&
-                Number(item.price) >= Number(filters.price.from) &&
-                Number(item.price) <= Number(filters.price.to)
+                (!this.filters.color.length || this.filters.color.includes(item.color)) &&
+                (!this.filters.memory.length ||
+                    this.filters.memory.includes((item.memory as unknown) as string)) &&
+                (!this.filters.manufacturer.length ||
+                    this.filters.manufacturer.includes(item.manufacturer))
+                //     &&
+                // Number(item.price) >= Number(filters.price.from) &&
+                // Number(item.price) <= Number(filters.price.to)
             );
         });
         return filtredProducts;
+    }
+    changeFilter(method: "ADD" | "DELETE", key: string, value: string) {
+        const a = Object.keys(this.filters);
+        switch (method) {
+            case "ADD": {
+                a.forEach((item) => {
+                    if (item === key) {
+                        this.filters[item as keyof typeof this.filters].push(value);
+                    }
+                });
+                break;
+            }
+            case "DELETE": {
+                a.forEach((item) => {
+                    if (item === key) {
+                        this.filters[item as keyof typeof this.filters].filter((item) => {
+                            item !== value;
+                        });
+                    }
+                });
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }
     // finish
     refreshCard(): void {
