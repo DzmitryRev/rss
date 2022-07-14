@@ -1,6 +1,6 @@
 import { ProductType } from "../../data/products";
 
-type FiltersType = { color: string[]; year: string[] };
+type FiltersType = { color: string[]; year: string[]; manufacturer: string[]; memory: string[] };
 
 export interface IModel {
     _products: ProductType[];
@@ -53,6 +53,8 @@ export class Model implements IModel {
         const defaultFilters: FiltersType = {
             color: [],
             year: [],
+            memory: [],
+            manufacturer: [],
         };
 
         this.getFiltersStorage = () => {

@@ -25,6 +25,8 @@ export class Controller implements IController {
         this.view.removeFromCardEvent((id: string) => {
             this.handleRemoveFromCard(id);
         });
+
+        //
         this.render();
     }
 
