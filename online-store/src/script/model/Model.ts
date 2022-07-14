@@ -31,17 +31,33 @@ export class Model implements IModel {
     colorFilter: CheckboxFilter;
     yearFilter: CheckboxFilter;
     // Refactor
-    localStorage: Storage
+    getCardStorage: () => void;
+    setCardStorage: (card: ProductType[]) => void;
     //
+
     constructor() {
         this._products = products;
         this.card = [];
         this.colorFilter = new CheckboxFilter();
         this.yearFilter = new CheckboxFilter();
+
         // Refactor
-        this.localStorage = window.localStorage
+        const localStorage = window.localStorage;
+
+        this.getCardStorage = () => {
+            return localStorage.getItem("revchenko-store-card") || [];
+        };
+
+        this.setCardStorage = (card: ProductType[]) => {
+            localStorage.setItem("revchenko-store-card", JSON.stringify(card));
+        };
+
         //
     }
+
+    // Refactor
+
+    //
 
     // finish
     findProduct(id: string): ProductType | undefined {
