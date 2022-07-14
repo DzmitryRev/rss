@@ -7,8 +7,8 @@ export interface IController {
     view: IView;
     start(): void;
     render(): void;
-    hanlerAddToCard(id: string): void;
-    hanlerRemoveFromCard(id: string): void;
+    handleAddToCard(id: string): void;
+    handleRemoveFromCard(id: string): void;
 }
 
 export class Controller implements IController {
@@ -22,10 +22,10 @@ export class Controller implements IController {
     start() {
         // set up events
         this.view.addToCardEvent((id: string) => {
-            this.hanlerAddToCard(id);
+            this.handleAddToCard(id);
         });
         this.view.removeFromCardEvent((id: string) => {
-            this.hanlerRemoveFromCard(id);
+            this.handleRemoveFromCard(id);
         });
         this.view.colorFilterEvent((method: "ADD" | "DELETE", value: string) => {
             this.handleColorFilter(method, value);
@@ -34,39 +34,59 @@ export class Controller implements IController {
             this.handleYearFilter(method, value);
         });
         // init card local storage
-        this.model.refreshCard();
+        // this.model.refreshCard();
         // init render
         this.render();
     }
     // render All
     // finish
     render() {
-        this.view.productsBlock.render(this.model.filter(), this.model.card);
         this.view.settingsBlock.render(this.model._products);
-        this.view.renderCard(this.model.card);
+        this.view.productsBlock.render(this.model._products);
+        // this.view.renderCard(this.model.getCardStorage());
+        // this.view.renderProductFooter(this.model._products, this.model.getCardStorage());
+        this._getCard();
     }
-    // finish
-    hanlerAddToCard(id: string) {
-        this.model.addToCard(id, (card: ProductType[], productId: string) => {
-            this.view.renderCard(card);
-            this.view.renderProductFooter(productId);
-        });
-    }
-    // finish
-    hanlerRemoveFromCard(id: string) {
-        this.model.removeFromCard(id, (card: ProductType[], productId: string) => {
-            this.view.renderCard(card);
-            this.view.renderProductFooter(productId);
-        });
-    }
+    // // finish
+    // hanlerAddToCard(id: string) {
+    //     this.model.addToCard(id, (card: ProductType[], productId: string) => {
+    //         this.view.renderCard(card);
+    //         this.view.renderProductFooter(productId);
+    //     });
+    // }
+    // // finish
+    // hanlerRemoveFromCard(id: string) {
+    //     this.model.removeFromCard(id, (card: ProductType[], productId: string) => {
+    //         this.view.renderCard(card);
+    //         this.view.renderProductFooter(productId);
+    //     });
+    // }
     handleColorFilter(method: "ADD" | "DELETE", value: string) {
-        this.model.toggleColor(method, value, (products, card) => {
-            this.view.productsBlock.render(products, card);
+        this.model.toggleColor(method, value, (products) => {
+            this.view.productsBlock.render(products);
         });
     }
     handleYearFilter(method: "ADD" | "DELETE", value: string) {
-        this.model.toggleYear(method, value, (products, card) => {
-            this.view.productsBlock.render(products, card);
+        this.model.toggleYear(method, value, (products) => {
+            this.view.productsBlock.render(products);
+        });
+    }
+
+    // CARD
+    handleAddToCard(id: string) {
+        this.model.addToCard(id, () => {
+            this._getCard();
+        });
+    }
+    handleRemoveFromCard(id: string) {
+        this.model.removeFromCard(id, () => {
+            this._getCard();
+        });
+    }
+    _getCard() {
+        this.model.getCard((products, currentCard) => {
+            this.view.renderCard(currentCard);
+            this.view.renderProductFooter(products, currentCard);
         });
     }
 }

@@ -5,11 +5,9 @@ export class ProductsModule extends ViewModule {
     constructor(root: HTMLElement | null) {
         super(root);
     }
-    render(products: ProductType[], card?: ProductType[]): void {
-        if (!card) return;
+    render(products: ProductType[]): void {
         if (this.root) this.root.innerHTML = "";
         products.forEach((product) => {
-            const isInCard = card.find((item) => item.id === product.id);
             const template = `
                 <div class="product">
                     <div class="product__image-container">
@@ -26,16 +24,14 @@ export class ProductsModule extends ViewModule {
                         <p>Цвет: <span class="product__color">${product.color}</span></p>
                     </div>
                     <div class="product__footer">
-                        <span class="product__price ${isInCard ? "display-none" : ""}">
+                        <span class="product__price">
                         ${product.price}$</span>
                         <button id="test2" 
-                                class="button button-add-to-card ${isInCard ? "display-none" : ""}"
+                                class="button button-add-to-card"
                                 product-id='${product.id}'
                                 >В корзину</button>
                         <button id="test2" 
-                                class="button button-remove-from-card ${
-                                    isInCard ? "" : "display-none"
-                                }"
+                                class="button button-remove-from-card"
                                 product-id='${product.id}'
                                 >Убрать из корзины</button>
                     </div>

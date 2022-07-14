@@ -21,7 +21,7 @@ export interface IView {
     // renders
     // renderProducts(products: ProductType[], card: ProductType[]): void;
     renderCard(card: ProductType[]): void;
-    renderProductFooter(productId: string): void;
+    renderProductFooter(products: ProductType[], card: ProductType[]): void;
 }
 
 export class View {
@@ -58,23 +58,29 @@ export class View {
     }
 
     // finish
-    renderProductFooter(productId: string): void {
-        const buttonAddToCard = <HTMLButtonElement>(
-            document.querySelector(`.button-add-to-card[product-id='${productId}']`)
-        );
-        const buttonRemoveFromCard = <HTMLButtonElement>(
-            document.querySelector(`.button-remove-from-card[product-id='${productId}']`)
-        );
-        const priceSpan = buttonAddToCard.parentElement?.querySelector(".product__price");
-        if (buttonAddToCard.classList.contains("display-none")) {
-            buttonAddToCard.classList.remove("display-none");
-            buttonRemoveFromCard.classList.add("display-none");
-            priceSpan?.classList.remove("display-none");
-        } else {
-            buttonAddToCard.classList.add("display-none");
-            buttonRemoveFromCard.classList.remove("display-none");
-            priceSpan?.classList.add("display-none");
-        }
+    renderProductFooter(products: ProductType[], card: ProductType[]): void {
+        products.forEach((product) => {
+            const buttonAddToCard = <HTMLButtonElement>(
+                document.querySelector(`.button-add-to-card[product-id='${product.id}']`)
+            );
+            const buttonRemoveFromCard = <HTMLButtonElement>(
+                document.querySelector(`.button-remove-from-card[product-id='${product.id}']`)
+            );
+            const priceSpan = buttonAddToCard.parentElement?.querySelector(".product__price");
+
+            if (!card.find((productInCard) => productInCard.id === product.id)) {
+                buttonAddToCard.classList.remove("display-none");
+                priceSpan?.classList.remove("display-none");
+                //
+                buttonRemoveFromCard.classList.add("display-none");
+                return;
+            } else {
+                buttonRemoveFromCard.classList.remove("display-none");
+                //
+                buttonAddToCard.classList.add("display-none");
+                priceSpan?.classList.add("display-none");
+            }
+        });
     }
     // finish
     addToCardEvent(handler: (id: string) => void): void {
@@ -90,7 +96,9 @@ export class View {
     removeFromCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
+
             if (target?.classList.contains("button-remove-from-card")) {
+                console.log(target);
                 const id = target.getAttribute("product-id");
                 if (id) handler(id);
             }
