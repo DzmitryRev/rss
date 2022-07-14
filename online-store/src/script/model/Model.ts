@@ -17,16 +17,30 @@ export interface IModel {
         value: string,
         callback: (products: ProductType[], card: ProductType[]) => void
     ): void;
+    toggleYear(
+        method: "ADD" | "DELETE",
+        value: string,
+        callback: (products: ProductType[], card: ProductType[]) => void
+    ): void;
+    yearFilter: CheckboxFilter;
 }
 
 export class Model implements IModel {
     _products: ProductType[];
     card: ProductType[];
     colorFilter: CheckboxFilter;
+    yearFilter: CheckboxFilter;
+    // Refactor
+    localStorage: Storage
+    //
     constructor() {
         this._products = products;
         this.card = [];
         this.colorFilter = new CheckboxFilter();
+        this.yearFilter = new CheckboxFilter();
+        // Refactor
+        this.localStorage = window.localStorage
+        //
     }
 
     // finish
@@ -36,7 +50,10 @@ export class Model implements IModel {
 
     filter(): ProductType[] {
         const filtredProducts = this._products.filter((item) => {
-            return !this.colorFilter.values.length || this.colorFilter.values.includes(item.color);
+            return (
+                (!this.colorFilter.values.length || this.colorFilter.values.includes(item.color)) &&
+                (!this.yearFilter.values.length || this.yearFilter.values.includes(item.year))
+            );
         });
         return filtredProducts;
     }
@@ -47,6 +64,15 @@ export class Model implements IModel {
         callback: (products: ProductType[], card: ProductType[]) => void
     ) {
         this.colorFilter.toggleValue(method, value);
+        console.log(this.colorFilter.values);
+        callback(this.filter(), this.card);
+    }
+    toggleYear(
+        method: "ADD" | "DELETE",
+        value: string,
+        callback: (products: ProductType[], card: ProductType[]) => void
+    ) {
+        this.yearFilter.toggleValue(method, value);
         callback(this.filter(), this.card);
     }
 

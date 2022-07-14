@@ -30,6 +30,9 @@ export class Controller implements IController {
         this.view.colorFilterEvent((method: "ADD" | "DELETE", value: string) => {
             this.handleColorFilter(method, value);
         });
+        this.view.yearFilterEvent((method: "ADD" | "DELETE", value: string) => {
+            this.handleYearFilter(method, value);
+        });
         // init card local storage
         this.model.refreshCard();
         // init render
@@ -58,6 +61,11 @@ export class Controller implements IController {
     }
     handleColorFilter(method: "ADD" | "DELETE", value: string) {
         this.model.toggleColor(method, value, (products, card) => {
+            this.view.productsBlock.render(products, card);
+        });
+    }
+    handleYearFilter(method: "ADD" | "DELETE", value: string) {
+        this.model.toggleYear(method, value, (products, card) => {
             this.view.productsBlock.render(products, card);
         });
     }

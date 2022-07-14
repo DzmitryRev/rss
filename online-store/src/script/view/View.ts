@@ -13,7 +13,11 @@ export interface IView {
     // events
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
+    filterEvent(param: string, handler: (method: "ADD" | "DELETE", value: string) => void);
     colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
+    yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
+    manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
+    memoryFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
     // renders
     // renderProducts(products: ProductType[], card: ProductType[]): void;
     renderCard(card: ProductType[]): void;
@@ -92,11 +96,12 @@ export class View {
             }
         });
     }
-    colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
+    filterEvent(param: string, handler: (method: "ADD" | "DELETE", value: string) => void) {
         this.settingsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLInputElement>e.target;
-            if (target?.classList.contains("check")) {
+            if (target?.classList.contains("check") && target?.getAttribute("param") === param) {
                 const a = target.parentElement?.querySelector("span")?.innerText;
+                console.log(target.parentElement, "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 const meth = target.checked ? "ADD" : "DELETE";
                 if (a) {
                     handler(meth, a);
@@ -104,4 +109,16 @@ export class View {
             }
         });
     }
+    colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
+        this.filterEvent("Color", handler);
+    }
+    yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
+        this.filterEvent("Year", handler);
+    }
+    // manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
+    //     this.filterEvent("Производитель", handler);
+    // }
+    // memoryFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
+    //     this.filterEvent("Память", handler);
+    // }
 }

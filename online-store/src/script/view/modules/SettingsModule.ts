@@ -28,10 +28,10 @@ export class SettingsModule extends ViewModule implements ISettingsModule {
                 availableYears.push(item.year);
             }
         });
-        this.createFilterBlock(availableColors, "Цвет");
-        this.createFilterBlock(availableMemories, "Память");
-        this.createFilterBlock(availableManufacturers, "Производитель");
-        this.createFilterBlock(availableYears, "Год выпуска");
+        this.createFilterBlock(availableColors, "Color");
+        this.createFilterBlock(availableMemories, "Memory");
+        this.createFilterBlock(availableManufacturers, "Manufacturer");
+        this.createFilterBlock(availableYears, "Year");
     }
     createFilterBlock(values: string[], headin: string): void {
         const container = <HTMLDivElement>this.createElement("div");
@@ -39,13 +39,16 @@ export class SettingsModule extends ViewModule implements ISettingsModule {
         heading.innerText = headin;
         container.insertAdjacentElement("beforeend", heading);
         values.forEach((color) => {
+            const checkboxContainer = <HTMLDivElement>this.createElement("div");
             const chekbox = <HTMLInputElement>this.createElement("input");
+            chekbox.setAttribute("param", headin);
             chekbox.classList.add("check");
             chekbox.type = "checkbox";
             const span = <HTMLSpanElement>this.createElement("span");
             span.innerText = (color as unknown) as string;
-            container.insertAdjacentElement("beforeend", chekbox);
-            container.insertAdjacentElement("beforeend", span);
+            checkboxContainer.insertAdjacentElement("beforeend", chekbox);
+            checkboxContainer.insertAdjacentElement("beforeend", span);
+            container.insertAdjacentElement("beforeend", checkboxContainer);
             this.root?.insertAdjacentElement("beforeend", container);
         });
     }
