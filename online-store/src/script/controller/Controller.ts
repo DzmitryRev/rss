@@ -27,12 +27,12 @@ export class Controller implements IController {
         this.view.removeFromCardEvent((id: string) => {
             this.handleRemoveFromCard(id);
         });
-        this.view.colorFilterEvent((method: "ADD" | "DELETE", value: string) => {
-            this.handleColorFilter(method, value);
-        });
-        this.view.yearFilterEvent((method: "ADD" | "DELETE", value: string) => {
-            this.handleYearFilter(method, value);
-        });
+        // this.view.colorFilterEvent((method: "ADD" | "DELETE", value: string) => {
+        //     this.handleAddFilter(value);
+        // });
+        // this.view.yearFilterEvent((method: "ADD" | "DELETE", value: string) => {
+        //     this.handleYearFilter(method, value);
+        // });
         // init card local storage
         // this.model.refreshCard();
         // init render
@@ -41,8 +41,14 @@ export class Controller implements IController {
     // render All
     // finish
     render() {
-        this.view.settingsBlock.render(this.model._products);
-        this.view.productsBlock.render(this.model._products);
+        // this.view.settingsBlock.render(this.model._products);
+        // this.view.productsBlock.render(
+        //     this.model.getProducts((products) => {
+        //         console.log("Aaa");
+        //     })
+        // );
+        this._getProducts();
+        // this._getProducts();
         // this.view.renderCard(this.model.getCardStorage());
         // this.view.renderProductFooter(this.model._products, this.model.getCardStorage());
         this._getCard();
@@ -61,16 +67,16 @@ export class Controller implements IController {
     //         this.view.renderProductFooter(productId);
     //     });
     // }
-    handleColorFilter(method: "ADD" | "DELETE", value: string) {
-        this.model.toggleColor(method, value, (products) => {
-            this.view.productsBlock.render(products);
-        });
-    }
-    handleYearFilter(method: "ADD" | "DELETE", value: string) {
-        this.model.toggleYear(method, value, (products) => {
-            this.view.productsBlock.render(products);
-        });
-    }
+    // handleColorFilter(method: "ADD" | "DELETE", value: string) {
+    //     this.model.toggleColor(method, value, (products) => {
+    //         this.view.productsBlock.render(products);
+    //     });
+    // }
+    // handleYearFilter(method: "ADD" | "DELETE", value: string) {
+    //     this.model.toggleYear(method, value, (products) => {
+    //         this.view.productsBlock.render(products);
+    //     });
+    // }
 
     // CARD
     handleAddToCard(id: string) {
@@ -83,9 +89,27 @@ export class Controller implements IController {
             this._getCard();
         });
     }
+    // handleAddFilter(value: string) {
+    //     this.model.addFilter("color", value, () => {
+    //         this._getProducts();
+    //     });
+    // }
+    // handleRemoveFilter(value: string) {
+    //     this.model.removeFilter("color", value, () => {
+    //         this._getProducts();
+    //     });
+    // }
     _getCard() {
         this.model.getCard((products, currentCard) => {
             this.view.renderCard(currentCard);
+            this.model.getProducts((products) => {
+                this.view.renderProductFooter(products, currentCard);
+            });
+        });
+    }
+    _getProducts() {
+        this.model.getProducts((products, currentCard) => {
+            this.view.productsBlock.render(products);
             this.view.renderProductFooter(products, currentCard);
         });
     }

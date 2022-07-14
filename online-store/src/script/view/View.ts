@@ -16,8 +16,8 @@ export interface IView {
     filterEvent(param: string, handler: (method: "ADD" | "DELETE", value: string) => void);
     colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
     yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
-    manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
-    memoryFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
+    // manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
+    // memoryFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
     // renders
     // renderProducts(products: ProductType[], card: ProductType[]): void;
     renderCard(card: ProductType[]): void;
@@ -60,6 +60,7 @@ export class View {
     // finish
     renderProductFooter(products: ProductType[], card: ProductType[]): void {
         products.forEach((product) => {
+            
             const buttonAddToCard = <HTMLButtonElement>(
                 document.querySelector(`.button-add-to-card[product-id='${product.id}']`)
             );
@@ -98,7 +99,6 @@ export class View {
             const target = <HTMLElement>e.target;
 
             if (target?.classList.contains("button-remove-from-card")) {
-                console.log(target);
                 const id = target.getAttribute("product-id");
                 if (id) handler(id);
             }
@@ -109,7 +109,6 @@ export class View {
             const target = <HTMLInputElement>e.target;
             if (target?.classList.contains("check") && target?.getAttribute("param") === param) {
                 const a = target.parentElement?.querySelector("span")?.innerText;
-                console.log(target.parentElement, "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 const meth = target.checked ? "ADD" : "DELETE";
                 if (a) {
                     handler(meth, a);
