@@ -31,7 +31,7 @@ export class Model implements IModel {
     colorFilter: CheckboxFilter;
     yearFilter: CheckboxFilter;
     // Refactor
-    getCardStorage: () => void;
+    getCardStorage: () => ProductType[];
     setCardStorage: (card: ProductType[]) => void;
     //
 
@@ -45,7 +45,9 @@ export class Model implements IModel {
         const localStorage = window.localStorage;
 
         this.getCardStorage = () => {
-            return localStorage.getItem("revchenko-store-card") || [];
+            return (
+                <ProductType[]>JSON.parse(localStorage.getItem("revchenko-store-card") || "") || []
+            );
         };
 
         this.setCardStorage = (card: ProductType[]) => {
@@ -62,6 +64,17 @@ export class Model implements IModel {
     // finish
     findProduct(id: string): ProductType | undefined {
         return this._products.find((item) => item.id === id);
+    }
+
+    addToCardd(product: ProductType): void {
+        const card = this.getCardStorage();
+        if (!card) {
+            const newCard: ProductType[] = [product];
+            this.setCardStorage(newCard);
+            return;
+        }
+        const newCard: ProductType[] = [...card, product];
+        this.setCardStorage(newCard);
     }
 
     filter(): ProductType[] {
