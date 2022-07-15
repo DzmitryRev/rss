@@ -1,4 +1,5 @@
 import { ProductType } from "../../../data/products";
+import { FiltersType } from "../../model/Model";
 import { IViewModule, ViewModule } from "./ViewModule";
 
 // Your extend module interface
@@ -33,17 +34,17 @@ export class SettingsModule extends ViewModule implements ISettingsModule {
         this.createFilterBlock(availableManufacturers, "Manufacturer");
         this.createFilterBlock(availableYears, "Year");
     }
-    createFilterBlock(values: string[], headin: string): void {
+    createFilterBlock(values: string[], title: string): void {
         const container = <HTMLDivElement>this.createElement("div");
         const heading = <HTMLHeadingElement>this.createElement("h3");
-        heading.innerText = headin;
+        heading.innerText = title;
         container.insertAdjacentElement("beforeend", heading);
         values.forEach((color) => {
             const checkboxContainer = <HTMLDivElement>this.createElement("div");
             const chekbox = <HTMLInputElement>this.createElement("input");
-            chekbox.setAttribute("param", headin);
-            chekbox.dataset.field = headin.toLowerCase();
-            chekbox.classList.add("check");
+            chekbox.setAttribute("param", title);
+            chekbox.dataset.field = title.toLowerCase();
+            chekbox.classList.add("filters-checkbox");
             chekbox.type = "checkbox";
             const span = <HTMLSpanElement>this.createElement("span");
             span.innerText = (color as unknown) as string;

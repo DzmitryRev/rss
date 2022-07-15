@@ -8,6 +8,10 @@ export interface IController {
     render(): void;
     handleAddToCard(id: string): void;
     handleRemoveFromCard(id: string): void;
+    handleChangeFilter(field: string, value: string): void;
+    _getProducts(): void;
+    _getCard(): void;
+    _getFilters(): void;
 }
 
 export class Controller implements IController {
@@ -52,29 +56,34 @@ export class Controller implements IController {
             this._getCard();
         });
     }
+
+    // filter handlers
+
     handleChangeFilter(field: string, value: string) {
         this.model.changeFilter(field, value, () => {
             this._getProducts();
         });
     }
-    // handleRemoveFilter(value: string) {
-    //     this.model.removeFilter("color", value, () => {
-    //         this._getProducts();
-    //     });
-    // }
+
+    // connect
+
     _getCard() {
         this.model.getCard((products, currentCard) => {
             this.view.renderCard(currentCard);
             this.model.getProducts((products) => {
-                this.view.renderProductFooter(products, currentCard);
+                this.view.renderProductButton(products, currentCard);
             });
-            this.view.settingsBlock.render(products);
         });
     }
     _getProducts() {
         this.model.getProducts((products, currentCard) => {
-            this.view.productsBlock.render(products);
-            this.view.renderProductFooter(products, currentCard);
+            this.view.renderProducts(products);
+            this.view.renderProductButton(products, currentCard);
+        });
+    }
+    _getFilters() {
+        this.model.getFilters((products, filters) => {
+            this.view.settingsBlock.render(products);
         });
     }
 }

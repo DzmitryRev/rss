@@ -1,9 +1,10 @@
 import { ProductType } from "../../data/products";
+import { getProductTemplate } from "../Template";
 import { ProductsModule } from "./modules/ProductsModule";
 import { SettingsModule } from "./modules/SettingsModule";
 
 export interface IView {
-    productsRootElement: HTMLDivElement | null;
+    productsRootElement: HTMLDivElement;
     cardCountRootElement: HTMLDivElement | null;
     settingsRootElement: HTMLDivElement | null;
     settingsBlock: SettingsModule;
@@ -21,23 +22,26 @@ export interface IView {
     // renders
     // renderProducts(products: ProductType[], card: ProductType[]): void;
     renderCard(card: ProductType[]): void;
-    renderProductFooter(products: ProductType[], card: ProductType[]): void;
+    renderProductButton(products: ProductType[], card: ProductType[]): void;
+
+    renderProducts(products: ProductType[]): void;
 }
 
 export class View {
-    productsRootElement: HTMLDivElement | null;
+    productsRootElement: HTMLDivElement;
     cardCountRootElement: HTMLDivElement | null;
     settingsRootElement: HTMLDivElement | null;
     settingsBlock: SettingsModule;
     productsBlock: ProductsModule;
     constructor() {
-        this.productsRootElement = document.querySelector("#products-root-elem");
+        this.productsRootElement = <HTMLDivElement>document.querySelector("#products-root-elem");
         this.cardCountRootElement = document.querySelector("#card-count-root-elem");
         this.settingsRootElement = document.querySelector("#settings-root-element");
         this.settingsBlock = new SettingsModule(this.settingsRootElement);
         this.productsBlock = new ProductsModule(this.productsRootElement);
     }
-    // finish
+
+    // tools
     createElement(tag: string, className?: string): HTMLElement {
         const el: HTMLElement = document.createElement(tag);
         if (className) {
@@ -45,7 +49,18 @@ export class View {
         }
         return el;
     }
-    // TODO: add logic for displaing products in card
+
+    // renders
+    renderProducts(products: ProductType[]) {
+        this.productsRootElement.innerHTML = "";
+        products.forEach((product) => {
+            const template = getProductTemplate(product);
+            this.productsRootElement.insertAdjacentHTML("beforeend", template);
+        });
+    }
+    renderSettings() {
+        console.log("aaa");
+    }
     renderCard(card: ProductType[]): void {
         if (card.length === 0) {
             this.cardCountRootElement?.classList.add("display-none");
@@ -56,38 +71,35 @@ export class View {
             }
         }
     }
-
-    // finish
-    renderProductFooter(products: ProductType[], card: ProductType[]): void {
+    renderProductButton(products: ProductType[], card: ProductType[]): void {
         products.forEach((product) => {
             const buttonAddToCard = <HTMLButtonElement>(
-                document.querySelector(`.button-add-to-card[product-id='${product.id}']`)
+                document.querySelector(`.button-add-to-card[data-id='${product.id}']`)
             );
             const buttonRemoveFromCard = <HTMLButtonElement>(
-                document.querySelector(`.button-remove-from-card[product-id='${product.id}']`)
+                document.querySelector(`.button-remove-from-card[data-id='${product.id}']`)
             );
             const priceSpan = buttonAddToCard.parentElement?.querySelector(".product__price");
 
             if (!card.find((productInCard) => productInCard.id === product.id)) {
                 buttonAddToCard.classList.remove("display-none");
                 priceSpan?.classList.remove("display-none");
-                //
                 buttonRemoveFromCard.classList.add("display-none");
                 return;
             } else {
                 buttonRemoveFromCard.classList.remove("display-none");
-                //
                 buttonAddToCard.classList.add("display-none");
                 priceSpan?.classList.add("display-none");
             }
         });
     }
-    // finish
+
+    // events
     addToCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-add-to-card")) {
-                const id = target.getAttribute("product-id");
+                const id = target.dataset.id;
                 if (id) handler(id);
             }
         });
@@ -96,9 +108,8 @@ export class View {
     removeFromCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
-
             if (target?.classList.contains("button-remove-from-card")) {
-                const id = target.getAttribute("product-id");
+                const id = target.dataset.id;
                 if (id) handler(id);
             }
         });
@@ -106,25 +117,12 @@ export class View {
     filterEvent(handler: (field: string, value: string) => void) {
         this.settingsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLInputElement>e.target;
-            if (target?.classList.contains("check") && target?.dataset.field) {
+            if (target?.classList.contains("filters-checkbox") && target?.dataset.field) {
                 const a = target.parentElement?.querySelector("span")?.innerText;
-                // const meth = target.checked ? "ADD" : "DELETE";
                 if (a) {
                     handler(target?.dataset.field, a);
                 }
             }
         });
     }
-    // colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
-    //     this.filterEvent("Color", handler);
-    // }
-    // yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
-    //     this.filterEvent("Year", handler);
-    // }
-    // manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
-    //     this.filterEvent("Производитель", handler);
-    // }
-    // memoryFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
-    //     this.filterEvent("Память", handler);
-    // }
 }

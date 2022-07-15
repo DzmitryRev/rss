@@ -1,9 +1,10 @@
 import { ProductType } from "../../../data/products";
+import { FiltersType } from "../../model/Model";
 
 export interface IViewModule {
     createElement(tag: string, className?: string): HTMLElement;
     root: HTMLElement | null;
-    render(products: ProductType[], card?: ProductType[]): void;
+    render(products: ProductType[], card?: ProductType[], filters?: FiltersType): void;
 }
 
 export class ViewModule implements IViewModule {

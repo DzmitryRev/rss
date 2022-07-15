@@ -1,6 +1,6 @@
 import { ProductType } from "../../data/products";
 
-type FiltersType = { color: string[]; year: string[]; manufacturer: string[]; memory: string[] };
+export type FiltersType = { color: string[]; year: string[]; manufacturer: string[]; memory: string[] };
 
 export interface IModel {
     _products: ProductType[];
@@ -15,7 +15,7 @@ export interface IModel {
     // connectors for data
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
     getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
-    getFilters(callback: (filters: FiltersType) => void): void;
+    getFilters(callback: (products: ProductType[], filters: FiltersType) => void): void;
 
     // manage card
     addToCard(id: string, callback: () => void): void;
@@ -110,9 +110,9 @@ export class Model implements IModel {
         callback();
     }
 
-    getFilters(callback: (filters: FiltersType) => void) {
+    getFilters(callback: (products: ProductType[], filters: FiltersType) => void) {
         const filters = this.getFiltersStorage();
-        callback(filters);
+        callback(this._products, filters);
     }
 
     // Products logic
