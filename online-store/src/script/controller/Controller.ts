@@ -25,6 +25,9 @@ export class Controller implements IController {
         this.view.removeFromCardEvent((id: string) => {
             this.handleRemoveFromCard(id);
         });
+        this.view.filterEvent((filter: string, value: string) => {
+            this.handleChangeFilter(filter, value);
+        });
 
         //
         this.render();
@@ -49,11 +52,11 @@ export class Controller implements IController {
             this._getCard();
         });
     }
-    // handleAddFilter(value: string) {
-    //     this.model.addFilter("color", value, () => {
-    //         this._getProducts();
-    //     });
-    // }
+    handleChangeFilter(field: string, value: string) {
+        this.model.changeFilter(field, value, () => {
+            this._getProducts();
+        });
+    }
     // handleRemoveFilter(value: string) {
     //     this.model.removeFilter("color", value, () => {
     //         this._getProducts();
@@ -65,6 +68,7 @@ export class Controller implements IController {
             this.model.getProducts((products) => {
                 this.view.renderProductFooter(products, currentCard);
             });
+            this.view.settingsBlock.render(products);
         });
     }
     _getProducts() {

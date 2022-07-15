@@ -13,9 +13,9 @@ export interface IView {
     // events
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
-    filterEvent(param: string, handler: (method: "ADD" | "DELETE", value: string) => void);
-    colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
-    yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
+    filterEvent(handler: (field: string, value: string) => void): void;
+    // colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
+    // yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
     // manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
     // memoryFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
     // renders
@@ -60,7 +60,6 @@ export class View {
     // finish
     renderProductFooter(products: ProductType[], card: ProductType[]): void {
         products.forEach((product) => {
-            
             const buttonAddToCard = <HTMLButtonElement>(
                 document.querySelector(`.button-add-to-card[product-id='${product.id}']`)
             );
@@ -104,24 +103,24 @@ export class View {
             }
         });
     }
-    filterEvent(param: string, handler: (method: "ADD" | "DELETE", value: string) => void) {
+    filterEvent(handler: (field: string, value: string) => void) {
         this.settingsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLInputElement>e.target;
-            if (target?.classList.contains("check") && target?.getAttribute("param") === param) {
+            if (target?.classList.contains("check") && target?.dataset.field) {
                 const a = target.parentElement?.querySelector("span")?.innerText;
-                const meth = target.checked ? "ADD" : "DELETE";
+                // const meth = target.checked ? "ADD" : "DELETE";
                 if (a) {
-                    handler(meth, a);
+                    handler(target?.dataset.field, a);
                 }
             }
         });
     }
-    colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
-        this.filterEvent("Color", handler);
-    }
-    yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
-        this.filterEvent("Year", handler);
-    }
+    // colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
+    //     this.filterEvent("Color", handler);
+    // }
+    // yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
+    //     this.filterEvent("Year", handler);
+    // }
     // manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void) {
     //     this.filterEvent("Производитель", handler);
     // }

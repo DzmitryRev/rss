@@ -42,6 +42,7 @@ export class SettingsModule extends ViewModule implements ISettingsModule {
             const checkboxContainer = <HTMLDivElement>this.createElement("div");
             const chekbox = <HTMLInputElement>this.createElement("input");
             chekbox.setAttribute("param", headin);
+            chekbox.dataset.field = headin.toLowerCase();
             chekbox.classList.add("check");
             chekbox.type = "checkbox";
             const span = <HTMLSpanElement>this.createElement("span");

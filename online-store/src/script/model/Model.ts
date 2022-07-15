@@ -20,9 +20,8 @@ export interface IModel {
     addToCard(id: string, callback: () => void): void;
     removeFromCard(id: string, callback: () => void): void;
 
-    // manage filtre
-    addFilter(field: string, value: string, callback: () => void): void;
-    removeFilter(field: string, value: string, callback: () => void): void;
+    // manage filters
+    changeFilter(field: string, value: string, callback: () => void): void;
 }
 
 export class Model implements IModel {
@@ -97,15 +96,15 @@ export class Model implements IModel {
 
     // Filter logic
 
-    addFilter(field: string, value: string, callback: () => void) {
+    changeFilter(field: string, value: string, callback: () => void) {
         const filters = this.getFiltersStorage();
-        filters[field as keyof typeof filters].push(value);
-        this.setFiltersStorage(filters);
-        callback();
-    }
-    removeFilter(field: string, value: string, callback: () => void) {
-        const filters = this.getFiltersStorage();
-        filters[field as keyof typeof filters].filter((item) => item !== value);
+        const key = field as keyof typeof filters;
+        if (filters[key].includes(value)) {
+            const newArrayOfFilters = filters[key].filter((item) => item !== value);
+            filters[key] = newArrayOfFilters;
+        } else {
+            filters[key].push(value);
+        }
         this.setFiltersStorage(filters);
         callback();
     }
