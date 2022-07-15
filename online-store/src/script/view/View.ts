@@ -1,6 +1,5 @@
 import { ProductType } from "../../data/products";
 import { getProductTemplate } from "../Template";
-import { ProductsModule } from "./modules/ProductsModule";
 import { SettingsModule } from "./modules/SettingsModule";
 
 export interface IView {
@@ -8,7 +7,6 @@ export interface IView {
     cardCountRootElement: HTMLDivElement | null;
     settingsRootElement: HTMLDivElement | null;
     settingsBlock: SettingsModule;
-    productsBlock: ProductsModule;
     // root
     createElement(tag: string, className?: string): HTMLElement;
     // events
@@ -32,13 +30,11 @@ export class View {
     cardCountRootElement: HTMLDivElement | null;
     settingsRootElement: HTMLDivElement | null;
     settingsBlock: SettingsModule;
-    productsBlock: ProductsModule;
     constructor() {
         this.productsRootElement = <HTMLDivElement>document.querySelector("#products-root-elem");
         this.cardCountRootElement = document.querySelector("#card-count-root-elem");
         this.settingsRootElement = document.querySelector("#settings-root-element");
         this.settingsBlock = new SettingsModule(this.settingsRootElement);
-        this.productsBlock = new ProductsModule(this.productsRootElement);
     }
 
     // tools
