@@ -41,6 +41,7 @@ export class Controller implements IController {
 
     render() {
         this._getProducts();
+        this._getFilters();
         this._getCard();
     }
 
@@ -62,6 +63,7 @@ export class Controller implements IController {
     handleChangeFilter(field: string, value: string) {
         this.model.changeFilter(field, value, () => {
             this._getProducts();
+            this._getFilters();
         });
     }
 
@@ -83,7 +85,7 @@ export class Controller implements IController {
     }
     _getFilters() {
         this.model.getFilters((products, filters) => {
-            this.view.settingsBlock.render(products);
+            this.view.renderSettings(products, filters);
         });
     }
 }

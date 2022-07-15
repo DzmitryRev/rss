@@ -1,61 +1,88 @@
 import { ProductType } from "../../data/products";
-import { getProductTemplate } from "../Template";
-import { SettingsModule } from "./modules/SettingsModule";
+import { FiltersType } from "../model/Model";
+import { getFilterBlockTemplate, getProductTemplate } from "../Template";
 
 export interface IView {
-    productsRootElement: HTMLDivElement;
+    productsRootElement: HTMLElement;
     cardCountRootElement: HTMLDivElement | null;
-    settingsRootElement: HTMLDivElement | null;
-    settingsBlock: SettingsModule;
-    // root
-    createElement(tag: string, className?: string): HTMLElement;
+    settingsRootElement: HTMLElement;
     // events
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
     filterEvent(handler: (field: string, value: string) => void): void;
-    // colorFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
-    // yearFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
-    // manufacturerFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
-    // memoryFilterEvent(handler: (method: "ADD" | "DELETE", value: string) => void): void;
-    // renders
-    // renderProducts(products: ProductType[], card: ProductType[]): void;
+    // render
     renderCard(card: ProductType[]): void;
     renderProductButton(products: ProductType[], card: ProductType[]): void;
-
+    renderSettings(products: ProductType[], filters: FiltersType): void;
     renderProducts(products: ProductType[]): void;
 }
 
 export class View {
-    productsRootElement: HTMLDivElement;
+    productsRootElement: HTMLElement;
     cardCountRootElement: HTMLDivElement | null;
-    settingsRootElement: HTMLDivElement | null;
-    settingsBlock: SettingsModule;
+    settingsRootElement: HTMLElement;
     constructor() {
-        this.productsRootElement = <HTMLDivElement>document.querySelector("#products-root-elem");
+        this.productsRootElement = <HTMLElement>document.querySelector("#products-root-elem");
         this.cardCountRootElement = document.querySelector("#card-count-root-elem");
-        this.settingsRootElement = document.querySelector("#settings-root-element");
-        this.settingsBlock = new SettingsModule(this.settingsRootElement);
-    }
-
-    // tools
-    createElement(tag: string, className?: string): HTMLElement {
-        const el: HTMLElement = document.createElement(tag);
-        if (className) {
-            el.classList.add(className);
-        }
-        return el;
+        this.settingsRootElement = <HTMLElement>document.querySelector("#settings-root-element");
     }
 
     // renders
     renderProducts(products: ProductType[]) {
+        if (!products.length) {
+            this.productsRootElement.innerHTML = "No products found";
+            return;
+        }
         this.productsRootElement.innerHTML = "";
         products.forEach((product) => {
             const template = getProductTemplate(product);
             this.productsRootElement.insertAdjacentHTML("beforeend", template);
         });
     }
-    renderSettings() {
-        console.log("aaa");
+    renderSettings(products: ProductType[], filters: FiltersType): void {
+        this.settingsRootElement.innerHTML = "";
+        const availableColors: string[] = [];
+        const availableMemories: string[] = [];
+        const availableManufacturers: string[] = [];
+        const availableYears: string[] = [];
+        products.forEach((item) => {
+            if (!availableColors.includes(item.color)) {
+                availableColors.push(item.color);
+            }
+            if (!availableMemories.includes((item.memory as unknown) as string)) {
+                availableMemories.push((item.memory as unknown) as string);
+            }
+            if (!availableManufacturers.includes(item.manufacturer)) {
+                availableManufacturers.push(item.manufacturer);
+            }
+            if (!availableYears.includes(item.year)) {
+                availableYears.push(item.year);
+            }
+        });
+        this.settingsRootElement.insertAdjacentElement(
+            "beforeend",
+            getFilterBlockTemplate(availableColors, "Color", filters.color)
+        );
+        this.settingsRootElement.insertAdjacentElement(
+            "beforeend",
+            getFilterBlockTemplate(availableManufacturers, "Manufacturer", filters.manufacturer)
+        );
+        this.settingsRootElement.insertAdjacentElement(
+            "beforeend",
+            getFilterBlockTemplate(
+                availableMemories.sort((a, b) => parseInt(a) - parseInt(b)),
+                "Memory",
+                filters.memory
+            )
+        );
+        this.settingsRootElement.insertAdjacentElement(
+            "beforeend",
+            getFilterBlockTemplate(
+                availableYears.sort((a, b) => parseInt(a) - parseInt(b)),
+                "Year",
+                filters.year
+            )
+        );
     }
     renderCard(card: ProductType[]): void {
         if (card.length === 0) {
@@ -100,7 +127,6 @@ export class View {
             }
         });
     }
-    // finish
     removeFromCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
@@ -113,6 +139,7 @@ export class View {
     filterEvent(handler: (field: string, value: string) => void) {
         this.settingsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLInputElement>e.target;
+            console.log(target);
             if (target?.classList.contains("filters-checkbox") && target?.dataset.field) {
                 const a = target.parentElement?.querySelector("span")?.innerText;
                 if (a) {

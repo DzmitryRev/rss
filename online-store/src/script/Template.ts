@@ -1,4 +1,5 @@
 import { ProductType } from "../data/products";
+import { FiltersType } from "./model/Model";
 
 export function getProductTemplate(product: ProductType): string {
     return `
@@ -27,4 +28,32 @@ export function getProductTemplate(product: ProductType): string {
         </div>
     </div>
 `;
+}
+
+export function getFilterTemplate(value: string, field: string, checked: boolean): string {
+    return `
+    <div>
+        <input type="checkbox" data-field="${field}" class="filters-checkbox"  ${
+        checked ? "checked" : ""
+    } />
+        <span>${value}</span>
+    </div>
+`;
+}
+
+export function getFilterBlockTemplate(
+    values: string[],
+    title: string,
+    filter: string[]
+): HTMLDivElement {
+    const container = document.createElement("div");
+    const heading = document.createElement("h3");
+    heading.innerText = title;
+    container.insertAdjacentElement("beforeend", heading);
+    values.forEach((value) => {
+        const isChecked = filter.includes(value);
+        const template = getFilterTemplate(value, title.toLowerCase(), isChecked);
+        container.insertAdjacentHTML("beforeend", template);
+    });
+    return container;
 }

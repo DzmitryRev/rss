@@ -1,6 +1,11 @@
 import { ProductType } from "../../data/products";
 
-export type FiltersType = { color: string[]; year: string[]; manufacturer: string[]; memory: string[] };
+export type FiltersType = {
+    color: string[];
+    year: string[];
+    manufacturer: string[];
+    memory: string[];
+};
 
 export interface IModel {
     _products: ProductType[];
@@ -120,14 +125,16 @@ export class Model implements IModel {
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
         const filters = this.getFiltersStorage();
         const filtredPropucts = this._products.filter((product) => {
+            let result = true;
             for (const i in filters) {
                 const key = i as keyof typeof filters;
-                if (!filters[key].length) return true;
-                if (filters[key].includes(product[key])) {
-                    return true;
+                if (!filters[key].length) {
+                    result = true;
+                } else if (!filters[key].includes(product[key])) {
+                    return false;
                 }
-                return false;
             }
+            return result;
         });
         const currentCard = this.getCardStorage();
         callback(filtredPropucts, currentCard);
