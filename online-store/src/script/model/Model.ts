@@ -15,6 +15,7 @@ export interface IModel {
     // connectors for data
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
     getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
+    getFilters(callback: (filters: FiltersType) => void): void;
 
     // manage card
     addToCard(id: string, callback: () => void): void;
@@ -108,6 +109,13 @@ export class Model implements IModel {
         this.setFiltersStorage(filters);
         callback();
     }
+
+    getFilters(callback: (filters: FiltersType) => void) {
+        const filters = this.getFiltersStorage();
+        callback(filters);
+    }
+
+    // Products logic
 
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
         const filters = this.getFiltersStorage();
