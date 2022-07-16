@@ -25,13 +25,39 @@ export class View {
         this.productsRootElement = <HTMLElement>document.querySelector("#products-root-elem");
         this.cardCountRootElement = <HTMLElement>document.querySelector("#card-count-root-elem");
         this.settingsRootElement = <HTMLElement>document.querySelector("#settings-root-element");
+
+        const openFiltersBtn = document.querySelector("#open-filter-button");
+        if (!openFiltersBtn) {
+            throw new Error("Please add element with id='open-filter-button'");
+        }
+        if (!this.productsRootElement) {
+            throw new Error("Please add element with id='products-root-elem'");
+        }
+        if (!this.settingsRootElement) {
+            throw new Error("Please add element with id='settings-root-element'");
+        }
+        if (!this.cardCountRootElement) {
+            throw new Error("Please add element with id='card-count-root-elem'");
+        }
+        openFiltersBtn.addEventListener("click", () => {
+            this.settingsRootElement.classList.add("open");
+        });
+        document.addEventListener("click", (e) => {
+            if (this.settingsRootElement.classList.contains("open")) {
+                const node = <Node>e.target;
+                if (
+                    !this.settingsRootElement.contains(node) &&
+                    node !== openFiltersBtn &&
+                    node.nodeName !== "INPUT"
+                ) {
+                    this.settingsRootElement.classList.remove("open");
+                }
+            }
+        });
     }
 
     // renders
     renderProducts(products: ProductType[]) {
-        if (!this.productsRootElement) {
-            throw new Error("Please add element with id='products-root-elem'");
-        }
         if (!products.length) {
             this.productsRootElement.innerHTML = "No products found";
             return;
@@ -43,9 +69,6 @@ export class View {
         });
     }
     renderSettings(products: ProductType[], filters: FiltersType): void {
-        if (!this.settingsRootElement) {
-            throw new Error("Please add element with id='settings-root-element'");
-        }
         this.settingsRootElement.innerHTML = "";
         const availableFilters: FiltersType = <FiltersType>(
             Object.create(filters, Object.getOwnPropertyDescriptors(filters))
@@ -68,9 +91,6 @@ export class View {
         }
     }
     renderCard(card: ProductType[]): void {
-        if (!this.cardCountRootElement) {
-            throw new Error("Please add element with id='card-count-root-elem'");
-        }
         if (card.length === 0) {
             this.cardCountRootElement?.classList.add("display-none");
         } else {
