@@ -4,11 +4,15 @@ import { IView } from "../view/View";
 export interface IController {
     model: IModel;
     view: IView;
+    // run app
     start(): void;
+    //
     render(): void;
+    // handlers
     handleAddToCard(id: string): void;
     handleRemoveFromCard(id: string): void;
     handleChangeFilter(field: string, value: string): void;
+    // connectors
     _getProducts(): void;
     _getCard(): void;
     _getFilters(): void;
@@ -32,21 +36,15 @@ export class Controller implements IController {
         this.view.filterEvent((filter: string, value: string) => {
             this.handleChangeFilter(filter, value);
         });
-
-        //
         this.render();
     }
-
     // render all
-
     render() {
         this._getProducts();
         this._getFilters();
         this._getCard();
     }
-
     // card handlers
-
     handleAddToCard(id: string) {
         this.model.addToCard(id, () => {
             this._getCard();
@@ -57,18 +55,14 @@ export class Controller implements IController {
             this._getCard();
         });
     }
-
     // filter handlers
-
     handleChangeFilter(field: string, value: string) {
         this.model.changeFilter(field, value, () => {
             this._getProducts();
             this._getFilters();
         });
     }
-
     // connect
-
     _getCard() {
         this.model.getCard((products, currentCard) => {
             this.view.renderCard(currentCard);

@@ -68,7 +68,7 @@ export class Model implements IModel {
                 defaultFilters
             );
         };
-        this.setFiltersStorage = (filters: { color: string[]; year: string[] }) => {
+        this.setFiltersStorage = (filters: FiltersType) => {
             localStorage.setItem("revchenko-store-filters", JSON.stringify(filters));
         };
     }
@@ -76,9 +76,7 @@ export class Model implements IModel {
     findProduct(id: string): ProductType | undefined {
         return this._products.find((item) => item.id === id);
     }
-
     // Card logic
-
     addToCard(id: string, callback: () => void): void {
         const card = this.getCardStorage();
         const product = this.findProduct(id);
@@ -99,9 +97,7 @@ export class Model implements IModel {
         const card = this.getCardStorage();
         callback(this._products, card);
     }
-
     // Filter logic
-
     changeFilter(field: string, value: string, callback: () => void) {
         const filters = this.getFiltersStorage();
         const key = field as keyof typeof filters;
@@ -114,14 +110,11 @@ export class Model implements IModel {
         this.setFiltersStorage(filters);
         callback();
     }
-
     getFilters(callback: (products: ProductType[], filters: FiltersType) => void) {
         const filters = this.getFiltersStorage();
         callback(this._products, filters);
     }
-
     // Products logic
-
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
         const filters = this.getFiltersStorage();
         const filtredPropucts = this._products.filter((product) => {

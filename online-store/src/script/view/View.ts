@@ -4,7 +4,7 @@ import { getFilterBlockTemplate, getProductTemplate } from "../Template";
 
 export interface IView {
     productsRootElement: HTMLElement;
-    cardCountRootElement: HTMLDivElement | null;
+    cardCountRootElement: HTMLElement;
     settingsRootElement: HTMLElement;
     // events
     addToCardEvent(handler: (id: string) => void): void;
@@ -19,16 +19,19 @@ export interface IView {
 
 export class View {
     productsRootElement: HTMLElement;
-    cardCountRootElement: HTMLDivElement | null;
+    cardCountRootElement: HTMLElement;
     settingsRootElement: HTMLElement;
     constructor() {
         this.productsRootElement = <HTMLElement>document.querySelector("#products-root-elem");
-        this.cardCountRootElement = document.querySelector("#card-count-root-elem");
+        this.cardCountRootElement = <HTMLElement>document.querySelector("#card-count-root-elem");
         this.settingsRootElement = <HTMLElement>document.querySelector("#settings-root-element");
     }
 
     // renders
     renderProducts(products: ProductType[]) {
+        if (!this.productsRootElement) {
+            throw new Error("Please add element with id='products-root-elem'");
+        }
         if (!products.length) {
             this.productsRootElement.innerHTML = "No products found";
             return;
@@ -40,6 +43,9 @@ export class View {
         });
     }
     renderSettings(products: ProductType[], filters: FiltersType): void {
+        if (!this.settingsRootElement) {
+            throw new Error("Please add element with id='settings-root-element'");
+        }
         this.settingsRootElement.innerHTML = "";
         const availableFilters: FiltersType = <FiltersType>(
             Object.create(filters, Object.getOwnPropertyDescriptors(filters))
@@ -51,7 +57,6 @@ export class View {
             products.forEach((product) => {
                 if (key in product) {
                     if (!availableFiltersField.includes(product[key])) {
-                        console.log(product[key]);
                         availableFiltersField.push(product[key]);
                     }
                 }
@@ -63,6 +68,9 @@ export class View {
         }
     }
     renderCard(card: ProductType[]): void {
+        if (!this.cardCountRootElement) {
+            throw new Error("Please add element with id='card-count-root-elem'");
+        }
         if (card.length === 0) {
             this.cardCountRootElement?.classList.add("display-none");
         } else {
@@ -117,7 +125,6 @@ export class View {
     filterEvent(handler: (field: string, value: string) => void) {
         this.settingsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLInputElement>e.target;
-            console.log(target);
             if (target?.classList.contains("filters-checkbox") && target?.dataset.field) {
                 const a = target.parentElement?.querySelector("span")?.innerText;
                 if (a) {
