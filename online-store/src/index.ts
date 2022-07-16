@@ -8,12 +8,15 @@ import { Controller, IController } from "./script/controller/Controller";
 import { View } from "./script/view/View";
 import { products } from "./data/products";
 
-const test = document.querySelector("#test");
-const el = document.querySelector("#el");
-
-test?.addEventListener("click", () => {
-    el?.classList.toggle("open");
-});
-
 const app: IController = new Controller(new Model(products), new View());
 app.start();
+
+// TODO:
+// 1. Add reset filters
+// 1.1 IMAGES
+// 2. Add search
+// 3. Add range filters
+// 4. Add close btn for sidebar
+// 5. Convert Template to class and insert them into View
+// ??????
+// 6. Add modal, Add card

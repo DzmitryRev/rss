@@ -20,7 +20,7 @@ export const products: ProductType[] = [
         year: "2021",
         price: "599",
         memory: "128",
-        quantity: 1,
+        quantity: 0,
         color: "Белый",
         image: "https://mobillife.by/images/virtuemart/product/30059037b1.jpg",
     },

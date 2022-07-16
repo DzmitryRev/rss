@@ -80,7 +80,12 @@ export class Model implements IModel {
     addToCard(id: string, callback: () => void): void {
         const card = this.getCardStorage();
         const product = this.findProduct(id);
-        if (!product || card.find((productInCard) => productInCard.id === id)) return;
+        if (
+            !product ||
+            card.find((productInCard) => productInCard.id === id) ||
+            product.quantity === 0
+        )
+            return;
         const newCard: ProductType[] = [...card, product];
         this.setCardStorage(newCard);
         callback();

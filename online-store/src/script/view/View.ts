@@ -27,6 +27,8 @@ export class View {
         this.settingsRootElement = <HTMLElement>document.querySelector("#settings-root-element");
 
         const openFiltersBtn = document.querySelector("#open-filter-button");
+
+        // checking require elements on html
         if (!openFiltersBtn) {
             throw new Error("Please add element with id='open-filter-button'");
         }
@@ -39,6 +41,8 @@ export class View {
         if (!this.cardCountRootElement) {
             throw new Error("Please add element with id='card-count-root-elem'");
         }
+
+        // global events
         openFiltersBtn.addEventListener("click", () => {
             this.settingsRootElement.classList.add("open");
         });
@@ -108,17 +112,26 @@ export class View {
             const buttonRemoveFromCard = <HTMLButtonElement>(
                 document.querySelector(`.button-remove-from-card[data-id='${product.id}']`)
             );
+            const noAvailable = buttonAddToCard.parentElement?.querySelector(".no-available");
             const priceSpan = buttonAddToCard.parentElement?.querySelector(".product__price");
-
-            if (!card.find((productInCard) => productInCard.id === product.id)) {
-                buttonAddToCard.classList.remove("display-none");
-                priceSpan?.classList.remove("display-none");
+            if (product.quantity === 0) {
+                noAvailable?.classList.remove("display-none");
+                buttonAddToCard.classList.add("display-none");
+                priceSpan?.classList.add("display-none");
                 buttonRemoveFromCard.classList.add("display-none");
                 return;
             } else {
-                buttonRemoveFromCard.classList.remove("display-none");
-                buttonAddToCard.classList.add("display-none");
-                priceSpan?.classList.add("display-none");
+                noAvailable?.classList.add("display-none");
+                if (!card.find((productInCard) => productInCard.id === product.id)) {
+                    buttonAddToCard.classList.remove("display-none");
+                    priceSpan?.classList.remove("display-none");
+                    buttonRemoveFromCard.classList.add("display-none");
+                    return;
+                } else {
+                    buttonRemoveFromCard.classList.remove("display-none");
+                    buttonAddToCard.classList.add("display-none");
+                    priceSpan?.classList.add("display-none");
+                }
             }
         });
     }

@@ -15,8 +15,10 @@ export function getProductTemplate(product: ProductType): string {
             <span class="product__title">${product.title}</span>
             <p>Год: <span class="product__year">${product.year}</span></p>
             <p>Цвет: <span class="product__color">${product.color}</span></p>
+            <p>Кол-во на складе: <span class="product__quantity">${product.quantity}</span></p>
         </div>
         <div class="product__footer">
+            <div class="no-available">Нет на складе</div>
             <span class="product__price">
             ${product.price}$</span>
             <button class="button button-add-to-card"
