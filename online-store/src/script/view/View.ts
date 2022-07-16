@@ -41,48 +41,26 @@ export class View {
     }
     renderSettings(products: ProductType[], filters: FiltersType): void {
         this.settingsRootElement.innerHTML = "";
-        const availableColors: string[] = [];
-        const availableMemories: string[] = [];
-        const availableManufacturers: string[] = [];
-        const availableYears: string[] = [];
-        products.forEach((item) => {
-            if (!availableColors.includes(item.color)) {
-                availableColors.push(item.color);
-            }
-            if (!availableMemories.includes((item.memory as unknown) as string)) {
-                availableMemories.push((item.memory as unknown) as string);
-            }
-            if (!availableManufacturers.includes(item.manufacturer)) {
-                availableManufacturers.push(item.manufacturer);
-            }
-            if (!availableYears.includes(item.year)) {
-                availableYears.push(item.year);
-            }
-        });
-        this.settingsRootElement.insertAdjacentElement(
-            "beforeend",
-            getFilterBlockTemplate(availableColors, "Color", filters.color)
+        const availableFilters: FiltersType = <FiltersType>(
+            Object.create(filters, Object.getOwnPropertyDescriptors(filters))
         );
-        this.settingsRootElement.insertAdjacentElement(
-            "beforeend",
-            getFilterBlockTemplate(availableManufacturers, "Manufacturer", filters.manufacturer)
-        );
-        this.settingsRootElement.insertAdjacentElement(
-            "beforeend",
-            getFilterBlockTemplate(
-                availableMemories.sort((a, b) => parseInt(a) - parseInt(b)),
-                "Memory",
-                filters.memory
-            )
-        );
-        this.settingsRootElement.insertAdjacentElement(
-            "beforeend",
-            getFilterBlockTemplate(
-                availableYears.sort((a, b) => parseInt(a) - parseInt(b)),
-                "Year",
-                filters.year
-            )
-        );
+        for (const i in availableFilters) {
+            const key = i as keyof typeof availableFilters;
+            let availableFiltersField = availableFilters[key];
+            availableFiltersField = [];
+            products.forEach((product) => {
+                if (key in product) {
+                    if (!availableFiltersField.includes(product[key])) {
+                        console.log(product[key]);
+                        availableFiltersField.push(product[key]);
+                    }
+                }
+            });
+            this.settingsRootElement.insertAdjacentElement(
+                "beforeend",
+                getFilterBlockTemplate(availableFiltersField, String(key), filters[key])
+            );
+        }
     }
     renderCard(card: ProductType[]): void {
         if (card.length === 0) {

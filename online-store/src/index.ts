@@ -17,3 +17,8 @@ test?.addEventListener("click", () => {
 
 const app: IController = new Controller(new Model(products), new View());
 app.start();
+
+
+
+// TODO: 
+// 1. automatizate settings Render
