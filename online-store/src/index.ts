@@ -2,6 +2,7 @@
 import "./scss/index.scss";
 // images
 import "./assets/card-icon.svg";
+import "./assets/product-1.jpg"
 //
 import { Model } from "./script/model/Model";
 import { Controller, IController } from "./script/controller/Controller";

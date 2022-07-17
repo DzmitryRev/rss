@@ -22,7 +22,7 @@ export const products: ProductType[] = [
         memory: "128",
         quantity: 0,
         color: "Белый",
-        image: "https://mobillife.by/images/virtuemart/product/30059037b1.jpg",
+        image: "../assets/product-1.jpg",
     },
     {
         id: "2",
@@ -105,7 +105,7 @@ export const products: ProductType[] = [
         year: "2021",
         price: "370",
         memory: "64",
-        quantity: 19,
+        quantity: 0,
         color: "Голубой",
         image:
             "https://mobillife.by/images/virtuemart/product/oneplus_9_8gb_128gb_arctic_sky_1.jpg",

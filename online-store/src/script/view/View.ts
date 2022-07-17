@@ -1,5 +1,5 @@
 import { ProductType } from "../../data/products";
-import { FiltersType } from "../model/Model";
+import { CheckboxFiltersType } from "../model/Model";
 import { getFilterBlockTemplate, getProductTemplate } from "../Template";
 
 export interface IView {
@@ -10,10 +10,11 @@ export interface IView {
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
     filterEvent(handler: (field: string, value: string) => void): void;
+    resetFilterEvent(handler: () => void): void;
     // render
     renderCard(card: ProductType[]): void;
     renderProductButton(products: ProductType[], card: ProductType[]): void;
-    renderSettings(products: ProductType[], filters: FiltersType): void;
+    renderSettings(products: ProductType[], filters: CheckboxFiltersType): void;
     renderProducts(products: ProductType[]): void;
 }
 
@@ -60,7 +61,7 @@ export class View {
         });
     }
 
-    // renders
+    // Renders
     renderProducts(products: ProductType[]) {
         if (!products.length) {
             this.productsRootElement.innerHTML = "No products found";
@@ -72,9 +73,9 @@ export class View {
             this.productsRootElement.insertAdjacentHTML("beforeend", template);
         });
     }
-    renderSettings(products: ProductType[], filters: FiltersType): void {
+    renderSettings(products: ProductType[], filters: CheckboxFiltersType): void {
         this.settingsRootElement.innerHTML = "";
-        const availableFilters: FiltersType = <FiltersType>(
+        const availableFilters: CheckboxFiltersType = <CheckboxFiltersType>(
             Object.create(filters, Object.getOwnPropertyDescriptors(filters))
         );
         for (const i in availableFilters) {
@@ -136,7 +137,7 @@ export class View {
         });
     }
 
-    // events
+    // Events
     addToCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
@@ -163,6 +164,15 @@ export class View {
                 if (a) {
                     handler(target?.dataset.field, a);
                 }
+            }
+        });
+    }
+    resetFilterEvent(handler: () => void) {
+        document.addEventListener("click", (e) => {
+            const target = <HTMLElement>e.target;
+            if (target?.id === "reset") {
+                console.log("aaa");
+                handler();
             }
         });
     }

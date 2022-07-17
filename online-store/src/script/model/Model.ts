@@ -1,6 +1,6 @@
 import { ProductType } from "../../data/products";
 
-export type FiltersType = {
+export type CheckboxFiltersType = {
     color: string[];
     year: string[];
     manufacturer: string[];
@@ -13,14 +13,14 @@ export interface IModel {
 
     // storage listeners
     getCardStorage(): ProductType[];
-    getFiltersStorage(): FiltersType;
+    getFiltersStorage(): CheckboxFiltersType;
     setCardStorage(card: ProductType[]): void;
-    setFiltersStorage: (filters: FiltersType) => void;
+    setFiltersStorage: (filters: CheckboxFiltersType) => void;
 
     // connectors for data
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
     getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
-    getFilters(callback: (products: ProductType[], filters: FiltersType) => void): void;
+    getFilters(callback: (products: ProductType[], filters: CheckboxFiltersType) => void): void;
 
     // manage card
     addToCard(id: string, callback: () => void): void;
@@ -28,6 +28,7 @@ export interface IModel {
 
     // manage filters
     changeFilter(field: string, value: string, callback: () => void): void;
+    resetFilters(callback: () => void): void;
 }
 
 export class Model implements IModel {
@@ -36,8 +37,8 @@ export class Model implements IModel {
     getCardStorage: () => ProductType[];
     setCardStorage: (card: ProductType[]) => void;
 
-    getFiltersStorage: () => FiltersType;
-    setFiltersStorage: (filters: FiltersType) => void;
+    getFiltersStorage: () => CheckboxFiltersType;
+    setFiltersStorage: (filters: CheckboxFiltersType) => void;
 
     constructor(products: ProductType[]) {
         this._products = products;
@@ -55,7 +56,7 @@ export class Model implements IModel {
             localStorage.setItem("revchenko-store-card", JSON.stringify(card));
         };
 
-        const defaultFilters: FiltersType = {
+        const defaultFilters: CheckboxFiltersType = {
             color: [],
             year: [],
             memory: [],
@@ -64,19 +65,20 @@ export class Model implements IModel {
 
         this.getFiltersStorage = () => {
             return (
-                <FiltersType>JSON.parse(<string>localStorage.getItem("revchenko-store-filters")) ||
-                defaultFilters
+                <CheckboxFiltersType>(
+                    JSON.parse(<string>localStorage.getItem("revchenko-store-filters"))
+                ) || defaultFilters
             );
         };
-        this.setFiltersStorage = (filters: FiltersType) => {
+        this.setFiltersStorage = (filters: CheckboxFiltersType) => {
             localStorage.setItem("revchenko-store-filters", JSON.stringify(filters));
         };
     }
-
+    // Tools
     findProduct(id: string): ProductType | undefined {
         return this._products.find((item) => item.id === id);
     }
-    // Card logic
+    // Manage card
     addToCard(id: string, callback: () => void): void {
         const card = this.getCardStorage();
         const product = this.findProduct(id);
@@ -98,12 +100,8 @@ export class Model implements IModel {
         this.setCardStorage(newCard);
         callback();
     }
-    getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
-        const card = this.getCardStorage();
-        callback(this._products, card);
-    }
-    // Filter logic
-    changeFilter(field: string, value: string, callback: () => void) {
+    // Manage filters
+    changeFilter(field: string, value: string, callback: () => void): void {
         const filters = this.getFiltersStorage();
         const key = field as keyof typeof filters;
         if (filters[key].includes(value)) {
@@ -115,11 +113,17 @@ export class Model implements IModel {
         this.setFiltersStorage(filters);
         callback();
     }
-    getFilters(callback: (products: ProductType[], filters: FiltersType) => void) {
-        const filters = this.getFiltersStorage();
-        callback(this._products, filters);
+    resetFilters(callback: () => void): void {
+        const defaultFilters: CheckboxFiltersType = {
+            color: [],
+            year: [],
+            memory: [],
+            manufacturer: [],
+        };
+        this.setFiltersStorage(defaultFilters);
+        callback();
     }
-    // Products logic
+    // Connectors
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
         const filters = this.getFiltersStorage();
         const filtredPropucts = this._products.filter((product) => {
@@ -136,5 +140,13 @@ export class Model implements IModel {
         });
         const currentCard = this.getCardStorage();
         callback(filtredPropucts, currentCard);
+    }
+    getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
+        const card = this.getCardStorage();
+        callback(this._products, card);
+    }
+    getFilters(callback: (products: ProductType[], filters: CheckboxFiltersType) => void): void {
+        const filters = this.getFiltersStorage();
+        callback(this._products, filters);
     }
 }

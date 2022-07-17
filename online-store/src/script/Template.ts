@@ -1,5 +1,4 @@
 import { ProductType } from "../data/products";
-import { FiltersType } from "./model/Model";
 
 export function getProductTemplate(product: ProductType): string {
     return `

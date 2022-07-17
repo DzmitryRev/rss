@@ -26,7 +26,6 @@ export class Controller implements IController {
         this.view = view;
     }
     start() {
-        // set up events
         this.view.addToCardEvent((id: string) => {
             this.handleAddToCard(id);
         });
@@ -36,15 +35,18 @@ export class Controller implements IController {
         this.view.filterEvent((filter: string, value: string) => {
             this.handleChangeFilter(filter, value);
         });
+        this.view.resetFilterEvent(() => {
+            this.handleResetFilter();
+        });
         this.render();
     }
-    // render all
+    // Render all
     render() {
         this._getProducts();
         this._getFilters();
         this._getCard();
     }
-    // card handlers
+    // Card handlers
     handleAddToCard(id: string) {
         this.model.addToCard(id, () => {
             this._getCard();
@@ -55,14 +57,20 @@ export class Controller implements IController {
             this._getCard();
         });
     }
-    // filter handlers
+    // Filters handlers
     handleChangeFilter(field: string, value: string) {
         this.model.changeFilter(field, value, () => {
             this._getProducts();
             this._getFilters();
         });
     }
-    // connect
+    handleResetFilter() {
+        this.model.resetFilters(() => {
+            this._getProducts();
+            this._getFilters();
+        });
+    }
+    // Connectors
     _getCard() {
         this.model.getCard((products, currentCard) => {
             this.view.renderCard(currentCard);
