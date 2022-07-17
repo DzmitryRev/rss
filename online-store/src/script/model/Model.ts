@@ -9,6 +9,7 @@ export type CheckboxFiltersType = {
 
 export interface IModel {
     _products: ProductType[];
+    searchValue: string;
     findProduct(id: string): void;
 
     // storage listeners
@@ -29,10 +30,14 @@ export interface IModel {
     // manage filters
     changeFilter(field: string, value: string, callback: () => void): void;
     resetFilters(callback: () => void): void;
+
+    // manage search
+    inputSearch(value: string, callback: () => void): void;
 }
 
 export class Model implements IModel {
     _products: ProductType[];
+    searchValue: string;
 
     getCardStorage: () => ProductType[];
     setCardStorage: (card: ProductType[]) => void;
@@ -42,7 +47,7 @@ export class Model implements IModel {
 
     constructor(products: ProductType[]) {
         this._products = products;
-
+        this.searchValue = "";
         const localStorage = window.localStorage;
 
         this.getCardStorage = () => {
@@ -123,10 +128,26 @@ export class Model implements IModel {
         this.setFiltersStorage(defaultFilters);
         callback();
     }
+    // Manage search
+    inputSearch(value: string, callback: () => void) {
+        console.log(value);
+        this.searchValue = value;
+        callback();
+    }
+    // Manage ranges
+
     // Connectors
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
         const filters = this.getFiltersStorage();
-        const filtredPropucts = this._products.filter((product) => {
+        // Step 1 - filter by search value
+        const searchedProducts = this._products.filter((product) => {
+            if (product.title.toLowerCase().includes(this.searchValue)) {
+                return true;
+            }
+            return false;
+        });
+        // Step 2 - filter by checkboxes
+        const filtredPropucts = searchedProducts.filter((product) => {
             let result = true;
             for (const i in filters) {
                 const key = i as keyof typeof filters;

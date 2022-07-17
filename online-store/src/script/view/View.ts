@@ -11,6 +11,7 @@ export interface IView {
     removeFromCardEvent(handler: (id: string) => void): void;
     filterEvent(handler: (field: string, value: string) => void): void;
     resetFilterEvent(handler: () => void): void;
+    searchEvent(handler: (value: string) => void): void;
     // render
     renderCard(card: ProductType[]): void;
     renderProductButton(products: ProductType[], card: ProductType[]): void;
@@ -171,8 +172,15 @@ export class View {
         document.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
             if (target?.id === "reset") {
-                console.log("aaa");
                 handler();
+            }
+        });
+    }
+    searchEvent(handler: (value: string) => void) {
+        document.addEventListener("input", (e) => {
+            const target = <HTMLInputElement>e.target;
+            if (target?.id === "search") {
+                handler(target.value);
             }
         });
     }

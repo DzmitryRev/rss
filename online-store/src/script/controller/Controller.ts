@@ -38,6 +38,10 @@ export class Controller implements IController {
         this.view.resetFilterEvent(() => {
             this.handleResetFilter();
         });
+        this.view.searchEvent((value) => {
+            console.log(value);
+            this.handleSearch(value);
+        });
         this.render();
     }
     // Render all
@@ -68,6 +72,12 @@ export class Controller implements IController {
         this.model.resetFilters(() => {
             this._getProducts();
             this._getFilters();
+        });
+    }
+    // Search handlers
+    handleSearch(value: string) {
+        this.model.inputSearch(value, () => {
+            this._getProducts();
         });
     }
     // Connectors
