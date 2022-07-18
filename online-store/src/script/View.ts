@@ -1,81 +1,109 @@
 import { ProductType } from "../data/products";
-import { CheckboxFiltersType } from "./Model";
-import { getFilterBlockTemplate, getProductTemplate } from "./Template";
+import { CheckboxFiltersType, SortValueType } from "./Model";
+import { Template } from "./Template";
 
 export interface IView {
     productsRootElement: HTMLElement;
     cardCountRootElement: HTMLElement;
     settingsRootElement: HTMLElement;
+    settingsSearchElement: HTMLElement;
+    settingsCheckboxElement: HTMLElement;
+    settingsRangeElement: HTMLElement;
+    settingsSortElement: HTMLElement;
+    template: Template;
     // events
     addToCardEvent(handler: (id: string) => void): void;
     removeFromCardEvent(handler: (id: string) => void): void;
     filterEvent(handler: (field: string, value: string) => void): void;
     resetFilterEvent(handler: () => void): void;
     searchEvent(handler: (value: string) => void): void;
+    sortEvent(handler: (value: SortValueType) => void): void;
     // render
     renderCard(card: ProductType[]): void;
     renderProductButton(products: ProductType[], card: ProductType[]): void;
-    renderSettings(products: ProductType[], filters: CheckboxFiltersType): void;
+    renderCheckboxFilters(products: ProductType[], filters: CheckboxFiltersType): void;
     renderProducts(products: ProductType[]): void;
+    renderSearch(): void;
+    renderSort(): void;
 }
 
 export class View {
     productsRootElement: HTMLElement;
     cardCountRootElement: HTMLElement;
     settingsRootElement: HTMLElement;
-    constructor() {
+    settingsSearchElement: HTMLElement;
+    settingsCheckboxElement: HTMLElement;
+    settingsRangeElement: HTMLElement;
+    settingsSortElement: HTMLElement;
+    template: Template;
+    // ranges: API[];
+    constructor(root: HTMLElement) {
+        // init App Template
+        this.template = new Template();
+        root.innerHTML = this.template.createApp();
+        // Define require elems
         this.productsRootElement = <HTMLElement>document.querySelector("#products-root-elem");
         this.cardCountRootElement = <HTMLElement>document.querySelector("#card-count-root-elem");
         this.settingsRootElement = <HTMLElement>document.querySelector("#settings-root-element");
+        this.settingsRangeElement = <HTMLElement>(
+            document.querySelector("#settings-range-container")
+        );
+        this.settingsSearchElement = <HTMLElement>(
+            document.querySelector("#settings-search-container")
+        );
+        this.settingsCheckboxElement = <HTMLElement>(
+            document.querySelector("#settings-checkbox-container")
+        );
+        this.settingsSortElement = <HTMLElement>(
+            (<HTMLDivElement>document.querySelector("#settings-sort-container"))
+        );
 
+        // add global events
         const openFiltersBtn = document.querySelector("#open-filter-button");
-
-        // checking require elements on html
-        if (!openFiltersBtn) {
-            throw new Error("Please add element with id='open-filter-button'");
-        }
-        if (!this.productsRootElement) {
-            throw new Error("Please add element with id='products-root-elem'");
-        }
-        if (!this.settingsRootElement) {
-            throw new Error("Please add element with id='settings-root-element'");
-        }
-        if (!this.cardCountRootElement) {
-            throw new Error("Please add element with id='card-count-root-elem'");
-        }
-
-        // global events
-        openFiltersBtn.addEventListener("click", () => {
+        openFiltersBtn?.addEventListener("click", (e) => {
+            e.stopPropagation();
             this.settingsRootElement.classList.add("open");
+            document.body.style.overflow = "hidden";
         });
         document.addEventListener("click", (e) => {
             if (this.settingsRootElement.classList.contains("open")) {
                 const node = <Node>e.target;
-                if (
-                    !this.settingsRootElement.contains(node) &&
-                    node !== openFiltersBtn &&
-                    node.nodeName !== "INPUT"
-                ) {
+                if (!this.settingsRootElement.contains(node) && node.nodeName !== "INPUT") {
                     this.settingsRootElement.classList.remove("open");
+                    document.body.style.overflow = "auto";
                 }
             }
         });
     }
 
     // Renders
-    renderProducts(products: ProductType[]) {
+    renderProducts(products: ProductType[]): void {
         if (!products.length) {
             this.productsRootElement.innerHTML = "No products found";
             return;
         }
         this.productsRootElement.innerHTML = "";
         products.forEach((product) => {
-            const template = getProductTemplate(product);
+            const template = this.template.createProduct(product);
             this.productsRootElement.insertAdjacentHTML("beforeend", template);
         });
     }
-    renderSettings(products: ProductType[], filters: CheckboxFiltersType): void {
-        this.settingsRootElement.innerHTML = "";
+    renderSearch(): void {
+        this.settingsSearchElement.innerHTML = "";
+        const searchContainer = this.template.createSearch();
+        this.settingsSearchElement.insertAdjacentElement("beforeend", searchContainer);
+        searchContainer.querySelector("input")?.focus();
+    }
+    renderSort(): void {
+        this.settingsSortElement.innerHTML = "";
+        const sorts: SortValueType[] = ["default", "price", "memory", "quantity"];
+        sorts.forEach((sort) => {
+            const elem = this.template.createSortSpan(sort);
+            this.settingsSortElement?.insertAdjacentElement("beforeend", elem);
+        });
+    }
+    renderCheckboxFilters(products: ProductType[], filters: CheckboxFiltersType): void {
+        this.settingsCheckboxElement.innerHTML = "";
         const availableFilters: CheckboxFiltersType = <CheckboxFiltersType>(
             Object.create(filters, Object.getOwnPropertyDescriptors(filters))
         );
@@ -90,9 +118,9 @@ export class View {
                     }
                 }
             });
-            this.settingsRootElement.insertAdjacentElement(
+            this.settingsCheckboxElement.insertAdjacentElement(
                 "beforeend",
-                getFilterBlockTemplate(availableFiltersField, String(key), filters[key])
+                this.template.createFilterBlock(availableFiltersField, String(key), filters[key])
             );
         }
     }
@@ -137,10 +165,10 @@ export class View {
             }
         });
     }
-
     // Events
     addToCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
+            if (this.settingsRootElement.classList.contains("open")) return;
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-add-to-card")) {
                 const id = target.dataset.id;
@@ -150,6 +178,7 @@ export class View {
     }
     removeFromCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
+            if (this.settingsRootElement.classList.contains("open")) return;
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-remove-from-card")) {
                 const id = target.dataset.id;
@@ -157,7 +186,7 @@ export class View {
             }
         });
     }
-    filterEvent(handler: (field: string, value: string) => void) {
+    filterEvent(handler: (field: string, value: string) => void): void {
         this.settingsRootElement?.addEventListener("click", (e) => {
             const target = <HTMLInputElement>e.target;
             if (target?.classList.contains("filters-checkbox") && target?.dataset.field) {
@@ -168,7 +197,7 @@ export class View {
             }
         });
     }
-    resetFilterEvent(handler: () => void) {
+    resetFilterEvent(handler: () => void): void {
         document.addEventListener("click", (e) => {
             const target = <HTMLElement>e.target;
             if (target?.id === "reset") {
@@ -176,11 +205,19 @@ export class View {
             }
         });
     }
-    searchEvent(handler: (value: string) => void) {
+    searchEvent(handler: (value: string) => void): void {
         document.addEventListener("input", (e) => {
             const target = <HTMLInputElement>e.target;
             if (target?.id === "search") {
                 handler(target.value);
+            }
+        });
+    }
+    sortEvent(handler: (value: "price" | "quantity" | "memory" | "default") => void): void {
+        document.addEventListener("click", (e) => {
+            const target = <HTMLSpanElement>e.target;
+            if (target?.dataset.sort) {
+                handler(<"price" | "quantity" | "memory" | "default">target?.dataset.sort);
             }
         });
     }

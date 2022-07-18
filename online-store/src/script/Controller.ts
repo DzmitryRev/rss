@@ -39,9 +39,14 @@ export class Controller implements IController {
             this.handleResetFilter();
         });
         this.view.searchEvent((value) => {
-            console.log(value);
             this.handleSearch(value);
         });
+        this.view.sortEvent((value) => {
+            this.handleSort(value);
+        });
+        // this.view.rangeEvent((field: string, value: string[]) => {
+        //     this.handleChangeRange(field, value);
+        // });
         this.render();
     }
     // Render all
@@ -49,6 +54,9 @@ export class Controller implements IController {
         this._getProducts();
         this._getFilters();
         this._getCard();
+        this.view.renderSearch();
+        this.view.renderSort();
+        // this.view.renderRanges(this.model._products, this.model.ranges);
     }
     // Card handlers
     handleAddToCard(id: string) {
@@ -66,6 +74,19 @@ export class Controller implements IController {
         this.model.changeFilter(field, value, () => {
             this._getProducts();
             this._getFilters();
+        });
+    }
+    // handleChangeRange(field: string, value: string[]) {
+    //     this.model.changeRange(field, value, (rang) => {
+    //         // this._getProducts();
+    //         // this._getFilters();
+    //         // this.view.modifyRange(rang);
+    //     });
+    // }
+
+    handleSort(value: "price" | "quantity" | "memory" | "default") {
+        this.model.changeSort(value, () => {
+            this._getProducts();
         });
     }
     handleResetFilter() {
@@ -97,7 +118,7 @@ export class Controller implements IController {
     }
     _getFilters() {
         this.model.getFilters((products, filters) => {
-            this.view.renderSettings(products, filters);
+            this.view.renderCheckboxFilters(products, filters);
         });
     }
 }
