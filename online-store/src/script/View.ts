@@ -1,6 +1,6 @@
-import { ProductType } from "../../data/products";
-import { CheckboxFiltersType } from "../model/Model";
-import { getFilterBlockTemplate, getProductTemplate } from "../Template";
+import { ProductType } from "../data/products";
+import { CheckboxFiltersType } from "./Model";
+import { getFilterBlockTemplate, getProductTemplate } from "./Template";
 
 export interface IView {
     productsRootElement: HTMLElement;

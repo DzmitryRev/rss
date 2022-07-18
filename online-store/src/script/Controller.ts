@@ -1,5 +1,5 @@
-import { IModel } from "../model/Model";
-import { IView } from "../view/View";
+import { IModel } from "./Model";
+import { IView } from "./View";
 
 export interface IController {
     model: IModel;

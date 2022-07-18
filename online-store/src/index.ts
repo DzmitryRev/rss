@@ -4,9 +4,9 @@ import "./scss/index.scss";
 import "./assets/card-icon.svg";
 import "./assets/product-1.jpg";
 //
-import { Model } from "./script/model/Model";
-import { Controller, IController } from "./script/controller/Controller";
-import { View } from "./script/view/View";
+import { Model } from "./script/Model";
+import { Controller, IController } from "./script/Controller";
+import { View } from "./script/View";
 import { products } from "./data/products";
 import noUiSlider, { target } from "../node_modules/nouislider/dist/nouislider";
 
