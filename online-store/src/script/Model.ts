@@ -130,7 +130,6 @@ export class Model implements IModel {
     }
     // Manage search
     inputSearch(value: string, callback: () => void) {
-        console.log(value);
         this.searchValue = value;
         callback();
     }
