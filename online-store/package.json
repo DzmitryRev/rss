@@ -33,5 +33,10 @@
         "webpack-cli": "^4.5.0",
         "webpack-dev-server": "^3.11.2",
         "webpack-merge": "^5.7.3"
+    },
+    "dependencies": {
+        "multirange": "^2.0.0",
+        "nouislider": "^15.6.0",
+        "rn-range-slider": "^2.1.1"
     }
 }
