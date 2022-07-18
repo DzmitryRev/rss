@@ -1,5 +1,5 @@
 import { ProductType } from "../data/products";
-import { CheckboxFiltersType, SortValueType } from "./Model";
+import { CheckboxFiltersType, SortType, SortValueType } from "./Model";
 import { Template } from "./Template";
 
 export interface IView {
@@ -24,7 +24,7 @@ export interface IView {
     renderCheckboxFilters(products: ProductType[], filters: CheckboxFiltersType): void;
     renderProducts(products: ProductType[]): void;
     renderSearch(): void;
-    renderSort(): void;
+    renderSort(currentSort: SortType): void;
 }
 
 export class View {
@@ -94,11 +94,11 @@ export class View {
         this.settingsSearchElement.insertAdjacentElement("beforeend", searchContainer);
         searchContainer.querySelector("input")?.focus();
     }
-    renderSort(): void {
+    renderSort(currentSort: SortType): void {
         this.settingsSortElement.innerHTML = "";
         const sorts: SortValueType[] = ["default", "price", "memory", "quantity"];
         sorts.forEach((sort) => {
-            const elem = this.template.createSortSpan(sort);
+            const elem = this.template.createSort(sort, currentSort);
             this.settingsSortElement?.insertAdjacentElement("beforeend", elem);
         });
     }

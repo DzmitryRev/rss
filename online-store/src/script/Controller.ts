@@ -1,4 +1,4 @@
-import { IModel } from "./Model";
+import { IModel, SortValueType } from "./Model";
 import { IView } from "./View";
 
 export interface IController {
@@ -6,12 +6,14 @@ export interface IController {
     view: IView;
     // run app
     start(): void;
-    //
     render(): void;
     // handlers
     handleAddToCard(id: string): void;
     handleRemoveFromCard(id: string): void;
     handleChangeFilter(field: string, value: string): void;
+    handleSearch(value: string): void;
+    handleResetFilter(): void;
+    handleSort(value: SortValueType): void;
     // connectors
     _getProducts(): void;
     _getCard(): void;
@@ -26,83 +28,72 @@ export class Controller implements IController {
         this.view = view;
     }
     start() {
-        this.view.addToCardEvent((id: string) => {
+        this.view.addToCardEvent((id: string): void => {
             this.handleAddToCard(id);
         });
-        this.view.removeFromCardEvent((id: string) => {
+        this.view.removeFromCardEvent((id: string): void => {
             this.handleRemoveFromCard(id);
         });
-        this.view.filterEvent((filter: string, value: string) => {
+        this.view.filterEvent((filter: string, value: string): void => {
             this.handleChangeFilter(filter, value);
         });
-        this.view.resetFilterEvent(() => {
+        this.view.resetFilterEvent((): void => {
             this.handleResetFilter();
         });
-        this.view.searchEvent((value) => {
+        this.view.searchEvent((value): void => {
             this.handleSearch(value);
         });
-        this.view.sortEvent((value) => {
+        this.view.sortEvent((value): void => {
             this.handleSort(value);
         });
-        // this.view.rangeEvent((field: string, value: string[]) => {
-        //     this.handleChangeRange(field, value);
-        // });
         this.render();
     }
     // Render all
-    render() {
+    render(): void {
         this._getProducts();
         this._getFilters();
         this._getCard();
+        this._getSort();
         this.view.renderSearch();
-        this.view.renderSort();
-        // this.view.renderRanges(this.model._products, this.model.ranges);
     }
     // Card handlers
-    handleAddToCard(id: string) {
+    handleAddToCard(id: string): void {
         this.model.addToCard(id, () => {
             this._getCard();
         });
     }
-    handleRemoveFromCard(id: string) {
+    handleRemoveFromCard(id: string): void {
         this.model.removeFromCard(id, () => {
             this._getCard();
         });
     }
     // Filters handlers
-    handleChangeFilter(field: string, value: string) {
-        this.model.changeFilter(field, value, () => {
+    handleChangeFilter(field: string, value: string): void {
+        this.model.changeCheckboxFilter(field, value, () => {
             this._getProducts();
             this._getFilters();
         });
     }
-    // handleChangeRange(field: string, value: string[]) {
-    //     this.model.changeRange(field, value, (rang) => {
-    //         // this._getProducts();
-    //         // this._getFilters();
-    //         // this.view.modifyRange(rang);
-    //     });
-    // }
-
-    handleSort(value: "price" | "quantity" | "memory" | "default") {
+    handleSort(value: SortValueType): void {
         this.model.changeSort(value, () => {
+            this._getSort();
             this._getProducts();
         });
     }
-    handleResetFilter() {
+    handleResetFilter(): void {
         this.model.resetFilters(() => {
             this._getProducts();
             this._getFilters();
         });
     }
     // Search handlers
-    handleSearch(value: string) {
+    handleSearch(value: string): void {
         this.model.inputSearch(value, () => {
             this._getProducts();
         });
     }
     // Connectors
-    _getCard() {
+    _getCard(): void {
         this.model.getCard((products, currentCard) => {
             this.view.renderCard(currentCard);
             this.model.getProducts((products) => {
@@ -110,13 +101,18 @@ export class Controller implements IController {
             });
         });
     }
-    _getProducts() {
+    _getSort(): void {
+        this.model.getSort((currentSort) => {
+            this.view.renderSort(currentSort);
+        });
+    }
+    _getProducts(): void {
         this.model.getProducts((products, currentCard) => {
             this.view.renderProducts(products);
             this.view.renderProductButton(products, currentCard);
         });
     }
-    _getFilters() {
+    _getFilters(): void {
         this.model.getFilters((products, filters) => {
             this.view.renderCheckboxFilters(products, filters);
         });

@@ -1,5 +1,5 @@
 import { ProductType } from "../data/products";
-import { SortValueType } from "./Model";
+import { SortType, SortValueType } from "./Model";
 
 export class Template {
     createApp() {
@@ -37,16 +37,12 @@ export class Template {
                             <div id="settings-range-container"></div>
                             <div id="settings-sort-container"></div>
                             <button id="reset" class="button">reset filters</button>
+                            
                         </div>
                         <div id="products-root-elem" class="content__products-container"></div>
                     </div>
                 </div>
             </main>
-            <div id="slider"></div>
-            <input class="skip-value-lower" />
-            <input class="skip-value-upper" />
-            <button id="test">test</button>
-            <div class="body-bg display-none"></div>
         `;
         return template;
     }
@@ -62,9 +58,10 @@ export class Template {
             </div>
             <div class="product__description">
                 <span class="product__title">${product.title}</span>
-                <p>Год: <span class="product__year">${product.year}</span></p>
-                <p>Цвет: <span class="product__color">${product.color}</span></p>
-                <p>Кол-во на складе: <span class="product__quantity">${product.quantity}</span></p>
+                <p>year: <span class="product__year">${product.year}</span></p>
+                <p>color: <span class="product__color">${product.color}</span></p>
+                <p>memory: <span class="product__color">${product.memory} Гб</span></p>
+                <p>quantity: <span class="product__quantity">${product.quantity}</span></p>
             </div>
             <div class="product__footer">
                 <div class="no-available">Нет на складе</div>
@@ -114,10 +111,24 @@ export class Template {
         container.insertAdjacentElement("beforeend", input);
         return container;
     }
-    createSortSpan(sort: SortValueType): HTMLSpanElement {
+    createSort(sort: SortValueType, currentSort: SortType): HTMLDivElement {
+        const container = document.createElement("div");
         const elem = document.createElement("span");
         elem.innerText = sort;
         elem.dataset.sort = sort;
-        return elem;
+        const arrow = document.createElement("div");
+        if (sort === currentSort.value && sort !== "default") {
+            arrow.classList.add("arrow");
+            if (currentSort.Up) {
+                arrow.classList.add("up");
+            } else {
+                arrow.classList.add("down");
+            }
+        } else {
+            arrow.classList.add("display-none");
+        }
+        container.insertAdjacentElement("beforeend", elem);
+        container.insertAdjacentElement("beforeend", arrow);
+        return container;
     }
 }

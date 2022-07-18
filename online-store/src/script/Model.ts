@@ -6,48 +6,41 @@ export type CheckboxFiltersType = {
     manufacturer: string[];
     memory: string[];
 };
+
 export type SortValueType = "price" | "quantity" | "memory" | "default";
 export type SortType = {
     Up: boolean;
     value: SortValueType;
 };
 
+export type FiltersType = {
+    checkbox: CheckboxFiltersType;
+    sort: SortType;
+};
 export interface IModel {
     _products: ProductType[];
     searchValue: string;
-    // ranges: { price: [string, string] };
-    sortBy: SortType;
     findProduct(id: string): void;
-
     // storage listeners
     getCardStorage(): ProductType[];
-    getFiltersStorage(): CheckboxFiltersType;
+    getFiltersStorage(): FiltersType;
     setCardStorage(card: ProductType[]): void;
-    setFiltersStorage: (filters: CheckboxFiltersType) => void;
-
+    setFiltersStorage: (filters: FiltersType) => void;
     // connectors for data
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
     getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
     getFilters(callback: (products: ProductType[], filters: CheckboxFiltersType) => void): void;
-
+    getSort(callback: (sort: SortType) => void): void;
     // manage card
     addToCard(id: string, callback: () => void): void;
     removeFromCard(id: string, callback: () => void): void;
-
     // manage filters
-    changeFilter(field: string, value: string, callback: () => void): void;
+    changeCheckboxFilter(field: string, value: string, callback: () => void): void;
     resetFilters(callback: () => void): void;
-
+    // manage sort
+    changeSort(value: SortValueType, callback: (sortBy: SortType) => void): void;
     // manage search
     inputSearch(value: string, callback: () => void): void;
-
-    changeSort(value: SortValueType, callback: (sortBy: SortType) => void): void;
-    // manage range filters
-    // changeRange(
-    //     field: string,
-    //     value: string[],
-    //     callback: (ranges: { price: [string, string] }) => void
-    // ): void;
 }
 
 export class Model implements IModel {
@@ -59,8 +52,8 @@ export class Model implements IModel {
     getCardStorage: () => ProductType[];
     setCardStorage: (card: ProductType[]) => void;
 
-    getFiltersStorage: () => CheckboxFiltersType;
-    setFiltersStorage: (filters: CheckboxFiltersType) => void;
+    getFiltersStorage: () => FiltersType;
+    setFiltersStorage: (filters: FiltersType) => void;
 
     constructor(products: ProductType[]) {
         this._products = products;
@@ -70,9 +63,6 @@ export class Model implements IModel {
             Up: true,
             value: "default",
         };
-        // this.ranges = {
-        //     price: ["0", "300"],
-        // };
 
         this.getCardStorage = () => {
             return (
@@ -85,21 +75,26 @@ export class Model implements IModel {
             localStorage.setItem("revchenko-store-card", JSON.stringify(card));
         };
 
-        const defaultFilters: CheckboxFiltersType = {
-            color: [],
-            year: [],
-            memory: [],
-            manufacturer: [],
+        const defaultFilters: FiltersType = {
+            checkbox: {
+                color: [],
+                year: [],
+                memory: [],
+                manufacturer: [],
+            },
+            sort: {
+                Up: true,
+                value: "default",
+            },
         };
 
         this.getFiltersStorage = () => {
             return (
-                <CheckboxFiltersType>(
-                    JSON.parse(<string>localStorage.getItem("revchenko-store-filters"))
-                ) || defaultFilters
+                <FiltersType>JSON.parse(<string>localStorage.getItem("revchenko-store-filters")) ||
+                defaultFilters
             );
         };
-        this.setFiltersStorage = (filters: CheckboxFiltersType) => {
+        this.setFiltersStorage = (filters: FiltersType) => {
             localStorage.setItem("revchenko-store-filters", JSON.stringify(filters));
         };
     }
@@ -129,66 +124,62 @@ export class Model implements IModel {
         this.setCardStorage(newCard);
         callback();
     }
-    // Manage filters
-    changeFilter(field: string, value: string, callback: () => void): void {
-        const filters = this.getFiltersStorage();
-        const key = field as keyof typeof filters;
-        if (filters[key].includes(value)) {
-            const newArrayOfFilters = filters[key].filter((item) => item !== value);
-            filters[key] = newArrayOfFilters;
+    // Manage filters and sort
+    changeCheckboxFilter(field: string, value: string, callback: () => void): void {
+        const { checkbox } = this.getFiltersStorage();
+        const key = field as keyof typeof checkbox;
+        if (checkbox[key].includes(value)) {
+            const newArrayOfFilters = checkbox[key].filter((item) => item !== value);
+            checkbox[key] = newArrayOfFilters;
         } else {
-            filters[key].push(value);
+            checkbox[key].push(value);
         }
-        this.setFiltersStorage(filters);
+        this.setFiltersStorage({ ...this.getFiltersStorage(), checkbox });
         callback();
     }
-    changeSort(value: SortValueType, callback: (sortBy: SortType) => void): void {
-        if (this.sortBy.value === "default") {
-            this.sortBy.Up = true;
-            this.sortBy.value = value;
-            console.log(this.sortBy);
-            callback(this.sortBy);
-            return;
-        }
-        if (this.sortBy.value === value) {
-            this.sortBy.Up = !this.sortBy.Up;
-            console.log(this.sortBy);
-            callback(this.sortBy);
-            return;
-        }
-        this.sortBy.Up = true;
-        this.sortBy.value = value;
-        console.log(this.sortBy);
-        callback(this.sortBy);
-    }
     resetFilters(callback: () => void): void {
-        const defaultFilters: CheckboxFiltersType = {
-            color: [],
-            year: [],
-            memory: [],
-            manufacturer: [],
+        const defaultFilters: FiltersType = {
+            ...this.getFiltersStorage(),
+            checkbox: {
+                color: [],
+                year: [],
+                memory: [],
+                manufacturer: [],
+            },
         };
         this.setFiltersStorage(defaultFilters);
         callback();
+    }
+    // Manage sort
+    changeSort(value: SortValueType, callback: (sortBy: SortType) => void): void {
+        const filters = this.getFiltersStorage();
+
+        if (filters.sort.value === "default") {
+            filters.sort.Up = true;
+            filters.sort.value = value;
+            this.setFiltersStorage(filters);
+            callback(filters.sort);
+            return;
+        }
+        if (filters.sort.value === value) {
+            filters.sort.Up = !filters.sort.Up;
+            this.setFiltersStorage(filters);
+            callback(filters.sort);
+            return;
+        }
+        filters.sort.Up = true;
+        filters.sort.value = value;
+        this.setFiltersStorage(filters);
+        callback(filters.sort);
     }
     // Manage search
     inputSearch(value: string, callback: () => void) {
         this.searchValue = value;
         callback();
     }
-    // Manage ranges
-    // changeRange(
-    //     field: string,
-    //     value: string[],
-    //     callback: (ranges: { price: [string, string] }) => void
-    // ) {
-    //     console.log("aaa");
-    //     this.ranges[field] = value;
-    //     callback(this.ranges);
-    // }
     // Connectors
     getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
-        const filters = this.getFiltersStorage();
+        const { checkbox, sort } = this.getFiltersStorage();
         // Step 1 - filter by search value
         const searchedProducts = this._products.filter((product) => {
             if (product.title.toLowerCase().includes(this.searchValue.toLowerCase())) {
@@ -199,32 +190,32 @@ export class Model implements IModel {
         // Step 2 - filter by checkboxes
         const filtredPropucts = searchedProducts.filter((product) => {
             let result = true;
-            for (const i in filters) {
-                const key = i as keyof typeof filters;
-                if (!filters[key].length) {
+            for (const i in checkbox) {
+                const key = i as keyof typeof checkbox;
+                if (!checkbox[key].length) {
                     result = true;
-                } else if (!filters[key].includes(product[key])) {
+                } else if (!checkbox[key].includes(product[key])) {
                     return false;
                 }
             }
             return result;
         });
         // Step 3 - sort
-        switch (this.sortBy.value) {
+        switch (sort.value) {
             case "price": {
-                this.sortBy.Up
+                sort.Up
                     ? filtredPropucts.sort((a, b) => +a.price - +b.price)
                     : filtredPropucts.sort((a, b) => +b.price - +a.price);
                 break;
             }
             case "memory": {
-                this.sortBy.Up
+                sort.Up
                     ? filtredPropucts.sort((a, b) => +a.memory - +b.memory)
                     : filtredPropucts.sort((a, b) => +b.memory - +a.memory);
                 break;
             }
             case "quantity": {
-                this.sortBy.Up
+                sort.Up
                     ? filtredPropucts.sort((a, b) => +a.quantity - +b.quantity)
                     : filtredPropucts.sort((a, b) => +b.quantity - +a.quantity);
                 break;
@@ -243,7 +234,11 @@ export class Model implements IModel {
         callback(this._products, card);
     }
     getFilters(callback: (products: ProductType[], filters: CheckboxFiltersType) => void): void {
-        const filters = this.getFiltersStorage();
-        callback(this._products, filters);
+        const { checkbox } = this.getFiltersStorage();
+        callback(this._products, checkbox);
+    }
+    getSort(callback: (sort: SortType) => void): void {
+        const { sort } = this.getFiltersStorage();
+        callback(sort);
     }
 }
