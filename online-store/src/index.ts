@@ -8,7 +8,7 @@ import { Model } from "./script/Model";
 import { Controller, IController } from "./script/Controller";
 import { View } from "./script/View";
 import { products } from "./data/products";
-import noUiSlider, { target } from "../node_modules/nouislider/dist/nouislider";
+import noUiSlider, { Formatter, target } from "../node_modules/nouislider/dist/nouislider";
 
 // import
 
@@ -18,16 +18,70 @@ import noUiSlider, { target } from "../node_modules/nouislider/dist/nouislider";
 // document.addEventListener("DOMContentLoaded", () => {
 
 // });
-
+const formatForSlider: Formatter = {
+    from: function (formattedValue) {
+        return Number(formattedValue);
+    },
+    to: function (numericValue) {
+        return Math.round(numericValue);
+    },
+};
+// Range
 const slider = <target>document.getElementById("slider");
 const btn = <HTMLButtonElement>document.getElementById("test");
 const a = noUiSlider.create(slider, {
     start: [20, 80],
     connect: true,
+    // snap: true,
+    format: formatForSlider,
     range: {
         min: 0,
-        max: 100,
+        max: 200,
     },
+});
+
+const inputs = <HTMLInputElement[]>[
+    document.querySelector(".skip-value-lower"),
+    document.querySelector(".skip-value-upper"),
+];
+a.on("update", function (values, handle) {
+    inputs[handle].value = <string>values[handle];
+});
+
+inputs.forEach(function (input, handle) {
+    input.addEventListener("change", function () {
+        a.setHandle(handle, this.value);
+    });
+    input.addEventListener("keydown", function (e) {
+        const values = a.get();
+        const value = Number(values[handle]);
+        const steps = a.steps();
+        const step = steps[handle];
+        let position;
+        switch (e.which) {
+            case 13:
+                a.setHandle(handle, this.value);
+                break;
+            case 38:
+                position = step[1];
+                if (position === false) {
+                    position = 1;
+                }
+                if (position !== null) {
+                    a.setHandle(handle, value - Number(position));
+                }
+                break;
+            case 40:
+                position = step[0];
+                if (position === false) {
+                    position = 1;
+                }
+                if (position !== null) {
+                    a.setHandle(handle, value - Number(position));
+                }
+                break;
+        }
+    });
 });
 
 btn.addEventListener("click", () => {

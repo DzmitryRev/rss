@@ -33,6 +33,9 @@ export interface IModel {
 
     // manage search
     inputSearch(value: string, callback: () => void): void;
+
+    // manage range filters
+    
 }
 
 export class Model implements IModel {

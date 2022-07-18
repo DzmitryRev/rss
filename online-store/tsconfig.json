@@ -1,11 +1,22 @@
 {
+    // "exclude": ["**/*.test.ts", "./webpack.config.js"],
     "compilerOptions": {
-        "module": "ES6",
-        "noImplicitAny": false,
+        "target": "es2020",
+        // "module": "ES2020",
+        // "noEmit": true,
         "strict": true,
+        "noImplicitAny": false,
+        // "baseUrl": "./",
         "noEmitOnError": false,
-        "allowJs": true,
-        "target": "ES5"
+        "allowJs": true
+        // "checkJs": true,
+        // "paths": {
+        //     "@/*": ["./*"]
+        // },
+        // "esModuleInterop": true,
+        // "skipLibCheck": true,
+        // "forceConsistentCasingInFileNames": true
     },
     "include": ["src"]
+    // "files": ["./webpack.config.js"]
 }
