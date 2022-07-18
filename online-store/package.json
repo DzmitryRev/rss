@@ -6,7 +6,8 @@
     "scripts": {
         "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
         "build": "webpack --config ./webpack.config.js --env mode=prod",
-        "lint": "eslint . --ext .ts"
+        "lint": "eslint . --ext .ts",
+        "test": "jest"
     },
     "author": "",
     "license": "ISC",
@@ -24,6 +25,7 @@
         "eslint-plugin-prettier": "^3.4.0",
         "eslint-plugin-promise": "^6.0.0",
         "html-webpack-plugin": "^5.2.0",
+        "jest": "^28.1.3",
         "prettier": "2.2.1",
         "sass-loader": "^13.0.2",
         "style-loader": "^2.0.0",
