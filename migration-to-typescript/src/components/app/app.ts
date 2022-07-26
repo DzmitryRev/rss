@@ -1,7 +1,5 @@
-import AppController, {
-    NewsDataType,
-    SourcesDataType,
-} from "../controller/controller";
+import { NewsDataType, SourcesDataType } from "../../types/index";
+import AppController from "../controller/controller";
 import { AppView } from "../view/appView";
 
 class App {
@@ -14,7 +12,6 @@ class App {
 
     start(): void {
         const sources: Element | null = document.querySelector(".sources");
-
         sources?.addEventListener("click", (e) =>
             this.controller.getNews(e, (data: NewsDataType) => this.view.drawNews(data))
         );
