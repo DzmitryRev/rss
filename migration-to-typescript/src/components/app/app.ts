@@ -1,6 +1,6 @@
-import { NewsDataType, SourcesDataType } from "../../types/index";
 import AppController from "../controller/controller";
 import { AppView } from "../view/appView";
+import { NewsDataType, SourcesDataType } from "../../types/index";
 
 class App {
     controller: AppController;
