@@ -13,21 +13,7 @@ type GetRespSettingsType = {
 
 type CallbackType = (data?: any) => void;
 
-interface ILoader {
-    baseLink: string;
-    options: OptionsType;
-    getResp(settings: GetRespSettingsType, callback: CallbackType): void;
-    errorHandler(res: Response): Response;
-    makeUrl(options: GetRespOptionsType, endpoint: string): string;
-    load(
-        method: string,
-        endpoint: string,
-        callback: CallbackType,
-        options: GetRespOptionsType
-    ): void;
-}
-
-class Loader implements ILoader {
+class Loader  {
     baseLink: string;
     options: OptionsType;
 

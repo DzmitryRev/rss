@@ -2,14 +2,7 @@ import { NewsDataType, SourcesDataType } from "../controller/controller";
 import News, { INews } from "./news/news";
 import Sources, { ISources } from "./sources/sources";
 
-export interface IAppView {
-    news: INews;
-    sources: ISources;
-    drawNews(data: NewsDataType): void;
-    drawSources(data: SourcesDataType): void;
-}
-
-export class AppView implements IAppView {
+export class AppView {
     news: INews;
     sources: ISources;
     constructor() {

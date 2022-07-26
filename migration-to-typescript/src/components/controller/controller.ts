@@ -1,47 +1,6 @@
 import AppLoader from "./appLoader";
 
-// Type for data from sources fetching
-
-export type SourcesType = {
-    category: string;
-    country: string;
-    description: string;
-    id: string;
-    language: string;
-    name: string;
-    url: string;
-};
-
-export type SourcesDataType = {
-    status: string;
-    sources: SourcesType[];
-};
-
-// Type for data from news fetching
-
-export type NewsType = {
-    author: string;
-    content: string;
-    description: string;
-    publishedAt: string;
-    source: { id: string; name: string };
-    title: string;
-    url: string;
-    urlToImage: string;
-};
-
-export type NewsDataType = {
-    status: string;
-    articles: NewsType[];
-    totalResults: number;
-};
-
-export interface IAppController {
-    getSources(callback: (data?: any) => void): void;
-    getNews(e: Event, callback: (data?: any) => void): void;
-}
-
-class AppController extends AppLoader implements IAppController {
+class AppController extends AppLoader {
     getSources(callback: (data?: SourcesDataType) => void): void {
         super.getResp<SourcesDataType>(
             {

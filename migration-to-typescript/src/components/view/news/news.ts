@@ -1,11 +1,7 @@
 import { NewsType } from "../../controller/controller";
 import "./news.css";
 
-export interface INews {
-    draw(data: NewsType[]): void;
-}
-
-class News implements INews {
+class News  {
     draw(data: NewsType[]) {
         const news: NewsType[] = data.length >= 10 ? data.filter((_item, idx) => idx < 10) : data;
 

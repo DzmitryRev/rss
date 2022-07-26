@@ -1,19 +1,12 @@
 import AppController, {
-    IAppController,
     NewsDataType,
     SourcesDataType,
 } from "../controller/controller";
-import { AppView, IAppView } from "../view/appView";
+import { AppView } from "../view/appView";
 
-interface IApp {
-    controller: IAppController;
-    view: IAppView;
-    start(): void;
-}
-
-class App implements IApp {
-    controller: IAppController;
-    view: IAppView;
+class App {
+    controller: AppController;
+    view: AppView;
     constructor() {
         this.controller = new AppController();
         this.view = new AppView();
