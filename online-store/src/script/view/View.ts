@@ -92,7 +92,11 @@ export class View {
             });
             this.settingsCheckboxElement.insertAdjacentElement(
                 "beforeend",
-                this.template.createFilterBlock(availableFiltersField, String(key), filters[key])
+                this.template.createFiltersContainer(
+                    availableFiltersField,
+                    String(key),
+                    filters[key]
+                )
             );
         }
     }
