@@ -21,12 +21,9 @@ export type FiltersType = {
 export class Model {
     _products: ProductType[];
     searchValue: string;
-    // ranges: { price: [string, string] };
-    sortBy: SortType;
-
+    // sortBy: SortType;
     getCardStorage: () => ProductType[];
     setCardStorage: (card: ProductType[]) => void;
-
     getFiltersStorage: () => FiltersType;
     setFiltersStorage: (filters: FiltersType) => void;
 
@@ -34,12 +31,12 @@ export class Model {
         this._products = products;
         this.searchValue = "";
         const localStorage = window.localStorage;
-        this.sortBy = {
-            Up: true,
-            value: "default",
-        };
+        // this.sortBy = {
+        //     Up: true,
+        //     value: "default",
+        // };
 
-        this.getCardStorage = () => {
+        this.getCardStorage = (): ProductType[] => {
             return (
                 <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) ||
                 []
