@@ -1,4 +1,5 @@
-import { Model, SortValueType } from "../model/Model";
+import { Model } from "../model/Model";
+import { SortValueType } from "../model/types";
 import { IView } from "../view/View";
 
 export interface IController {

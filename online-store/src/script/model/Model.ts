@@ -1,23 +1,5 @@
-import { products, ProductType } from "../../data/products";
-
-export type CheckboxFiltersType = {
-    color: string[];
-    year: string[];
-    manufacturer: string[];
-    memory: string[];
-};
-
-export type SortValueType = keyof ProductType | "default";
-
-export type SortType = {
-    fromSmaller: boolean;
-    value: SortValueType;
-};
-
-export type FiltersType = {
-    checkbox: CheckboxFiltersType;
-    sort: SortType;
-};
+import { ProductType } from "../../data/products";
+import { CheckboxFiltersType, FiltersType, SortType, SortValueType } from "./types";
 
 export class Model {
     _products: ProductType[];

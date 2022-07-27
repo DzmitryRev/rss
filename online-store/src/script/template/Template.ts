@@ -1,5 +1,5 @@
 import { ProductType } from "../../data/products";
-import { SortType, SortValueType } from "../model/Model";
+import { SortType, SortValueType } from "../model/types";
 
 export class Template {
     createApp() {
