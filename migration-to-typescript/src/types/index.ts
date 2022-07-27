@@ -30,3 +30,6 @@ export interface SourcesDataType {
     status: string;
     sources: SourcesType[];
 };
+
+
+export type Element<T> = T | null;

@@ -1,7 +1,5 @@
-import { NewsType } from "../../../types/index";
+import { Element, NewsType } from "../../../types/index";
 import "./news.css";
-
-type Element<T> = T | null;
 
 class News  {
     draw(data: NewsType[]): void {
