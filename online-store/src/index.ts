@@ -2,12 +2,11 @@
 import "./scss/index.scss";
 // images
 import "./assets/card-icon.svg";
-import "./assets/arrow.svg";
 import "./assets/product-1.jpg";
 //
-import { Model } from "./script/Model";
-import { Controller, IController } from "./script/Controller";
-import { View } from "./script/View";
+import { Model } from "./script/model/Model";
+import { Controller, IController } from "./script/controller/Controller";
+import { View } from "./script/view/View";
 import { products } from "./data/products";
 // import noUiSlider, { Formatter, target } from "../node_modules/nouislider/dist/nouislider";
 

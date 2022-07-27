@@ -1,6 +1,6 @@
-import { ProductType } from "../data/products";
-import { CheckboxFiltersType, SortType, SortValueType } from "./Model";
-import { Template } from "./Template";
+import { ProductType } from "../../data/products";
+import { CheckboxFiltersType, SortType, SortValueType } from "../model/Model";
+import { Template } from "../template/Template";
 
 export interface IView {
     productsRootElement: HTMLElement;
