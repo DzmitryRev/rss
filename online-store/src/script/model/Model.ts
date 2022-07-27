@@ -10,7 +10,7 @@ export type CheckboxFiltersType = {
 export type SortValueType = keyof ProductType | "default";
 
 export type SortType = {
-    Up: boolean;
+    fromSmaller: boolean;
     value: SortValueType;
 };
 
@@ -51,7 +51,7 @@ export class Model {
                 manufacturer: [],
             },
             sort: {
-                Up: true,
+                fromSmaller: true,
                 value: "default",
             },
         };
@@ -123,19 +123,19 @@ export class Model {
         const filters = this.getFiltersStorage();
 
         if (filters.sort.value === "default") {
-            filters.sort.Up = true;
+            filters.sort.fromSmaller = true;
             filters.sort.value = value;
             this.setFiltersStorage(filters);
             callback(filters.sort);
             return;
         }
         if (filters.sort.value === value) {
-            filters.sort.Up = !filters.sort.Up;
+            filters.sort.fromSmaller = !filters.sort.fromSmaller;
             this.setFiltersStorage(filters);
             callback(filters.sort);
             return;
         }
-        filters.sort.Up = true;
+        filters.sort.fromSmaller = true;
         filters.sort.value = value;
         this.setFiltersStorage(filters);
         callback(filters.sort);
@@ -171,19 +171,19 @@ export class Model {
         // Step 3 - sort
         switch (sort.value) {
             case "price": {
-                sort.Up
+                sort.fromSmaller
                     ? filtredPropucts.sort((a, b) => +a.price - +b.price)
                     : filtredPropucts.sort((a, b) => +b.price - +a.price);
                 break;
             }
             case "memory": {
-                sort.Up
+                sort.fromSmaller
                     ? filtredPropucts.sort((a, b) => +a.memory - +b.memory)
                     : filtredPropucts.sort((a, b) => +b.memory - +a.memory);
                 break;
             }
             case "quantity": {
-                sort.Up
+                sort.fromSmaller
                     ? filtredPropucts.sort((a, b) => +a.quantity - +b.quantity)
                     : filtredPropucts.sort((a, b) => +b.quantity - +a.quantity);
                 break;

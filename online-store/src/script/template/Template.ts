@@ -119,7 +119,7 @@ export class Template {
         const arrow = document.createElement("div");
         if (sort === currentSort.value && sort !== "default") {
             arrow.classList.add("arrow");
-            if (currentSort.Up) {
+            if (currentSort.fromSmaller) {
                 arrow.classList.add("up");
             } else {
                 arrow.classList.add("down");
