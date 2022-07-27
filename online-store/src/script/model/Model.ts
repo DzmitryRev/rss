@@ -1,4 +1,4 @@
-import { ProductType } from "../../data/products";
+import { products, ProductType } from "../../data/products";
 
 export type CheckboxFiltersType = {
     color: string[];
@@ -7,7 +7,8 @@ export type CheckboxFiltersType = {
     memory: string[];
 };
 
-export type SortValueType = "price" | "quantity" | "memory" | "default";
+export type SortValueType = keyof ProductType | "default";
+
 export type SortType = {
     Up: boolean;
     value: SortValueType;
@@ -21,7 +22,6 @@ export type FiltersType = {
 export class Model {
     _products: ProductType[];
     searchValue: string;
-    // sortBy: SortType;
     getCardStorage: () => ProductType[];
     setCardStorage: (card: ProductType[]) => void;
     getFiltersStorage: () => FiltersType;
@@ -31,10 +31,6 @@ export class Model {
         this._products = products;
         this.searchValue = "";
         const localStorage = window.localStorage;
-        // this.sortBy = {
-        //     Up: true,
-        //     value: "default",
-        // };
 
         this.getCardStorage = (): ProductType[] => {
             return (
