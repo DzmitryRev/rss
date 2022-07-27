@@ -1,5 +1,5 @@
-import { ProductType } from "../../data/products";
-import { CheckboxFiltersType, SortType, SortValueType } from "../model/Model";
+import { ProductType } from "../../data/types";
+import { CheckboxFiltersType, SortType, SortValueType } from "../model/types";
 import { Template } from "../template/Template";
 
 export interface IView {

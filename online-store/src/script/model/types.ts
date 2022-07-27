@@ -1,4 +1,4 @@
-import { ProductType } from "../../data/products";
+import { ProductType } from "../../data/types";
 
 export interface CheckboxFiltersType {
     color: string[];

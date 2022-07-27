@@ -1,4 +1,4 @@
-import { ProductType } from "../../data/products";
+import { ProductType } from "../../data/types";
 import { CheckboxFiltersType, FiltersType, SortType, SortValueType } from "./types";
 
 export class Model {
@@ -12,19 +12,8 @@ export class Model {
     constructor(products: ProductType[]) {
         this._products = products;
         this.searchValue = "";
+
         const localStorage = window.localStorage;
-
-        this.getCardStorage = (): ProductType[] => {
-            return (
-                <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) ||
-                []
-            );
-        };
-
-        this.setCardStorage = (card: ProductType[]): void => {
-            localStorage.setItem("revchenko-store-card", JSON.stringify(card));
-        };
-
         const defaultFilters: FiltersType = {
             checkbox: {
                 color: [],
@@ -38,6 +27,17 @@ export class Model {
             },
         };
 
+        this.getCardStorage = (): ProductType[] => {
+            return (
+                <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) ||
+                []
+            );
+        };
+
+        this.setCardStorage = (card: ProductType[]): void => {
+            localStorage.setItem("revchenko-store-card", JSON.stringify(card));
+        };
+
         this.getFiltersStorage = (): FiltersType => {
             return (
                 <FiltersType>JSON.parse(<string>localStorage.getItem("revchenko-store-filters")) ||
@@ -48,11 +48,12 @@ export class Model {
             localStorage.setItem("revchenko-store-filters", JSON.stringify(filters));
         };
     }
+
     // Tools
     findProduct(id: string): ProductType | undefined {
         return this._products.find((item) => item.id === id);
     }
-    // Manage card
+    // Card
     addToCard(id: string, callback: () => void): void {
         const card = this.getCardStorage();
         const product = this.findProduct(id);
@@ -74,7 +75,7 @@ export class Model {
         this.setCardStorage(newCard);
         callback();
     }
-    // Manage filters and sort
+    // Filters
     changeCheckboxFilter(field: string, value: string, callback: () => void): void {
         const { checkbox } = this.getFiltersStorage();
         const key = field as keyof typeof checkbox;
@@ -100,7 +101,7 @@ export class Model {
         this.setFiltersStorage(defaultFilters);
         callback();
     }
-    // Manage sort
+    // Sort
     changeSort(value: SortValueType, callback: (sortBy: SortType) => void): void {
         const filters = this.getFiltersStorage();
 
@@ -122,7 +123,7 @@ export class Model {
         this.setFiltersStorage(filters);
         callback(filters.sort);
     }
-    // Manage search
+    // Search
     inputSearch(value: string, callback: () => void): void {
         this.searchValue = value;
         callback();
