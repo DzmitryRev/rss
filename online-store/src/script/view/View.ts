@@ -1,72 +1,40 @@
 import { ProductType } from "../../data/types";
 import { CheckboxFiltersType, SortType, SortValueType } from "../model/types";
 import { Template } from "../template/Template";
-
-export interface IView {
-    productsRootElement: HTMLElement;
-    cardCountRootElement: HTMLElement;
-    settingsRootElement: HTMLElement;
-    settingsSearchElement: HTMLElement;
-    settingsCheckboxElement: HTMLElement;
-    settingsRangeElement: HTMLElement;
-    settingsSortElement: HTMLElement;
-    template: Template;
-    // events
-    addToCardEvent(handler: (id: string) => void): void;
-    removeFromCardEvent(handler: (id: string) => void): void;
-    filterEvent(handler: (field: string, value: string) => void): void;
-    resetFilterEvent(handler: () => void): void;
-    searchEvent(handler: (value: string) => void): void;
-    sortEvent(handler: (value: SortValueType) => void): void;
-    // render
-    renderCard(card: ProductType[]): void;
-    renderProductButton(products: ProductType[], card: ProductType[]): void;
-    renderCheckboxFilters(products: ProductType[], filters: CheckboxFiltersType): void;
-    renderProducts(products: ProductType[]): void;
-    renderSearch(): void;
-    renderSort(currentSort: SortType): void;
-}
+import { Element } from "./types";
 
 export class View {
-    productsRootElement: HTMLElement;
-    cardCountRootElement: HTMLElement;
-    settingsRootElement: HTMLElement;
-    settingsSearchElement: HTMLElement;
-    settingsCheckboxElement: HTMLElement;
-    settingsRangeElement: HTMLElement;
-    settingsSortElement: HTMLElement;
+    productsRootElement: Element;
+    cardCountRootElement: Element;
+    settingsRootElement: Element;
+    settingsSearchElement: Element;
+    settingsCheckboxElement: Element;
+    settingsSortElement: Element;
     template: Template;
-    // ranges: API[];
-    constructor(root: HTMLElement) {
-        // init App Template
+
+    constructor() {
         this.template = new Template();
-        root.innerHTML = this.template.createApp();
-        // Define require elems
-        this.productsRootElement = <HTMLElement>document.querySelector("#products-root-elem");
-        this.cardCountRootElement = <HTMLElement>document.querySelector("#card-count-root-elem");
-        this.settingsRootElement = <HTMLElement>document.querySelector("#settings-root-element");
-        this.settingsRangeElement = <HTMLElement>(
-            document.querySelector("#settings-range-container")
-        );
-        this.settingsSearchElement = <HTMLElement>(
-            document.querySelector("#settings-search-container")
-        );
-        this.settingsCheckboxElement = <HTMLElement>(
+        // Require elements
+        this.productsRootElement = <Element>document.querySelector("#products-root-elem");
+        this.cardCountRootElement = <Element>document.querySelector("#card-count-root-elem");
+        this.settingsRootElement = <Element>document.querySelector("#settings-root-element");
+        this.settingsSearchElement = <Element>document.querySelector("#settings-search-container");
+        this.settingsCheckboxElement = <Element>(
             document.querySelector("#settings-checkbox-container")
         );
-        this.settingsSortElement = <HTMLElement>(
-            (<HTMLDivElement>document.querySelector("#settings-sort-container"))
+        this.settingsSortElement = <Element<HTMLDivElement>>(
+            document.querySelector("#settings-sort-container")
         );
 
-        // add global events
+        // Add global events
         const openFiltersBtn = document.querySelector("#open-filter-button");
         openFiltersBtn?.addEventListener("click", (e) => {
             e.stopPropagation();
-            this.settingsRootElement.classList.add("open");
+            this.settingsRootElement?.classList.add("open");
             document.body.style.overflow = "hidden";
         });
         document.addEventListener("click", (e) => {
-            if (this.settingsRootElement.classList.contains("open")) {
+            if (this.settingsRootElement?.classList.contains("open")) {
                 const node = <Node>e.target;
                 if (!this.settingsRootElement.contains(node) && node.nodeName !== "INPUT") {
                     this.settingsRootElement.classList.remove("open");
@@ -78,6 +46,7 @@ export class View {
 
     // Renders
     renderProducts(products: ProductType[]): void {
+        if (!this.productsRootElement) return;
         if (!products.length) {
             this.productsRootElement.innerHTML = "No products found";
             return;
@@ -85,16 +54,18 @@ export class View {
         this.productsRootElement.innerHTML = "";
         products.forEach((product) => {
             const template = this.template.createProduct(product);
-            this.productsRootElement.insertAdjacentHTML("beforeend", template);
+            this.productsRootElement?.insertAdjacentHTML("beforeend", template);
         });
     }
     renderSearch(): void {
+        if (!this.settingsSearchElement) return;
         this.settingsSearchElement.innerHTML = "";
         const searchContainer = this.template.createSearch();
         this.settingsSearchElement.insertAdjacentElement("beforeend", searchContainer);
         searchContainer.querySelector("input")?.focus();
     }
     renderSort(currentSort: SortType): void {
+        if (!this.settingsSortElement) return;
         this.settingsSortElement.innerHTML = "";
         const sorts: SortValueType[] = ["default", "price", "memory", "quantity"];
         sorts.forEach((sort) => {
@@ -103,6 +74,7 @@ export class View {
         });
     }
     renderCheckboxFilters(products: ProductType[], filters: CheckboxFiltersType): void {
+        if (!this.settingsCheckboxElement) return;
         this.settingsCheckboxElement.innerHTML = "";
         const availableFilters: CheckboxFiltersType = <CheckboxFiltersType>(
             Object.create(filters, Object.getOwnPropertyDescriptors(filters))
@@ -168,7 +140,7 @@ export class View {
     // Events
     addToCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
-            if (this.settingsRootElement.classList.contains("open")) return;
+            if (this.settingsRootElement?.classList.contains("open")) return;
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-add-to-card")) {
                 const id = target.dataset.id;
@@ -178,7 +150,7 @@ export class View {
     }
     removeFromCardEvent(handler: (id: string) => void): void {
         this.productsRootElement?.addEventListener("click", (e) => {
-            if (this.settingsRootElement.classList.contains("open")) return;
+            if (this.settingsRootElement?.classList.contains("open")) return;
             const target = <HTMLElement>e.target;
             if (target?.classList.contains("button-remove-from-card")) {
                 const id = target.dataset.id;
@@ -213,11 +185,11 @@ export class View {
             }
         });
     }
-    sortEvent(handler: (value: "price" | "quantity" | "memory" | "default") => void): void {
+    sortEvent(handler: (value: SortValueType) => void): void {
         document.addEventListener("click", (e) => {
             const target = <HTMLSpanElement>e.target;
             if (target?.dataset.sort) {
-                handler(<"price" | "quantity" | "memory" | "default">target?.dataset.sort);
+                handler(<SortValueType>target?.dataset.sort);
             }
         });
     }

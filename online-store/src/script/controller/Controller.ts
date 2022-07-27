@@ -1,11 +1,11 @@
 import { Model } from "../model/Model";
 import { SortValueType } from "../model/types";
-import { IView } from "../view/View";
+import { View } from "../view/View";
 
 export class Controller {
     model: Model;
-    view: IView;
-    constructor(model: Model, view: IView) {
+    view: View;
+    constructor(model: Model, view: View) {
         this.model = model;
         this.view = view;
     }
