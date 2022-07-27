@@ -1,8 +1,8 @@
-import { IModel, SortValueType } from "../model/Model";
+import { Model, SortValueType } from "../model/Model";
 import { IView } from "../view/View";
 
 export interface IController {
-    model: IModel;
+    model: Model;
     view: IView;
     // run app
     start(): void;
@@ -21,9 +21,9 @@ export interface IController {
 }
 
 export class Controller implements IController {
-    model: IModel;
+    model: Model;
     view: IView;
-    constructor(model: IModel, view: IView) {
+    constructor(model: Model, view: IView) {
         this.model = model;
         this.view = view;
     }

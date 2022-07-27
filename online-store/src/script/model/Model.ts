@@ -17,33 +17,8 @@ export type FiltersType = {
     checkbox: CheckboxFiltersType;
     sort: SortType;
 };
-export interface IModel {
-    _products: ProductType[];
-    searchValue: string;
-    findProduct(id: string): void;
-    // storage listeners
-    getCardStorage(): ProductType[];
-    getFiltersStorage(): FiltersType;
-    setCardStorage(card: ProductType[]): void;
-    setFiltersStorage: (filters: FiltersType) => void;
-    // connectors for data
-    getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
-    getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void;
-    getFilters(callback: (products: ProductType[], filters: CheckboxFiltersType) => void): void;
-    getSort(callback: (sort: SortType) => void): void;
-    // manage card
-    addToCard(id: string, callback: () => void): void;
-    removeFromCard(id: string, callback: () => void): void;
-    // manage filters
-    changeCheckboxFilter(field: string, value: string, callback: () => void): void;
-    resetFilters(callback: () => void): void;
-    // manage sort
-    changeSort(value: SortValueType, callback: (sortBy: SortType) => void): void;
-    // manage search
-    inputSearch(value: string, callback: () => void): void;
-}
 
-export class Model implements IModel {
+export class Model {
     _products: ProductType[];
     searchValue: string;
     // ranges: { price: [string, string] };
@@ -71,7 +46,7 @@ export class Model implements IModel {
             );
         };
 
-        this.setCardStorage = (card: ProductType[]) => {
+        this.setCardStorage = (card: ProductType[]): void => {
             localStorage.setItem("revchenko-store-card", JSON.stringify(card));
         };
 
@@ -88,13 +63,13 @@ export class Model implements IModel {
             },
         };
 
-        this.getFiltersStorage = () => {
+        this.getFiltersStorage = (): FiltersType => {
             return (
                 <FiltersType>JSON.parse(<string>localStorage.getItem("revchenko-store-filters")) ||
                 defaultFilters
             );
         };
-        this.setFiltersStorage = (filters: FiltersType) => {
+        this.setFiltersStorage = (filters: FiltersType): void => {
             localStorage.setItem("revchenko-store-filters", JSON.stringify(filters));
         };
     }
@@ -173,7 +148,7 @@ export class Model implements IModel {
         callback(filters.sort);
     }
     // Manage search
-    inputSearch(value: string, callback: () => void) {
+    inputSearch(value: string, callback: () => void): void {
         this.searchValue = value;
         callback();
     }
