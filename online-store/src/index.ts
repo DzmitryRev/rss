@@ -5,7 +5,7 @@ import "./assets/card-icon.svg";
 import "./assets/product-1.jpg";
 //
 import { Model } from "./script/model/Model";
-import { Controller, IController } from "./script/controller/Controller";
+import { Controller } from "./script/controller/Controller";
 import { View } from "./script/view/View";
 import { products } from "./data/products";
 // import noUiSlider, { Formatter, target } from "../node_modules/nouislider/dist/nouislider";
@@ -93,7 +93,7 @@ import { products } from "./data/products";
 
 const root = document.querySelector("#root");
 if (!root) throw new Error("Can't find #root element");
-const app: IController = new Controller(new Model(products), new View(<HTMLElement>root));
+const app: Controller = new Controller(new Model(products), new View(<HTMLElement>root));
 app.start();
 
 // TODO:

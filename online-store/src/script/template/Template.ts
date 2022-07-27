@@ -1,4 +1,4 @@
-import { ProductType } from "../../data/products";
+import { ProductType } from "../../data/types";
 import { SortType, SortValueType } from "../model/types";
 
 export class Template {

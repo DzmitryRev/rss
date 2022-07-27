@@ -2,33 +2,14 @@ import { Model } from "../model/Model";
 import { SortValueType } from "../model/types";
 import { IView } from "../view/View";
 
-export interface IController {
-    model: Model;
-    view: IView;
-    // run app
-    start(): void;
-    render(): void;
-    // handlers
-    handleAddToCard(id: string): void;
-    handleRemoveFromCard(id: string): void;
-    handleChangeFilter(field: string, value: string): void;
-    handleSearch(value: string): void;
-    handleResetFilter(): void;
-    handleSort(value: SortValueType): void;
-    // connectors
-    _getProducts(): void;
-    _getCard(): void;
-    _getFilters(): void;
-}
-
-export class Controller implements IController {
+export class Controller {
     model: Model;
     view: IView;
     constructor(model: Model, view: IView) {
         this.model = model;
         this.view = view;
     }
-    start() {
+    start(): void {
         this.view.addToCardEvent((id: string): void => {
             this.handleAddToCard(id);
         });
@@ -75,16 +56,17 @@ export class Controller implements IController {
             this._getFilters();
         });
     }
-    handleSort(value: SortValueType): void {
-        this.model.changeSort(value, () => {
-            this._getSort();
-            this._getProducts();
-        });
-    }
     handleResetFilter(): void {
         this.model.resetFilters(() => {
             this._getProducts();
             this._getFilters();
+        });
+    }
+    // Sort handlers
+    handleSort(value: SortValueType): void {
+        this.model.changeSort(value, () => {
+            this._getSort();
+            this._getProducts();
         });
     }
     // Search handlers
@@ -93,7 +75,7 @@ export class Controller implements IController {
             this._getProducts();
         });
     }
-    // Connectors
+    // Connect View with Model
     _getCard(): void {
         this.model.getCard((products, currentCard) => {
             this.view.renderCard(currentCard);
