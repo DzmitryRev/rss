@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "ES2020",
+        "noImplicitAny": false,
+        "strict": true,
+        "noEmitOnError": false,
+        "allowJs": true,
+        "lib": ["ES2020", "DOM"]
+      },
+    "include": ["src"]
+}
