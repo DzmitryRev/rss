@@ -1,10 +1,10 @@
-import { createCar, getCar, getCars } from "./scripts/API/Api";
+import { createCar, getCar } from './scripts/API/Api';
 
-getCars();
+// getCars();
 getCar(1);
 createCar({
-  name: "Tesla Model X",
-  color: "#fff",
+  name: 'Tesla Model X',
+  color: '#fff',
 });
 
-getCars();
+// getCars();

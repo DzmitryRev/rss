@@ -1,16 +1,16 @@
-export function getCars() {
-  let cars = fetch("http://localhost:3000/garage", {
-    method: "GET",
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      console.log(res);
-    });
-}
+// export function getCars() {
+//   fetch('http://localhost:3000/garage', {
+//     method: 'GET',
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       console.log(res);
+//     });
+// }
 
 export function getCar(id: number) {
-  let cars = fetch(`http://localhost:3000/garage/${id}`, {
-    method: "GET",
+  fetch(`http://localhost:3000/garage/${id}`, {
+    method: 'GET',
   })
     .then((res) => res.json())
     .then((res) => {
@@ -18,10 +18,10 @@ export function getCar(id: number) {
     });
 }
 export function createCar(car: { name: string; color: string }) {
-  let cars = fetch(`http://localhost:3000/garage`, {
-    method: "POST",
+  fetch('http://localhost:3000/garage', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(car),
   })
@@ -31,7 +31,4 @@ export function createCar(car: { name: string; color: string }) {
     });
 }
 
-
-export function deleteCar(id: number) {
-    
-}
+// export function deleteCar(id: number) {}
