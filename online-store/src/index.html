@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <header class="header">
+            <div class="container">
+                <div class="header__flex">
+                    <div class="header__logo">
+                        <h1 id="tet">Revchenko store</h1>
+                    </div>
+                    <div class="header__card">
+                        <svg height="30" width="30">
+                            <use
+                                class="header__card-icon"
+                                xlink:href="./assets/card-icon.svg#Layer_1"
+                            ></use>
+                        </svg>
+                        <div id="card-count-root-elem" class="header__card-count"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="content">
+            <div class="container">
+                <div class="content__filter-button-container">
+                    <button id="open-filter-button" class="content__filter-button button">
+                        Фильтры
+                    </button>
+                </div>
+                <div class="content__container">
+                    <div id="settings-root-element" class="content__settings-container">
+                        <div id="settings-search-container"></div>
+                        <div id="settings-checkbox-container"></div>
+                        <div id="settings-sort-container"></div>
+                        <button id="reset" class="button">reset filters</button>
+                    </div>
+                    <div id="products-root-elem" class="content__products-container"></div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,196 @@
+import { ProductType } from "../../data/types";
+import { CheckboxFiltersType, FiltersType, SortType, SortValueType } from "./types";
+
+export class Model {
+    _products: ProductType[];
+    searchValue: string;
+    getCardStorage: () => ProductType[];
+    setCardStorage: (card: ProductType[]) => void;
+    getFiltersStorage: () => FiltersType;
+    setFiltersStorage: (filters: FiltersType) => void;
+
+    constructor(products: ProductType[]) {
+        this._products = products;
+        this.searchValue = "";
+
+        const localStorage = window.localStorage;
+        const defaultFilters: FiltersType = {
+            checkbox: {
+                color: [],
+                year: [],
+                memory: [],
+                manufacturer: [],
+            },
+            sort: {
+                fromSmaller: true,
+                value: "default",
+            },
+        };
+
+        this.getCardStorage = (): ProductType[] => {
+            return (
+                <ProductType[]>JSON.parse(<string>localStorage.getItem("revchenko-store-card")) ||
+                []
+            );
+        };
+
+        this.setCardStorage = (card: ProductType[]): void => {
+            localStorage.setItem("revchenko-store-card", JSON.stringify(card));
+        };
+
+        this.getFiltersStorage = (): FiltersType => {
+            return (
+                <FiltersType>JSON.parse(<string>localStorage.getItem("revchenko-store-filters")) ||
+                defaultFilters
+            );
+        };
+        this.setFiltersStorage = (filters: FiltersType): void => {
+            localStorage.setItem("revchenko-store-filters", JSON.stringify(filters));
+        };
+    }
+
+    // Tools
+    findProduct(id: string): ProductType | undefined {
+        return this._products.find((item) => item.id === id);
+    }
+    // Card
+    addToCard(id: string, callback: () => void): void {
+        const card = this.getCardStorage();
+        const product = this.findProduct(id);
+        if (
+            !product ||
+            card.find((productInCard) => productInCard.id === id) ||
+            product.quantity === 0
+        ) {
+            return;
+        }
+        const newCard: ProductType[] = [...card, product];
+        this.setCardStorage(newCard);
+        callback();
+    }
+    removeFromCard(id: string, callback: () => void): void {
+        const card = this.getCardStorage();
+        const product = this.findProduct(id);
+        if (!product || !card.length) return;
+        const newCard: ProductType[] = card.filter((item) => item.id !== id);
+        this.setCardStorage(newCard);
+        callback();
+    }
+    // Filters
+    changeCheckboxFilter(field: string, value: string, callback: () => void): void {
+        const { checkbox } = this.getFiltersStorage();
+        const key = field as keyof typeof checkbox;
+        if (checkbox[key].includes(value)) {
+            const newArrayOfFilters = checkbox[key].filter((item) => item !== value);
+            checkbox[key] = newArrayOfFilters;
+        } else {
+            checkbox[key].push(value);
+        }
+        this.setFiltersStorage({ ...this.getFiltersStorage(), checkbox });
+        callback();
+    }
+    resetFilters(callback: () => void): void {
+        const defaultFilters: FiltersType = {
+            ...this.getFiltersStorage(),
+            checkbox: {
+                color: [],
+                year: [],
+                memory: [],
+                manufacturer: [],
+            },
+        };
+        this.setFiltersStorage(defaultFilters);
+        callback();
+    }
+    // Sort
+    changeSort(value: SortValueType, callback: (sortBy: SortType) => void): void {
+        const filters = this.getFiltersStorage();
+
+        if (filters.sort.value === "default") {
+            filters.sort.fromSmaller = true;
+            filters.sort.value = value;
+            this.setFiltersStorage(filters);
+            callback(filters.sort);
+            return;
+        }
+        if (filters.sort.value === value) {
+            filters.sort.fromSmaller = !filters.sort.fromSmaller;
+            this.setFiltersStorage(filters);
+            callback(filters.sort);
+            return;
+        }
+        filters.sort.fromSmaller = true;
+        filters.sort.value = value;
+        this.setFiltersStorage(filters);
+        callback(filters.sort);
+    }
+    // Search
+    inputSearch(value: string, callback: () => void): void {
+        this.searchValue = value;
+        callback();
+    }
+    // Connectors
+    getProducts(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
+        const { checkbox, sort } = this.getFiltersStorage();
+        // Step 1 - filter by search value
+        const searchedProducts = this._products.filter((product) => {
+            if (product.title.toLowerCase().includes(this.searchValue.toLowerCase())) {
+                return true;
+            }
+            return false;
+        });
+        // Step 2 - filter by checkboxes
+        const filtredPropucts = searchedProducts.filter((product) => {
+            let result = true;
+            for (const i in checkbox) {
+                const key = i as keyof typeof checkbox;
+                if (!checkbox[key].length) {
+                    result = true;
+                } else if (!checkbox[key].includes(product[key])) {
+                    return false;
+                }
+            }
+            return result;
+        });
+        // Step 3 - sort
+        switch (sort.value) {
+            case "price": {
+                sort.fromSmaller
+                    ? filtredPropucts.sort((a, b) => +a.price - +b.price)
+                    : filtredPropucts.sort((a, b) => +b.price - +a.price);
+                break;
+            }
+            case "memory": {
+                sort.fromSmaller
+                    ? filtredPropucts.sort((a, b) => +a.memory - +b.memory)
+                    : filtredPropucts.sort((a, b) => +b.memory - +a.memory);
+                break;
+            }
+            case "quantity": {
+                sort.fromSmaller
+                    ? filtredPropucts.sort((a, b) => +a.quantity - +b.quantity)
+                    : filtredPropucts.sort((a, b) => +b.quantity - +a.quantity);
+                break;
+            }
+            case "default": {
+                break;
+            }
+            default:
+                break;
+        }
+        const currentCard = this.getCardStorage();
+        callback(filtredPropucts, currentCard);
+    }
+    getCard(callback: (products: ProductType[], currentCard: ProductType[]) => void): void {
+        const card = this.getCardStorage();
+        callback(this._products, card);
+    }
+    getFilters(callback: (products: ProductType[], filters: CheckboxFiltersType) => void): void {
+        const { checkbox } = this.getFiltersStorage();
+        callback(this._products, checkbox);
+    }
+    getSort(callback: (sort: SortType) => void): void {
+        const { sort } = this.getFiltersStorage();
+        callback(sort);
+    }
+}

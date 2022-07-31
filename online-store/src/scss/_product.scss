@@ -1,0 +1,27 @@
+.product {
+    width: 250px;
+    height: 370px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 16px;
+    &__image-container {
+        height: 230px;
+        margin: 0 auto;
+    }
+    &__image {
+        width: auto;
+    }
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.no-available {
+    font-size: 20px;
+    color: $primary-red;
+    text-align: center;
+}
