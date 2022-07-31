@@ -3,8 +3,8 @@ import { CarType, EngineSettingsType } from './types';
 class API {
   static host: string = 'http://localhost:3000/';
 
-  static async getCars(callback: (cars: CarType[]) => void) {
-    await fetch(`${this.host}garage`)
+  static async getCars(page: number, callback: (cars: CarType[]) => void) {
+    await fetch(`${this.host}garage/?_limit=7&_page=${page}`)
       .then((res) => res.json())
       .then((res: CarType[]) => {
         callback(res);
