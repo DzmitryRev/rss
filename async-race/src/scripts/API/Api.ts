@@ -1,38 +1,9 @@
-/* eslint-disable no-unused-vars */
-// export function createCar(car: { name: string; color: string }) {
-//   fetch('http://localhost:3000/garage', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(car),
-//   })
-//     .then((res) => res.json())
-//     .then((res) => {
-//       console.log(res);
-//     });
-// }
-
-// export function deleteCar(id: number) {}
-
-type CarType = {
-  name: string;
-  color: string;
-  id: number;
-};
-type EngineSettingsType = {
-  velocity: number;
-  distance: number;
-};
+import { CarType, EngineSettingsType } from './types';
 
 class API {
-  host: string;
+  static host: string = 'http://localhost:3000/';
 
-  constructor() {
-    this.host = 'http://localhost:3000/';
-  }
-
-  async getCars(callback: (cars: CarType[]) => void) {
+  static async getCars(callback: (cars: CarType[]) => void) {
     await fetch(`${this.host}garage`)
       .then((res) => res.json())
       .then((res: CarType[]) => {
@@ -43,7 +14,7 @@ class API {
       });
   }
 
-  async getCar(id: number, callback: (car: CarType) => void) {
+  static async getCar(id: number, callback: (car: CarType) => void) {
     await fetch(`${this.host}garage/${id}`)
       .then((res) => res.json())
       .then((res: CarType) => {
@@ -54,7 +25,7 @@ class API {
       });
   }
 
-  async createCar(car: Omit<CarType, 'id'>, callback: () => void) {
+  static async createCar(car: Omit<CarType, 'id'>, callback: () => void) {
     await fetch(`${this.host}garage/`, {
       method: 'POST',
       headers: {
@@ -68,7 +39,7 @@ class API {
       });
   }
 
-  async removeCar(id: number, callback: () => void) {
+  static async removeCar(id: number, callback: () => void) {
     await fetch(`${this.host}garage/${id}`, {
       method: 'DELETE',
     })
@@ -78,7 +49,7 @@ class API {
       });
   }
 
-  async updateCar(id: number, car: Omit<CarType, 'id'>, callback: () => void) {
+  static async updateCar(id: number, car: Omit<CarType, 'id'>, callback: () => void) {
     await fetch(`${this.host}garage/${id}`, {
       method: 'PUT',
       headers: {
@@ -92,7 +63,7 @@ class API {
       });
   }
 
-  async startEngine(id: number, callback: (engineSettings: EngineSettingsType) => void) {
+  static async startEngine(id: number, callback: (engineSettings: EngineSettingsType) => void) {
     await fetch(`${this.host}engine/${id}/?status='started'`, {
       method: 'PATCH',
     })
