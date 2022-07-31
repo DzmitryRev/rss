@@ -11,7 +11,7 @@ export const products: ProductType[] = [
         memory: "128",
         quantity: 0,
         color: "Белый",
-        image: "../assets/product-1.jpg",
+        image: "https://mobillife.by/images/virtuemart/product/30052886b.jpg",
     },
     {
         id: "2",

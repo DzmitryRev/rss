@@ -61,8 +61,9 @@ export class Model {
             !product ||
             card.find((productInCard) => productInCard.id === id) ||
             product.quantity === 0
-        )
+        ) {
             return;
+        }
         const newCard: ProductType[] = [...card, product];
         this.setCardStorage(newCard);
         callback();

@@ -36,7 +36,7 @@ export class Template {
     createFilterField(value: string, field: string, checked: boolean): string {
         return `
         <div>
-            <input type="checkbox" data-field="${field}" class="filters-checkbox"  ${
+            <input type="checkbox" data-field="${field}" class="filters-checkbox" ${
             checked ? "checked" : ""
         } />
             <span>${value}</span>
