@@ -1,9 +1,9 @@
-import VirtualNode from './scripts/core/virtual-node/VirtualNode';
-import renderDOM from './scripts/core/render/renderDOM';
-import Component from './scripts/core/component/Component';
+import VirtualNode from './core/virtual-node/VirtualNode';
+import renderDOM from './core/render/renderDOM';
+import Component from './core/component/Component';
 import API from './scripts/API/Api';
 
-import { IState } from './scripts/core/component/types';
+import { IState } from './core/component/types';
 import { CarType } from './scripts/API/types';
 
 interface ICarProps {
