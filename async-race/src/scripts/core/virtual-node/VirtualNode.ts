@@ -22,7 +22,7 @@ export class VirtualNode implements IVirtualNode {
     this.renderChildren();
   }
 
-  renderChildren() {
+  renderChildren(): void {
     this.element.innerHTML = '';
     this.children.forEach((item) => {
       if (typeof item === 'string') {

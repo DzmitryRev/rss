@@ -1,105 +1,65 @@
-// /* eslint-disable max-classes-per-file */
-// import { CarType } from './scripts/API/types';
-// import GarageModel from './scripts/models/GarageModel';
-import { VirtualNode } from './scripts/core/virtual-node/VirtualNode';
+/* eslint-disable class-methods-use-this */
+/* eslint-disable import/extensions */
 
-// const a = new GarageModel();
+import VirtualNode from './scripts/core/virtual-node/VirtualNode';
+import renderDOM from './scripts/core/render/renderDOM';
+import Component from './scripts/core/component/Component';
+import API from './scripts/API/Api';
+import CarE from './car';
 
-// class Car {
-//   el: Root;
+import { IState } from './scripts/core/component/types';
+import { CarType } from './scripts/API/types';
 
-//   state: {
-//     name: string;
-//     color: string;
-//   };
+interface IAppState extends IState {
+  count: number;
+  cars: CarType[];
+}
+class App extends Component {
+  state: IAppState;
 
-//   props: {
-//     name: string;
-//     color: string;
-//   };
+  constructor() {
+    super();
+    this.state = {
+      count: 0,
+      cars: [],
+    };
+  }
 
-//   constructor(props: { name: string; color: string }) {
-//     this.props = props;
-//     this.state = {
-//       name: props.name,
-//       color: props.color,
-//     };
-//   }
+  fetchCars() {
+    API.getCars(1, (cars) => {
+      this.setState({ ...this.state, cars });
+    });
+  }
 
-//   render() {
-//     console.log('render car');
-//     const el = new Root('div', [new Root('span',
-// [`${this.props.name}`, `${this.props.color}`])]);
-//     if (!this.el) this.el = el;
-//     return el;
-//   }
-// }
+  onMount(): void {
+    this.fetchCars();
+  }
 
-// interface Component<T> {
-//   el: Root;
-//   render: () => Root;
-//   state?: T;
-// }
+  render(): VirtualNode {
+    console.log('render App');
+    const element = new VirtualNode('div', '', [
+      'hello',
+      new VirtualNode('h1', '', ['hello']),
+      new VirtualNode('h4', '', ['world']),
+      new VirtualNode('div', '', [
+        new VirtualNode('span', '', [`${this.state.count}`], {
+          type: 'click',
+          callback: () => {
+            this.setState<IAppState>({
+              ...this.state,
+              count: this.state.count + 1,
+            });
+          },
+        }),
+        new VirtualNode('span', '', ['world']),
+        ...this.state.cars.map((car) => new CarE({ name: car.name, color: car.color }).render()),
+      ]),
+    ]);
+    if (!this.element) this.element = element;
+    return element;
+  }
+}
 
-// class App {
-//   el: Root;
+const root = document.getElementById('app');
 
-//   model: GarageModel;
-
-//   state: {
-//     cars: CarType[];
-//   };
-
-//   constructor() {
-//     this.state = {
-//       cars: [],
-//     };
-//     this.model = a;
-//     // this.fetchCars();
-//     this.fetchCars();
-//   }
-
-//   setState(newState: { cars: CarType[] }) {
-//     this.state = newState;
-//     const newEl = this.render();
-//     this.el.children = newEl.children;
-//     this.el.update();
-//   }
-
-//   //   update() {
-//   //     const newEl = this.render();
-//   //     this.el.children = newEl.children;
-//   //     this.el.update();
-//   //   }
-
-//   fetchCars() {
-//     console.log(this.model);
-//     this.model.getCars((cars) => {
-//       this.setState({
-//         cars,
-//       });
-//       console.log(cars);
-//     });
-//   }
-
-//   render() {
-//     console.log('render App');
-//     const el = new Root(
-//       'div',
-//       ['Hello',
-// ...this.state.cars.map((car) => new Car({ name: car.name, color: car.color }).render())],
-//     );
-//     if (!this.el) this.el = el;
-//     return el;
-//   }
-// }
-
-// document
-//   .getElementById('app')
-//   .insertAdjacentElement(
-//     'beforeend',
-//     new VirtualNode('div', '', [
-//       'Hello',
-//       new VirtualNode('h1', '', ['Hello', new VirtualNode('h3', '', ['hello'])]),
-//     ]).element,
-//   );
+renderDOM(root, new App().render());
