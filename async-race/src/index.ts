@@ -1,7 +1,7 @@
 // /* eslint-disable max-classes-per-file */
 // import { CarType } from './scripts/API/types';
 // import GarageModel from './scripts/models/GarageModel';
-// import Root from './scripts/core/Root';
+import { VirtualNode } from './scripts/core/virtual-node/VirtualNode';
 
 // const a = new GarageModel();
 
@@ -94,4 +94,12 @@
 //   }
 // }
 
-// document.getElementById('app').insertAdjacentElement('beforeend', new App().render().render());
+// document
+//   .getElementById('app')
+//   .insertAdjacentElement(
+//     'beforeend',
+//     new VirtualNode('div', '', [
+//       'Hello',
+//       new VirtualNode('h1', '', ['Hello', new VirtualNode('h3', '', ['hello'])]),
+//     ]).element,
+//   );
