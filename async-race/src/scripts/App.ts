@@ -5,11 +5,11 @@ import Header from './components/Header';
 import Garage from './views/Garage';
 import Winners from './views/Winners';
 
-type RouteType = 'garage' | 'winners';
+export type RouteType = 'garage' | 'winners';
 
 type availableRoutesType = RouteType[];
 
-interface IAppState extends IState {
+export interface IAppState extends IState {
   availableRoutes: availableRoutesType;
   activeRoute: RouteType;
 }
@@ -26,7 +26,7 @@ class App extends Component {
   }
 
   changeRoute(route: RouteType) {
-    this.setState({ ...this.state, route });
+    this.setState({ ...this.state, activeRoute: route });
   }
 
   renderRoute(): VirtualNode {
@@ -45,7 +45,13 @@ class App extends Component {
 
   render() {
     const element = new VirtualNode('div', '', [
-      new Header().render(),
+      new Header({
+        availableRoutes: this.state.availableRoutes,
+        activeRoute: this.state.activeRoute,
+        changeRoute: (newRoute) => {
+          this.changeRoute(newRoute);
+        },
+      }).render(),
       new VirtualNode('main', '', [this.renderRoute()]),
     ]);
     if (!this.element) this.element = element;
