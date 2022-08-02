@@ -1,6 +1,6 @@
 import Component from '../core/component/Component';
 import VirtualNode from '../core/virtual-node/VirtualNode';
-import '../styles/app.css';
+import './app.css';
 import { IAppState, RouteType } from './App.types';
 import Header from './components/Header/Header';
 import Garage from './views/Garage';
@@ -38,14 +38,16 @@ class App extends Component {
 
   render() {
     const element = new VirtualNode('div', 'app', [
-      new Header({
-        availableRoutes: this.state.availableRoutes,
-        activeRoute: this.state.activeRoute,
-        changeRoute: (newRoute) => {
-          this.changeRoute(newRoute);
-        },
-      }).render(),
-      new VirtualNode('main', '', [this.renderRoute()]),
+      new VirtualNode('div', 'wrapper', [
+        new Header({
+          availableRoutes: this.state.availableRoutes,
+          activeRoute: this.state.activeRoute,
+          changeRoute: (newRoute) => {
+            this.changeRoute(newRoute);
+          },
+        }).render(),
+        new VirtualNode('main', '', [this.renderRoute()]),
+      ]),
     ]);
     if (!this.element) this.element = element;
     return element;
