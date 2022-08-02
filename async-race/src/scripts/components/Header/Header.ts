@@ -7,28 +7,13 @@ class Header extends Component<IHeaderProps> {
   render() {
     const element = new VirtualNode('header', '', [
       'HEADER',
-      //   ...this.props.availableRoutes.map(
-      //     (route) => new VirtualNode('button', '', [route], {
-      //       type: 'click',
-      //       callback: () => {
-      //         this.props.changeRoute(route);
-      //       },
-      //     }),
-      //   ),
-      new Button({
-        title: 'Garage',
+      ...this.props.availableRoutes.map((route) => new Button({
+        title: `to ${route}`,
         color: 'green',
         event: () => {
           this.props.changeRoute('garage');
         },
-      }).render(),
-      new Button({
-        title: 'Winners',
-        color: 'blue',
-        event: () => {
-          this.props.changeRoute('winners');
-        },
-      }).render(),
+      }).render()),
     ]);
     if (!this.element) this.element = element;
     return element;
