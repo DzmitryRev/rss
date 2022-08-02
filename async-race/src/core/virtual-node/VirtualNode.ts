@@ -6,7 +6,6 @@ export class VirtualNode implements IVirtualNode {
   children: (IVirtualNode | string)[];
 
   constructor(
-    // eslint-disable-next-line no-undef
     tag: keyof HTMLElementTagNameMap,
     className: string,
     children: (IVirtualNode | string)[] = [],
