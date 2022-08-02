@@ -1,5 +1,6 @@
 import Component from '../core/component/Component';
 import VirtualNode from '../core/virtual-node/VirtualNode';
+import '../styles/app.css';
 import { IAppState, RouteType } from './App.types';
 import Header from './components/Header/Header';
 import Garage from './views/Garage';
