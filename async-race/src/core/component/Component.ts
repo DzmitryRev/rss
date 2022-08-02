@@ -1,15 +1,13 @@
-/* eslint-disable class-methods-use-this */
 import VirtualNode from '../virtual-node/VirtualNode';
-import { IState, IProps } from './types';
 
-abstract class Component<T = null> {
+abstract class Component<P = null> {
   element: VirtualNode;
 
-  state: IState;
+  state: unknown;
 
-  props: T | null;
+  props: P | null;
 
-  constructor(props: T = null) {
+  constructor(props: P = null) {
     this.props = props;
     this.onMount();
   }
@@ -22,6 +20,8 @@ abstract class Component<T = null> {
   }
 
   onMount(): void {
+    // TODO: this!
+    console.log(this);
     // runs once
   }
 
