@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "module": "es6",
@@ -7,5 +8,6 @@
     "allowJs": true,
     "noEmitOnError": true
   },
-  "files": ["src/index.ts"]
+  "include": ["src"],
+  "exclude": ["./dist/**/*", "./webpack.config.js"]
 }

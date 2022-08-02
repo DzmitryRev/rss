@@ -1,11 +1,11 @@
-import Component from '../core/component/Component';
-import { IState } from '../core/component/types';
-import VirtualNode from '../core/virtual-node/VirtualNode';
-import Header from './components/Header';
-import Garage from './views/Garage';
-import Winners from './views/Winners';
+import Component from "../core/component/Component";
+import { IState } from "../core/component/types";
+import VirtualNode from "../core/virtual-node/VirtualNode";
+import Header from "./components/Header";
+import Garage from "./views/Garage";
+import Winners from "./views/Winners";
 
-export type RouteType = 'garage' | 'winners';
+export type RouteType = "garage" | "winners";
 
 type availableRoutesType = RouteType[];
 
@@ -20,9 +20,10 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      availableRoutes: ['garage', 'winners'],
-      activeRoute: 'garage',
+      availableRoutes: ["garage", "winners"],
+      activeRoute: "garage",
     };
+    let a = "div" + 1;
   }
 
   changeRoute(route: RouteType) {
@@ -31,10 +32,10 @@ class App extends Component {
 
   renderRoute(): VirtualNode {
     switch (this.state.activeRoute) {
-      case 'garage': {
+      case "garage": {
         return new Garage().render();
       }
-      case 'winners': {
+      case "winners": {
         return new Winners().render();
       }
       default: {
@@ -44,7 +45,7 @@ class App extends Component {
   }
 
   render() {
-    const element = new VirtualNode('div', '', [
+    const element = new VirtualNode("div", "app", [
       new Header({
         availableRoutes: this.state.availableRoutes,
         activeRoute: this.state.activeRoute,
@@ -52,7 +53,7 @@ class App extends Component {
           this.changeRoute(newRoute);
         },
       }).render(),
-      new VirtualNode('main', '', [this.renderRoute()]),
+      new VirtualNode("main", "", [this.renderRoute()]),
     ]);
     if (!this.element) this.element = element;
     return element;
