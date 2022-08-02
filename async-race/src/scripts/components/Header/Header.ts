@@ -2,16 +2,16 @@ import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import Button from '../Button/Button';
 import { IHeaderProps } from './Header.types';
+import './Header.css';
 
 class Header extends Component<IHeaderProps> {
   render() {
-    const element = new VirtualNode('header', '', [
-      'HEADER',
+    const element = new VirtualNode('header', 'header', [
       ...this.props.availableRoutes.map((route) => new Button({
         title: `to ${route}`,
         color: 'green',
         event: () => {
-          this.props.changeRoute('garage');
+          this.props.changeRoute(route);
         },
       }).render()),
     ]);
