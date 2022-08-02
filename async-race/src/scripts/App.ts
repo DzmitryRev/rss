@@ -18,6 +18,7 @@ class App extends Component {
   }
 
   changeRoute(route: RouteType) {
+    if (route === this.state.activeRoute) return;
     this.setState({ ...this.state, activeRoute: route });
   }
 
