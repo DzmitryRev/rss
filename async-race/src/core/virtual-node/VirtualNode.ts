@@ -1,6 +1,6 @@
 import { IVirtualNode, EventType } from './types';
 
-export class VirtualNode implements IVirtualNode {
+class VirtualNode implements IVirtualNode {
   element: HTMLElement;
 
   children: (IVirtualNode | string)[];
