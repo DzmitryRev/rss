@@ -1,0 +1,27 @@
+.button {
+    display: block;
+    padding: 0.6rem 2rem;
+    font-size: 2rem;
+    box-sizing: content-box;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    border-bottom: 0.5rem solid;
+    border-radius: 0.5rem;
+    float: left;
+}
+
+.green {
+    background-color: #e6feb6;
+    border-color: #8fcc3c;
+}
+
+.blue {
+    background-color: #e3edf7;
+    border-color: #427ae5;
+}
+
+.button:active {
+    border-bottom: none;
+    transform: translateY(0.5rem);
+}
