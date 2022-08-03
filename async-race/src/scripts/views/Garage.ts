@@ -12,7 +12,7 @@ class Garage extends Component {
   }
 
   render() {
-    const element = new VirtualNode('div', '', ['GARAGE']);
+    const element = new VirtualNode('div', '', ['GARAGE', new VirtualNode('div', 'circle')]);
     if (!this.element) this.element = element;
     return element;
   }

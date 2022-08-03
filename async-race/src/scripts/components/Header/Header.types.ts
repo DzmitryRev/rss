@@ -1,5 +1,6 @@
-import { IAppState, RouteType } from '../../App.types';
+import { AvailableRoutesType } from '../../App.types';
 
-export type IHeaderProps = IAppState & {
-  changeRoute(newRoute: RouteType): void;
+export type IHeaderProps = {
+  availableRoutes: AvailableRoutesType[];
+  changeRoute(newRoute: AvailableRoutesType): void;
 };

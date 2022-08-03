@@ -12,5 +12,6 @@
 }
 
 .none {
-    display: none;
+    visibility: hidden;
+    height: 0;
 }

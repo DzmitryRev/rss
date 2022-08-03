@@ -1,8 +1,8 @@
-export type RouteType = 'garage' | 'winners';
+// export type RouteType = 'garage' | 'winners';
 
-export type AvailableRoutesType = RouteType[];
+export type AvailableRoutesType = 'garage' | 'winners';
 
-export interface IAppState {
-  availableRoutes: AvailableRoutesType;
+// export interface IAppState {
+//   availableRoutes: AvailableRoutesType;
 //   activeRoute: RouteType;
-}
+// }
