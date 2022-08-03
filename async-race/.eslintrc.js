@@ -34,6 +34,7 @@ module.exports = {
   },
   rules: {
     'no-unused-vars': 'off',
+    'class-methods-use-this': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',

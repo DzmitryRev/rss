@@ -24,5 +24,5 @@
 
 .button:active {
     border-bottom: none;
-    transform: translateY(0.5rem);
+    transform: translateY(0.3rem);
 }

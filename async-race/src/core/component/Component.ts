@@ -21,7 +21,7 @@ abstract class Component<P = null> {
 
   onMount(): void {
     // TODO: this!
-    console.log(this);
+    // console.log(this);
     // runs once
   }
 
