@@ -5,7 +5,9 @@ class Winners extends Component {
   //   constructor() {}
 
   render() {
-    const element = new VirtualNode('div', '', ['WINNERS']);
+    const element = new VirtualNode('div', '', ['WINNERS',
+    // new VirtualNode("div", "squa")
+    ]);
     if (!this.element) this.element = element;
     return element;
   }
