@@ -1,24 +1,30 @@
 import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
+import API from '../../API/Api';
 
-interface IFormState {
-  nameValue: string;
-  color: string;
-}
+// interface IFormState {
+//   nameValue: string;
+//   color: string;
+// }
 
 class Form extends Component {
-  state: IFormState;
+  //   state: IFormState;
 
-  constructor() {
-    super();
-    this.state = {
-      nameValue: '',
-      color: '',
-    };
+  //   constructor() {
+  //     super();
+  //     // this.state = {
+  //     //   nameValue: '',
+  //     //   color: '',
+  //     // };
+  //   }
+
+  createCar(name: string, color: string) {
+    API.createCar({ name, color }, () => {
+      console.log('Hi', this);
+    });
   }
 
   render() {
-    console.log('render');
     const input = new VirtualNode<HTMLInputElement>('input', '', []);
     const color = new VirtualNode<HTMLInputElement>('input', '', []);
     color.element.type = 'color';
@@ -31,10 +37,12 @@ class Form extends Component {
       color,
       new VirtualNode('button', '', ['submit'], {
         type: 'click',
-        callback(e) {
-          console.log(input.element.validity);
-          console.log(color.element.value);
-          console.log(e);
+        callback: () => {
+          if (input.element.validity.valid && color.element.validity.valid) {
+            this.createCar(input.element.value, color.element.value);
+            input.element.value = '';
+            color.element.value = '#000000';
+          }
         },
       }),
     ]);
