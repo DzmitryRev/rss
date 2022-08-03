@@ -11,7 +11,7 @@
     max-width: 1280px;
 }
 
-.none {
+.hidden-view {
     visibility: hidden;
     height: 0;
 }

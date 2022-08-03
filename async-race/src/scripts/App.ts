@@ -19,25 +19,25 @@ class App extends Component {
         switch (newRoute) {
           case 'garage': {
             if (route.element.classList.contains('garage')) {
-              route.element.classList.remove('none');
+              route.element.classList.remove('hidden-view');
             } else {
-              route.element.classList.add('none');
+              route.element.classList.add('hidden-view');
             }
             break;
           }
           case 'winners': {
             if (route.element.classList.contains('winners')) {
-              route.element.classList.remove('none');
+              route.element.classList.remove('hidden-view');
             } else {
-              route.element.classList.add('none');
+              route.element.classList.add('hidden-view');
             }
             break;
           }
           default: {
             if (route.element.classList.contains('garage')) {
-              route.element.classList.remove('none');
+              route.element.classList.remove('hidden-view');
             } else {
-              route.element.classList.add('none');
+              route.element.classList.add('hidden-view');
             }
           }
         }
