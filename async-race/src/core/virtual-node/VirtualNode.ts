@@ -1,7 +1,7 @@
 import { IVirtualNode, EventType } from './types';
 
-class VirtualNode implements IVirtualNode {
-  element: HTMLElement;
+class VirtualNode<T extends HTMLElement = HTMLElement> implements IVirtualNode<T> {
+  element: T;
 
   children: (IVirtualNode | string)[];
 
@@ -11,12 +11,13 @@ class VirtualNode implements IVirtualNode {
     children: (IVirtualNode | string)[] = [],
     event: EventType | null = null,
   ) {
-    this.element = document.createElement(tag);
+    this.element = <T>document.createElement(tag);
     if (className) this.element.className = className;
     this.children = children;
     if (event) {
-      this.element.addEventListener(event.type, () => {
-        event.callback();
+      this.element.addEventListener(event.type, (e) => {
+        e.preventDefault();
+        event.callback(e);
       });
     }
     this.renderChildren();

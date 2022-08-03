@@ -1,9 +1,9 @@
-export interface IVirtualNode {
-  element: HTMLElement;
+export interface IVirtualNode<T = HTMLElement> {
+  element: T;
   children: (IVirtualNode | string)[];
 }
 
 export type EventType = {
-  type: string;
-  callback(): void;
+  type: keyof HTMLElementEventMap;
+  callback(e: Event): void;
 };
