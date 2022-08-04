@@ -19,7 +19,7 @@ class Garage extends Component {
     };
   }
 
-  onMount(): void {
+  getCars() {
     API.getCars(1, (cars) => {
       this.setState({
         ...this.state,
@@ -28,12 +28,28 @@ class Garage extends Component {
     });
   }
 
+  onMount(): void {
+    this.getCars();
+  }
+
   render() {
     console.log('Garage rendered');
     const element = new VirtualNode('div', '', [
       'GARAGE',
       new VirtualNode('div', '', [
-        new Form().render(),
+        new Form({
+          buttonTitle: 'create',
+          getCars: () => {
+            this.getCars();
+          },
+        }).render(),
+        new Form({
+          buttonTitle: 'update',
+          getCars: () => {
+            this.getCars();
+          },
+          disabled: true,
+        }).render(),
         ...this.state.cars.map((car) => new Car({ name: car.name, color: car.color }).render()),
       ]),
     ]);

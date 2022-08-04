@@ -10,6 +10,7 @@ class Header extends Component<IHeaderProps> {
       ...this.props.availableRoutes.map((route) => new Button({
         title: `to ${route}`,
         color: 'green',
+        disabled: false,
         event: () => {
           this.props.changeRoute(route);
         },
