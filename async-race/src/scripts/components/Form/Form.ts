@@ -3,12 +3,7 @@ import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import API from '../../API/Api';
 import Button from '../Button/Button';
 import './Form.css';
-
-type FormPropsType = {
-  buttonTitle: string;
-  getCars(): void;
-  disabled?: boolean;
-};
+import { FormPropsType } from './Form.types';
 
 class Form extends Component<FormPropsType> {
   createCar(name: string, color: string) {
@@ -17,29 +12,34 @@ class Form extends Component<FormPropsType> {
     });
   }
 
-  render() {
-    const input = new VirtualNode<HTMLInputElement>('input', 'text-input', []);
+  createInputs(): VirtualNode<HTMLInputElement>[] {
+    const text = new VirtualNode<HTMLInputElement>('input', 'text-input', []);
     const color = new VirtualNode<HTMLInputElement>('input', 'color-input', []);
     color.element.type = 'color';
-    input.element.required = true;
-    input.element.minLength = 2;
-    input.element.maxLength = 20;
+    text.element.required = true;
+    text.element.minLength = 2;
+    text.element.maxLength = 20;
     color.element.required = true;
     if (this.props.disabled) {
-      input.element.disabled = true;
+      text.element.disabled = true;
       color.element.disabled = true;
     }
+    return [text, color];
+  }
+
+  render() {
+    const [text, color] = this.createInputs();
     const element = new VirtualNode('form', 'form', [
-      input,
+      text,
       color,
       new Button({
         title: this.props.buttonTitle,
         color: 'blue',
         disabled: this.props.disabled || false,
         event: () => {
-          if (input.element.validity.valid && color.element.validity.valid) {
-            this.createCar(input.element.value, color.element.value);
-            input.element.value = '';
+          if (text.element.validity.valid && color.element.validity.valid) {
+            this.createCar(text.element.value, color.element.value);
+            text.element.value = '';
             color.element.value = '#000000';
           }
         },

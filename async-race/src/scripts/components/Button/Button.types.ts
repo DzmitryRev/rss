@@ -1,6 +1,6 @@
 export type ButtonPropsType = {
   title: string;
   color: 'blue' | 'green';
-  disabled: boolean;
+  disabled?: boolean;
   event(): void;
 };

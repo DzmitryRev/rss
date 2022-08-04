@@ -29,13 +29,21 @@
     border-radius: 0.5rem;
 }
 
+/* Active */
+
 .text-input:focus {
     border-bottom: none;
     height: 3.5rem;
     transform: translateY(0.3rem);
 }
 
+.color-input:active {
+    border-bottom: none;
+    height: 3.5rem;
+    transform: translateY(0.3rem);
+}
 
+/* Disabled */
 
 .text-input:disabled {
     background-color: rgb(255, 255, 255);
@@ -47,8 +55,7 @@
     border-bottom: 0.5rem solid #7f848d;
 }
 
-.color-input:active {
-    border-bottom: none;
-    height: 3.5rem;
-    transform: translateY(0.3rem);
+.color-input:disabled:active {
+    height: 4rem;
+    transform: translateY(0);
 }
