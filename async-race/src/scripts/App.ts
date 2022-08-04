@@ -3,8 +3,8 @@ import VirtualNode from '../core/virtual-node/VirtualNode';
 import './App.css';
 import { AvailableRoutesType } from './App.types';
 import Header from './components/Header/Header';
-import Garage from './views/Garage';
-import Winners from './views/Winners';
+import Garage from './views/Garage/Garage';
+import Winners from './views/Winners/Winners';
 
 class App extends Component {
   render() {

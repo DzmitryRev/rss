@@ -1,5 +1,5 @@
-import Component from '../../core/component/Component';
-import VirtualNode from '../../core/virtual-node/VirtualNode';
+import Component from '../../../core/component/Component';
+import VirtualNode from '../../../core/virtual-node/VirtualNode';
 
 class Winners extends Component {
   //   constructor() {}

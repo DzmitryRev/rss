@@ -1,13 +1,9 @@
-import Component from '../../core/component/Component';
-import VirtualNode from '../../core/virtual-node/VirtualNode';
-import API from '../API/Api';
-import { CarType } from '../API/types';
-import Car from '../components/Car/Car';
-import Form from '../components/Form/Form';
-
-interface IGarageState {
-  cars: CarType[];
-}
+import Component from '../../../core/component/Component';
+import VirtualNode from '../../../core/virtual-node/VirtualNode';
+import API from '../../API/Api';
+import Car from '../../components/Car/Car';
+import Form from '../../components/Form/Form';
+import { IGarageState } from './Garage.types';
 
 class Garage extends Component {
   state: IGarageState;
@@ -33,7 +29,6 @@ class Garage extends Component {
   }
 
   render() {
-    console.log('Garage rendered');
     const element = new VirtualNode('div', '', [
       'GARAGE',
       new VirtualNode('div', '', [

@@ -1,4 +1,4 @@
-import { IVirtualNode, EventType } from './types';
+import { IVirtualNode, EventType } from './VirtualNode.types';
 
 class VirtualNode<T extends HTMLElement = HTMLElement> implements IVirtualNode<T> {
   element: T;
