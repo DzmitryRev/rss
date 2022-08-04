@@ -38,14 +38,14 @@ class Garage extends Component {
             this.getCars();
           },
         }).render(),
-        new Form({
-          buttonTitle: 'update',
+        ...this.state.cars.map((car) => new Car({
+          name: car.name,
+          color: car.color,
+          id: car.id,
           getCars: () => {
             this.getCars();
           },
-          disabled: true,
-        }).render(),
-        ...this.state.cars.map((car) => new Car({ name: car.name, color: car.color }).render()),
+        }).render()),
       ]),
     ]);
     if (!this.element) this.element = element;

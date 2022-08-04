@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import API from '../../API/Api';
@@ -13,8 +14,20 @@ class Form extends Component<FormPropsType> {
   }
 
   createInputs(): VirtualNode<HTMLInputElement>[] {
-    const text = new VirtualNode<HTMLInputElement>('input', 'text-input', []);
-    const color = new VirtualNode<HTMLInputElement>('input', 'color-input', []);
+    const colorStorageName = 'revchenko-color-input';
+    const textStorageName = 'revchenko-text-input';
+    const text = new VirtualNode<HTMLInputElement>('input', 'text-input', [], {
+      type: 'input',
+      callback: () => {
+        this.saveToLocalStorage(text.element.value, textStorageName);
+      },
+    });
+    const color = new VirtualNode<HTMLInputElement>('input', 'color-input', [], {
+      type: 'input',
+      callback: () => {
+        this.saveToLocalStorage(color.element.value, colorStorageName);
+      },
+    });
     color.element.type = 'color';
     text.element.required = true;
     text.element.minLength = 2;
@@ -24,7 +37,17 @@ class Form extends Component<FormPropsType> {
       text.element.disabled = true;
       color.element.disabled = true;
     }
+    if (localStorage.getItem(textStorageName)) {
+      text.element.value = localStorage.getItem(textStorageName);
+    }
+    if (localStorage.getItem(colorStorageName)) {
+      color.element.value = localStorage.getItem(colorStorageName);
+    }
     return [text, color];
+  }
+
+  saveToLocalStorage(value: string, storageName: string) {
+    localStorage.setItem(storageName, value);
   }
 
   render() {
@@ -39,8 +62,7 @@ class Form extends Component<FormPropsType> {
         event: () => {
           if (text.element.validity.valid && color.element.validity.valid) {
             this.createCar(text.element.value, color.element.value);
-            text.element.value = '';
-            color.element.value = '#000000';
+            localStorage.clear();
           }
         },
       }).render(),

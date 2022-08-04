@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import VirtualNode from '../virtual-node/VirtualNode';
 
 abstract class Component<P = null> {
@@ -21,7 +22,7 @@ abstract class Component<P = null> {
 
   onMount(): void {
     // TODO: this!
-    console.log(this);
+    // console.log(this);
     // runs once
   }
 
