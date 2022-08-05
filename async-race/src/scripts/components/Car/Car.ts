@@ -74,6 +74,16 @@ class Car extends Component<CarPropsType> {
           event: () => {
             if (this.state.editMode) {
               if (input.element.validity.valid && color.element.validity.valid) {
+                if (
+                  input.element.value === this.props.name
+                  && color.element.value === this.props.color
+                ) {
+                  this.setState({
+                    ...this.state,
+                    editMode: !this.state.editMode,
+                  });
+                  return;
+                }
                 this.updateCar(input.element.value, color.element.value);
               }
               return;
