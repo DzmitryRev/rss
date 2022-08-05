@@ -74,7 +74,7 @@ class Car extends Component<CarPropsType> {
       }).render(),
       new Button({
         title: 'delete',
-        color: 'blue',
+        color: 'red',
         event: () => {
           this.deleteCar();
         },

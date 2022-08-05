@@ -19,6 +19,10 @@
     background-color: #e3edf7;
     border-color: #427ae5;
 }
+.red {
+    background-color: #ed5454;
+    border-color: #ae1e1e;
+}
 
 .button:active {
     border-bottom: none;
