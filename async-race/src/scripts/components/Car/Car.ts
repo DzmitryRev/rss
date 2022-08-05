@@ -55,8 +55,8 @@ class Car extends Component<CarPropsType> {
   }
 
   render() {
-    const input = this.createInput(this.props.name, 'text', 'text-input');
-    const color = this.createInput(this.props.color, 'color', 'color-input');
+    const input = this.createInput(this.props.name, 'text', 'text-input small-text-input');
+    const color = this.createInput(this.props.color, 'color', 'color-input small small-color-input');
 
     const element = new VirtualNode('div', 'car', [
       new Button({
