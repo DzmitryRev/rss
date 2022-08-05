@@ -30,7 +30,6 @@ class Garage extends Component {
 
   render() {
     const element = new VirtualNode('div', '', [
-      'GARAGE',
       new VirtualNode('div', '', [
         new Form({
           buttonTitle: 'create',

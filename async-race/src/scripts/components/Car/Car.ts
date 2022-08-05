@@ -4,6 +4,7 @@ import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import API from '../../API/Api';
 import Button from '../Button/Button';
 import { CarPropsType } from './Car.types';
+import './Car.css';
 
 interface ICarState {
   editMode: boolean;
@@ -42,8 +43,8 @@ class Car extends Component<CarPropsType> {
     useit.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', './assets/car.svg#svg2');
     svg.style.fill = color;
     svg.insertAdjacentElement('beforeend', useit);
-    svg.style.height = '50px';
-    svg.style.width = '50px';
+    svg.style.height = '60px';
+    svg.style.width = '60px';
     return svg;
   }
 
@@ -65,9 +66,7 @@ class Car extends Component<CarPropsType> {
           });
         },
       }).render(),
-      ' => ',
-      this.state.editMode ? input : new VirtualNode('span', '', [this.props.name]),
-      ' => ',
+      this.state.editMode ? input : new VirtualNode('span', 'car-name', [this.props.name]),
       this.state.editMode ? color : this.createSvg(this.props.color),
     ]);
     if (!this.element) this.element = element;

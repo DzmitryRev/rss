@@ -1,0 +1,13 @@
+.car {
+    display: flex;
+    align-items: center;
+    height: 100px;
+}
+
+.car-name {
+    width: 150px;
+    margin: 0 5px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+}

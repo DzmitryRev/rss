@@ -54,7 +54,7 @@ class App extends Component {
             changeRoute(newRoute);
           },
         }).render(),
-        new VirtualNode('main', '', [...routesView]),
+        new VirtualNode('main', 'main', [...routesView]),
       ]),
     ]);
     if (!this.element) this.element = element;
