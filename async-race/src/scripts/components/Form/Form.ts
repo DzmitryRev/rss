@@ -59,6 +59,7 @@ class Form extends Component<FormPropsType> {
         title: this.props.buttonTitle,
         color: 'blue',
         disabled: this.props.disabled || false,
+        size: 'big',
         event: () => {
           if (text.element.validity.valid && color.element.validity.valid) {
             this.createCar(text.element.value, color.element.value);

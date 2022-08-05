@@ -11,6 +11,7 @@ class Header extends Component<IHeaderProps> {
         title: `to ${route}`,
         color: 'green',
         disabled: false,
+        size: 'big',
         event: () => {
           this.props.changeRoute(route);
         },

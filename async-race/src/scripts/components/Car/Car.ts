@@ -62,6 +62,7 @@ class Car extends Component<CarPropsType> {
       new Button({
         title: this.state.editMode ? 'save' : 'edit',
         color: 'green',
+        size: 'small',
         event: () => {
           if (this.state.editMode) {
             this.updateCar(input.element.value, color.element.value);
@@ -75,6 +76,7 @@ class Car extends Component<CarPropsType> {
       new Button({
         title: 'delete',
         color: 'red',
+        size: 'small',
         event: () => {
           this.deleteCar();
         },

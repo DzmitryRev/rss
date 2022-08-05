@@ -7,7 +7,7 @@ class Button extends Component<ButtonPropsType> {
   render() {
     const element = new VirtualNode<HTMLButtonElement>(
       'button',
-      `button ${this.props.color}`,
+      `button ${this.props.color} ${this.props.size}`,
       [this.props.title],
       {
         type: 'click',
