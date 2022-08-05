@@ -7,7 +7,6 @@ class API {
     await fetch(`${this.host}garage/`)
       .then((res) => res.json())
       .then((res: CarType[]) => {
-        console.log(res);
         callback(res.length);
       })
       .catch(() => {

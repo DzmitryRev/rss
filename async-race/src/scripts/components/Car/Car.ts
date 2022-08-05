@@ -37,6 +37,12 @@ class Car extends Component<CarPropsType> {
     });
   }
 
+  deleteCar(): void {
+    API.removeCar(this.props.id, () => {
+      this.props.getCars();
+    });
+  }
+
   createSvg(color: string): SVGSVGElement {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const useit = document.createElementNS('http://www.w3.org/2000/svg', 'use');
@@ -64,6 +70,13 @@ class Car extends Component<CarPropsType> {
             ...this.state,
             editMode: !this.state.editMode,
           });
+        },
+      }).render(),
+      new Button({
+        title: 'delete',
+        color: 'blue',
+        event: () => {
+          this.deleteCar();
         },
       }).render(),
       this.state.editMode ? input : new VirtualNode('span', 'car-name', [this.props.name]),
