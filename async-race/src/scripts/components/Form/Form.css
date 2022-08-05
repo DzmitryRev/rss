@@ -18,6 +18,8 @@
     background-color: #e3edf7;
 }
 
+
+
 .color-input {
     height: 4rem;
     padding: 0.3rem;
@@ -65,23 +67,43 @@
     height: 3rem;
     width: 15rem;
     margin: 0 0.1rem;
-    
+    font-size: 1.6rem;
+
 }
 
 .small-text-input:focus {
     height: 2.7rem;
     width: 15rem;
-    transform: translateY(0.1rem);
+    transform: translateY(0.05rem);
 }
 
 .small-color-input {
     border-bottom: 0.3rem solid #427ae5;
     height: 3rem;
     width: 3rem;
-    margin: 0 0.1rem;
+    margin: 0 0.5rem;
 }
 
 .small-color-input:active {
     height: 2.7rem;
     transform: translateY(0.1rem);
+}
+
+@keyframes blinker {
+    0% {
+        background-color: #e3edf7;
+    }
+
+
+    50% {
+        background-color: #e87979;
+    }
+
+    100% {
+        background-color: #e3edf7;
+    }
+}
+
+.small-text-input:invalid {
+    animation: blinker 1s steps(1) infinite;
 }
