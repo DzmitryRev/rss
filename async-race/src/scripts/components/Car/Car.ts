@@ -28,6 +28,9 @@ class Car extends Component<CarPropsType> {
     const input = new VirtualNode<HTMLInputElement>('input', className);
     input.element.type = type;
     input.element.value = value;
+    input.element.required = true;
+    input.element.minLength = 2;
+    input.element.maxLength = 20;
     return input;
   }
 
@@ -49,40 +52,51 @@ class Car extends Component<CarPropsType> {
     useit.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', './assets/car.svg#svg2');
     svg.style.fill = color;
     svg.insertAdjacentElement('beforeend', useit);
-    svg.style.height = '60px';
+    svg.style.height = '40px';
     svg.style.width = '60px';
     return svg;
   }
 
   render() {
     const input = this.createInput(this.props.name, 'text', 'text-input small-text-input');
-    const color = this.createInput(this.props.color, 'color', 'color-input small small-color-input');
+    const color = this.createInput(
+      this.props.color,
+      'color',
+      'color-input small small-color-input',
+    );
 
     const element = new VirtualNode('div', 'car', [
-      new Button({
-        title: this.state.editMode ? 'save' : 'edit',
-        color: 'green',
-        size: 'small',
-        event: () => {
-          if (this.state.editMode) {
-            this.updateCar(input.element.value, color.element.value);
-          }
-          this.setState({
-            ...this.state,
-            editMode: !this.state.editMode,
-          });
-        },
-      }).render(),
-      new Button({
-        title: 'delete',
-        color: 'red',
-        size: 'small',
-        event: () => {
-          this.deleteCar();
-        },
-      }).render(),
-      this.state.editMode ? input : new VirtualNode('span', 'car-name', [this.props.name]),
-      this.state.editMode ? color : this.createSvg(this.props.color),
+      new VirtualNode('div', '', [
+        new Button({
+          title: this.state.editMode ? 'save' : 'edit',
+          color: 'green',
+          size: 'small',
+          event: () => {
+            if (this.state.editMode) {
+              if (input.element.validity.valid && color.element.validity.valid) {
+                this.updateCar(input.element.value, color.element.value);
+              }
+              return;
+            }
+            this.setState({
+              ...this.state,
+              editMode: !this.state.editMode,
+            });
+          },
+        }).render(),
+        new Button({
+          title: 'delete',
+          color: 'red',
+          size: 'small',
+          event: () => {
+            this.deleteCar();
+          },
+        }).render(),
+      ]),
+      new VirtualNode('div', 'car-container', [
+        this.state.editMode ? input : new VirtualNode('span', 'car-name', [this.props.name]),
+        this.state.editMode ? color : this.createSvg(this.props.color),
+      ]),
     ]);
     if (!this.element) this.element = element;
     return element;
