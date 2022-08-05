@@ -84,6 +84,19 @@ class Car extends Component<CarPropsType> {
             });
           },
         }).render(),
+        this.state.editMode
+          ? new Button({
+            title: 'cancel',
+            color: 'blue',
+            size: 'small',
+            event: () => {
+              this.setState({
+                ...this.state,
+                editMode: false,
+              });
+            },
+          }).render()
+          : '',
         new Button({
           title: 'delete',
           color: 'red',
