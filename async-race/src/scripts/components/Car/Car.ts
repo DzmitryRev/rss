@@ -36,9 +36,21 @@ class Car extends Component<CarPropsType> {
     });
   }
 
+  createSvg(color: string): SVGSVGElement {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const useit = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    useit.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', './assets/car.svg#svg2');
+    svg.style.fill = color;
+    svg.insertAdjacentElement('beforeend', useit);
+    svg.style.height = '50px';
+    svg.style.width = '50px';
+    return svg;
+  }
+
   render() {
     const input = this.createInput(this.props.name, 'text', 'text-input');
     const color = this.createInput(this.props.color, 'color', 'color-input');
+
     const element = new VirtualNode('div', 'car', [
       new Button({
         title: this.state.editMode ? 'save' : 'edit',
@@ -56,7 +68,7 @@ class Car extends Component<CarPropsType> {
       ' => ',
       this.state.editMode ? input : new VirtualNode('span', '', [this.props.name]),
       ' => ',
-      this.state.editMode ? color : new VirtualNode('span', '', [this.props.color]),
+      this.state.editMode ? color : this.createSvg(this.props.color),
     ]);
     if (!this.element) this.element = element;
     return element;

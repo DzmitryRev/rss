@@ -3,12 +3,12 @@ import { IVirtualNode, EventType } from './VirtualNode.types';
 class VirtualNode<T extends HTMLElement = HTMLElement> implements IVirtualNode<T> {
   element: T;
 
-  children: (IVirtualNode | string)[];
+  children: (IVirtualNode | string | SVGSVGElement)[];
 
   constructor(
     tag: keyof HTMLElementTagNameMap,
     className: string,
-    children: (IVirtualNode | string)[] = [],
+    children: (IVirtualNode | string | SVGSVGElement)[] = [],
     event: EventType | null = null,
   ) {
     this.element = <T>document.createElement(tag);
@@ -28,6 +28,10 @@ class VirtualNode<T extends HTMLElement = HTMLElement> implements IVirtualNode<T
     this.children.forEach((item) => {
       if (typeof item === 'string') {
         this.element.insertAdjacentText('beforeend', item);
+        return;
+      }
+      if (item instanceof SVGSVGElement) {
+        this.element.insertAdjacentElement('beforeend', item);
         return;
       }
       this.element.insertAdjacentElement('beforeend', item.element);

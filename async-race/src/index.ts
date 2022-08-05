@@ -1,3 +1,5 @@
+import './assets/car.svg';
+
 import './styles/index.css';
 
 import renderDOM from './core/render/renderDOM';

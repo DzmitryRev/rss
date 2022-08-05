@@ -14,20 +14,7 @@ body {
     font-family: 'Roboto Mono', monospace;
 }
 
-@keyframes testAnim {
-    from {
-        transform: translateX(0);
-    }
 
-    to {
-        transform: translateX(500px);
-    }
-}
-
-.circle {
-    width: 100px;
-    height: 100px;
-    border-radius: 100%;
-    background-color: red;
-    animation: testAnim 5s linear infinite;
+.red #path3779 {
+    fill: red;
 }
