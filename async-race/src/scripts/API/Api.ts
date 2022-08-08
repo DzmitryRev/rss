@@ -3,15 +3,15 @@ import { CarType, EngineSettingsType } from './types';
 class API {
   static host = 'http://localhost:3000/';
 
-  static async getCars(page: number, callback: (cars: CarType[]) => void) {
-    await fetch(`${this.host}garage/?_limit=7&_page=${page}`)
-      .then((res) => res.json())
-      .then((res: CarType[]) => {
-        callback(res);
-      })
-      .catch(() => {
-        throw new Error();
-      });
+  static async getCars(page?: number) {
+    return fetch(`${this.host}garage/${page ? `?_limit=7&_page=${page}` : ''}`);
+    //   .then((res) => res.json())
+    //   .then((res: CarType[]) => {
+    //     callback(res);
+    //   })
+    //   .catch(() => {
+    //     throw new Error();
+    //   });
   }
 
   static async getCar(id: number, callback: (car: CarType) => void) {

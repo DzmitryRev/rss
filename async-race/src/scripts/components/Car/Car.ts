@@ -1,7 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
-import Button from '../Button/Button';
 import { CarPropsType } from './Car.types';
 import './Car.css';
 import CarController from '../CarController/CarContaroller';
@@ -92,17 +91,14 @@ class Car extends Component<CarPropsType> {
           animation = this.createAnimation(res.distance / res.velocity, svg);
           animation[0]();
           const time = performance.now();
-          API.driveMode(this.props.id)
-            .then((driveModeRes) => {
-              if (!driveModeRes.ok) {
-                throw new Error();
-              } else if (this.props.raceMode) {
-                this.props.setWinner(this.props.id, performance.now() - time);
-              }
-            })
-            .catch(() => {
+          API.driveMode(this.props.id).then((driveModeRes) => {
+            if (!driveModeRes.ok) {
+              console.log('Engine broke');
               animation[1]();
-            });
+            } else if (this.props.raceMode) {
+              this.props.setWinner(this.props.id, performance.now() - time);
+            }
+          });
         });
     };
 

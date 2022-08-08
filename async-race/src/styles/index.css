@@ -14,7 +14,13 @@ body {
     font-family: 'Roboto Mono', monospace;
 }
 
-
-.red #path3779 {
-    fill: red;
+td {
+    display: inline-block;
+    width: 90px;
+    max-width: 100px;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1.6rem;
+    cursor: default;
 }

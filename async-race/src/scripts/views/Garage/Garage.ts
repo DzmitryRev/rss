@@ -1,6 +1,7 @@
 import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import API from '../../API/Api';
+import { CarType } from '../../API/types';
 import Button from '../../components/Button/Button';
 import Car from '../../components/Car/Car';
 import Form from '../../components/Form/Form';
@@ -18,12 +19,14 @@ class Garage extends Component {
   }
 
   getCars() {
-    API.getCars(1, (cars) => {
-      this.setState({
-        ...this.state,
-        cars,
+    API.getCars()
+      .then((res) => res.json())
+      .then((res: CarType[]) => {
+        this.setState({
+          ...this.state,
+          cars: res,
+        });
       });
-    });
   }
 
   updateCar(name: string, color: string, id: number) {
@@ -85,13 +88,10 @@ class Garage extends Component {
       }
     };
 
-    API.getWinners()
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-      });
-
     const startRace = () => {
+      this.state.cars.forEach((car) => {
+        API.stopEngine(car.id);
+      });
       this.setState({
         ...this.state,
         raceMode: true,
@@ -133,7 +133,9 @@ class Garage extends Component {
             stopRace();
           },
         }).render(),
-        new VirtualNode('div', '', [`GARAGE(${this.state.cars.length})`]),
+        new VirtualNode('div', '', [
+          new VirtualNode('h3', '', [`GARAGE(${this.state.cars.length})`]),
+        ]),
         ...this.state.cars.map((car) => new Car({
           name: car.name,
           color: car.color,
