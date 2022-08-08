@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
-import API from '../../API/Api';
 import Button from '../Button/Button';
 import { CarPropsType } from './Car.types';
 import './Car.css';
+import CarController from '../CarController/CarContaroller';
 
 interface ICarState {
   editMode: boolean;
@@ -45,6 +45,34 @@ class Car extends Component<CarPropsType> {
     return svg;
   }
 
+  createAnimation(time: number, svg: SVGSVGElement): [() => void, () => void, () => void] {
+    let animationId: number;
+    let start: number | null = null;
+    const svgCar = svg;
+    const animation = (timestamp: number) => {
+      if (!start) start = timestamp;
+      const progress = timestamp - start;
+      svgCar.style.transform = `translateX(${Math.min(
+        ((svgCar.parentElement.clientWidth - 200) / time) * progress,
+        svgCar.parentElement.clientWidth - 200,
+      )}px)`;
+      if (progress < time) {
+        animationId = requestAnimationFrame(animation);
+      }
+    };
+    const run = () => {
+      animationId = requestAnimationFrame(animation);
+    };
+    const stop = async () => {
+      cancelAnimationFrame(animationId);
+      start = null;
+    };
+    const moveCarToStart = () => {
+      svgCar.style.transform = 'translateX(0)';
+    };
+    return [run, stop, moveCarToStart];
+  }
+
   render() {
     const input = this.createInput(this.props.name, 'text', 'text-input small-text-input');
     const color = this.createInput(
@@ -52,61 +80,56 @@ class Car extends Component<CarPropsType> {
       'color',
       'color-input small small-color-input',
     );
+    const svg = this.createSvg(this.props.color);
 
-    const element = new VirtualNode('div', 'car', [
-      new VirtualNode('div', '', [
-        new Button({
-          title: this.state.editMode ? 'save' : 'edit',
-          color: 'green',
-          size: 'small',
-          event: () => {
-            if (this.state.editMode) {
-              if (input.element.validity.valid && color.element.validity.valid) {
-                if (
-                  input.element.value === this.props.name
-                  && color.element.value === this.props.color
-                ) {
-                  this.setState({
-                    ...this.state,
-                    editMode: !this.state.editMode,
-                  });
-                  return;
-                }
-                this.props.updateCar(input.element.value, color.element.value, this.props.id);
-              }
-              return;
-            }
+    const [run, stop, moveToStart] = this.createAnimation(5000, svg);
+
+    const updateCar = () => {
+      if (this.state.editMode) {
+        if (input.element.validity.valid && color.element.validity.valid) {
+          if (input.element.value === this.props.name && color.element.value === this.props.color) {
             this.setState({
               ...this.state,
               editMode: !this.state.editMode,
             });
-          },
-        }).render(),
-        this.state.editMode
-          ? new Button({
-            title: 'cancel',
-            color: 'blue',
-            size: 'small',
-            event: () => {
-              this.setState({
-                ...this.state,
-                editMode: false,
-              });
-            },
-          }).render()
-          : '',
-        new Button({
-          title: 'delete',
-          color: 'red',
-          size: 'small',
-          event: () => {
-            this.props.deleteCar(this.props.id);
-          },
-        }).render(),
-      ]),
+            return;
+          }
+          this.props.updateCar(input.element.value, color.element.value, this.props.id);
+        }
+        return;
+      }
+      this.setState({
+        ...this.state,
+        editMode: !this.state.editMode,
+      });
+    };
+
+    const element = new VirtualNode('div', 'car', [
+      new CarController({
+        editMode: this.state.editMode,
+        updateCar: () => {
+          updateCar();
+        },
+        deleteCar: () => {
+          this.props.deleteCar(this.props.id);
+        },
+        cancelEdit: () => {
+          this.setState({
+            ...this.state,
+            editMode: false,
+          });
+        },
+        runCar: () => {
+          run();
+        },
+        stopCar: () => {
+          stop();
+          moveToStart();
+        },
+      }).render(),
       new VirtualNode('div', 'car-container', [
         this.state.editMode ? input : new VirtualNode('span', 'car-name', [this.props.name]),
-        this.state.editMode ? color : this.createSvg(this.props.color),
+        this.state.editMode ? color : svg,
       ]),
     ]);
     if (!this.element) this.element = element;

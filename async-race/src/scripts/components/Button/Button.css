@@ -55,7 +55,16 @@
     border-bottom: 0.5rem solid #7f848d;
 }
 
+.button.small:disabled {
+    background-color: rgb(255, 255, 255);
+    border-bottom: 0.3rem solid;
+}
+
 .button:disabled:active {
     height: 4rem;
+    transform: translateY(0);
+}
+.button.small:disabled:active {
+    height: 3rem;
     transform: translateY(0);
 }

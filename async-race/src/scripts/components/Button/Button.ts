@@ -4,6 +4,17 @@ import { ButtonPropsType } from './Button.types';
 import './Button.css';
 
 class Button extends Component<ButtonPropsType> {
+  state: {
+    disabled: boolean;
+  };
+
+  constructor(props: ButtonPropsType) {
+    super(props);
+    this.state = {
+      disabled: this.props.disabled || false,
+    };
+  }
+
   render() {
     const element = new VirtualNode<HTMLButtonElement>(
       'button',
