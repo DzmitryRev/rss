@@ -30,22 +30,15 @@ class Winners extends Component<WinnersPropsType> {
     API.getWinners()
       .then((res) => res.json())
       .then((res) => {
-        this.setState({
-          ...this.state,
-          winners: res,
-        });
-        this.getCars();
-      });
-  }
-
-  getCars() {
-    API.getCars()
-      .then((res) => res.json())
-      .then((res: CarType) => {
-        this.setState({
-          ...this.state,
-          cars: res,
-        });
+        API.getCars()
+          .then((carsRes) => carsRes.json())
+          .then((carsRes: CarType) => {
+            this.setState({
+              ...this.state,
+              winners: res,
+              cars: carsRes,
+            });
+          });
       });
   }
 
@@ -56,6 +49,7 @@ class Winners extends Component<WinnersPropsType> {
   }
 
   render() {
+    console.log('aaa');
     this.props.bindGarageToWinners(this.getWinners.bind(this));
     const element = new VirtualNode('div', '', [
       new VirtualNode('h3', '', ['WINNERS']),
@@ -65,7 +59,15 @@ class Winners extends Component<WinnersPropsType> {
           new VirtualNode('td', '', ['color']),
           new VirtualNode('td', '', ['name']),
           new VirtualNode('td', '', ['wins']),
-          new VirtualNode('td', '', ['time']),
+          new VirtualNode('td', '', ['time'], {
+            type: 'click',
+            callback: () => {
+              this.setState({
+                ...this.state,
+                sort: 'ASC',
+              });
+            },
+          }),
         ]),
         ...this.state.winners.map(
           (item) => new VirtualNode('tr', '', [

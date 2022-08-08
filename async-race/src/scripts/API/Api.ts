@@ -4,14 +4,11 @@ class API {
   static host = 'http://localhost:3000/';
 
   static async getCars(page?: number) {
-    return fetch(`${this.host}garage/${page ? `?_limit=7&_page=${page}` : ''}`);
-    //   .then((res) => res.json())
-    //   .then((res: CarType[]) => {
-    //     callback(res);
-    //   })
-    //   .catch(() => {
-    //     throw new Error();
-    //   });
+    return fetch(`${this.host}garage/${page ? `?_limit=7&_page=${page}` : ''}`, {
+      headers: {
+        'Access-Control-Expose-Headers': 'X-Total-Count',
+      },
+    });
   }
 
   static async getCar(id: number, callback: (car: CarType) => void) {
@@ -109,7 +106,7 @@ class API {
     });
   }
 
-  static async getWinners(): Promise<Response> {
+  static async getWinners(sort?: 'ASC' | 'DESC' | null): Promise<Response> {
     return fetch(`${this.host}winners/`, {
       method: 'GET',
     });

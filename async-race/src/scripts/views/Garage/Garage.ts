@@ -1,7 +1,8 @@
 import Component from '../../../core/component/Component';
+import createSvg from '../../../core/createSVG/createSvg';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import API from '../../API/Api';
-import { CarType } from '../../API/types';
+import { CarType, EngineSettingsType } from '../../API/types';
 import Button from '../../components/Button/Button';
 import Car from '../../components/Car/Car';
 import Form from '../../components/Form/Form';
@@ -15,36 +16,47 @@ class Garage extends Component {
     this.state = {
       cars: [],
       raceMode: false,
+      page: 1,
+      totalCarCount: 1,
     };
   }
 
-  getCars() {
-    API.getCars()
-      .then((res) => res.json())
-      .then((res: CarType[]) => {
+  getCars(page: number) {
+    API.getCars(page)
+      .then((res) => {
         this.setState({
           ...this.state,
-          cars: res,
+          totalCarCount: +res.headers.get('X-Total-Count'),
         });
+        return res.json();
+      })
+      .then((res: CarType[]) => {
+        if (res) {
+          this.setState({
+            ...this.state,
+            cars: res,
+            page,
+          });
+        }
       });
   }
 
   updateCar(name: string, color: string, id: number) {
     API.updateCar(id, { name, color }, () => {
-      this.getCars();
+      this.getCars(this.state.page);
     });
   }
 
   deleteCar(id: number) {
     API.removeCar(id).then(() => {
       API.removeWinner(id).then(() => {
-        this.getCars();
+        this.getCars(this.state.page);
       });
     });
   }
 
   onMount(): void {
-    this.getCars();
+    this.getCars(1);
   }
 
   render() {
@@ -114,7 +126,7 @@ class Garage extends Component {
           buttonTitle: 'create',
           disabled: this.state.raceMode,
           getCars: () => {
-            this.getCars();
+            this.getCars(this.state.page);
           },
         }).render(),
         new Button({
@@ -136,14 +148,17 @@ class Garage extends Component {
           },
         }).render(),
         new VirtualNode('div', '', [
-          new VirtualNode('h3', '', [`GARAGE(${this.state.cars.length})`]),
+          new VirtualNode('h3', '', [
+            `GARAGE(${this.state.totalCarCount})`,
+            `  page #${this.state.page}`,
+          ]),
         ]),
         ...this.state.cars.map((car) => new Car({
           name: car.name,
           color: car.color,
           id: car.id,
           getCars: () => {
-            this.getCars();
+            this.getCars(this.state.page);
           },
           deleteCar: (id: number) => {
             this.deleteCar(id);
@@ -156,6 +171,27 @@ class Garage extends Component {
           },
           raceMode: this.state.raceMode,
         }).render()),
+        new VirtualNode('div', '', [
+          new Button({
+            title: 'prev page',
+            color: 'green',
+            size: 'small',
+            disabled: this.state.page === 1 || this.state.raceMode,
+            event: () => {
+              this.getCars(this.state.page - 1);
+            },
+          }).render(),
+          new Button({
+            title: 'next page',
+            color: 'green',
+            size: 'small',
+            disabled:
+              this.state.page === Math.ceil(this.state.totalCarCount / 7) || this.state.raceMode,
+            event: () => {
+              this.getCars(this.state.page + 1);
+            },
+          }).render(),
+        ]),
       ]),
     ]);
     if (!this.element) this.element = element;
