@@ -49,14 +49,16 @@ class API {
     });
   }
 
-  static async removeCar(id: number, callback: () => void) {
-    await fetch(`${this.host}garage/${id}`, {
+  static async removeCar(id: number) {
+    return fetch(`${this.host}garage/${id}`, {
       method: 'DELETE',
-    })
-      .then(() => callback())
-      .catch(() => {
-        throw new Error();
-      });
+    });
+  }
+
+  static async removeWinner(id: number) {
+    return fetch(`${this.host}winners/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   static async updateCar(id: number, car: Omit<CarType, 'id'>, callback: () => void) {

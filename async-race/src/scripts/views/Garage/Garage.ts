@@ -33,8 +33,10 @@ class Garage extends Component {
   }
 
   deleteCar(id: number) {
-    API.removeCar(id, () => {
-      this.getCars();
+    API.removeCar(id).then(() => {
+      API.removeWinner(id).then(() => {
+        this.getCars();
+      });
     });
   }
 
@@ -131,6 +133,7 @@ class Garage extends Component {
             stopRace();
           },
         }).render(),
+        new VirtualNode('div', '', [`GARAGE(${this.state.cars.length})`]),
         ...this.state.cars.map((car) => new Car({
           name: car.name,
           color: car.color,
@@ -145,7 +148,6 @@ class Garage extends Component {
             this.updateCar(name, color, id);
           },
           setWinner: (id: number, time: number) => {
-            // console.log(winner);
             setWinner(id, time);
           },
           raceMode: this.state.raceMode,
