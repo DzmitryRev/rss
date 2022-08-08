@@ -34,18 +34,6 @@ class Car extends Component<CarPropsType> {
     return input;
   }
 
-  updateCar(name: string, color: string): void {
-    API.updateCar(this.props.id, { name, color }, () => {
-      this.props.getCars();
-    });
-  }
-
-  deleteCar(): void {
-    API.removeCar(this.props.id, () => {
-      this.props.getCars();
-    });
-  }
-
   createSvg(color: string): SVGSVGElement {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     const useit = document.createElementNS('http://www.w3.org/2000/svg', 'use');
@@ -84,7 +72,7 @@ class Car extends Component<CarPropsType> {
                   });
                   return;
                 }
-                this.updateCar(input.element.value, color.element.value);
+                this.props.updateCar(input.element.value, color.element.value, this.props.id);
               }
               return;
             }
@@ -112,7 +100,7 @@ class Car extends Component<CarPropsType> {
           color: 'red',
           size: 'small',
           event: () => {
-            this.deleteCar();
+            this.props.deleteCar(this.props.id);
           },
         }).render(),
       ]),

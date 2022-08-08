@@ -24,6 +24,18 @@ class Garage extends Component {
     });
   }
 
+  updateCar(name: string, color: string, id: number) {
+    API.updateCar(id, { name, color }, () => {
+      this.getCars();
+    });
+  }
+
+  deleteCar(id: number) {
+    API.removeCar(id, () => {
+      this.getCars();
+    });
+  }
+
   onMount(): void {
     this.getCars();
   }
@@ -43,6 +55,12 @@ class Garage extends Component {
           id: car.id,
           getCars: () => {
             this.getCars();
+          },
+          deleteCar: (id: number) => {
+            this.deleteCar(id);
+          },
+          updateCar: (name: string, color: string, id: number) => {
+            this.updateCar(name, color, id);
           },
         }).render()),
       ]),
