@@ -5,6 +5,8 @@ import Button from '../Button/Button';
 import { CarPropsType } from './Car.types';
 import './Car.css';
 import CarController from '../CarController/CarContaroller';
+import API from '../../API/Api';
+import { EngineSettingsType } from '../../API/types';
 
 interface ICarState {
   editMode: boolean;
@@ -82,7 +84,41 @@ class Car extends Component<CarPropsType> {
     );
     const svg = this.createSvg(this.props.color);
 
-    const [run, stop, moveToStart] = this.createAnimation(5000, svg);
+    let animation: (() => void)[];
+    const run = () => {
+      API.startEngine(this.props.id)
+        .then((res) => res.json())
+        .then((res: EngineSettingsType) => {
+          animation = this.createAnimation(res.distance / res.velocity, svg);
+          animation[0]();
+          const time = performance.now();
+          API.driveMode(this.props.id)
+            .then((driveModeRes) => {
+              if (!driveModeRes.ok) {
+                throw new Error();
+              } else if (this.props.raceMode) {
+                this.props.setWinner(this.props.id, performance.now() - time);
+              }
+            })
+            .catch(() => {
+              animation[1]();
+            });
+        });
+    };
+
+    const stop = (cb: () => void) => {
+      API.stopEngine(this.props.id)
+        .then((res) => res)
+        .then(() => {
+          animation[1]();
+          animation[2]();
+          cb();
+        });
+    };
+
+    if (this.props.raceMode) {
+      run();
+    }
 
     const updateCar = () => {
       if (this.state.editMode) {
@@ -122,10 +158,12 @@ class Car extends Component<CarPropsType> {
         runCar: () => {
           run();
         },
-        stopCar: () => {
-          stop();
-          moveToStart();
+        stopCar: (cb: () => void) => {
+          stop(() => {
+            cb();
+          });
         },
+        raceMode: this.props.raceMode,
       }).render(),
       new VirtualNode('div', 'car-container', [
         this.state.editMode ? input : new VirtualNode('span', 'car-name', [this.props.name]),

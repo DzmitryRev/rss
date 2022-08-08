@@ -9,12 +9,13 @@ type CarControllerPropsType = {
   deleteCar(): void;
   cancelEdit(): void;
   runCar(): void;
-  stopCar(): void;
+  stopCar(cb: () => void): void;
+  raceMode: boolean;
 };
 
 class CarController extends Component<CarControllerPropsType> {
   state: {
-    driveMode: boolean
+    driveMode: boolean;
   };
 
   constructor(props: CarControllerPropsType) {
@@ -30,7 +31,7 @@ class CarController extends Component<CarControllerPropsType> {
         title: this.props.editMode ? 'save' : 'edit',
         color: 'green',
         size: 'small',
-        // disabled: this.state.raceMode || this.state.engineOnMode,
+        disabled: this.props.raceMode,
         event: () => {
           this.props.updateCar();
         },
@@ -49,7 +50,7 @@ class CarController extends Component<CarControllerPropsType> {
         title: 'delete',
         color: 'red',
         size: 'small',
-        // disabled: this.state.raceMode || this.state.engineOnMode,
+        disabled: this.props.raceMode,
         event: () => {
           this.props.deleteCar();
         },
@@ -58,7 +59,7 @@ class CarController extends Component<CarControllerPropsType> {
         title: 'D',
         color: 'blue',
         size: 'small',
-        disabled: this.state.driveMode,
+        disabled: this.state.driveMode || this.props.raceMode,
         event: () => {
           if (this.props.editMode) return;
           this.setState({
@@ -72,19 +73,14 @@ class CarController extends Component<CarControllerPropsType> {
         title: 'P',
         color: 'green',
         size: 'small',
-        disabled: !this.state.driveMode,
+        disabled: !this.state.driveMode || this.props.raceMode,
         event: () => {
-          //   this.props.stopEngine(() => {
-          //     this.setState({
-          //       ...this.state,
-          //       engineOnMode: true,
-          //     });
-          //   });
-          this.setState({
-            ...this.state,
-            driveMode: false,
+          this.props.stopCar(() => {
+            this.setState({
+              ...this.state,
+              driveMode: false,
+            });
           });
-          this.props.stopCar();
         },
       }).render(),
     ]);

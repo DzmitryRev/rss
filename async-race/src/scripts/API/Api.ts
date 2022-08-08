@@ -3,17 +3,6 @@ import { CarType, EngineSettingsType } from './types';
 class API {
   static host = 'http://localhost:3000/';
 
-  static async getCarsCount(callback: (carsLength: number) => void) {
-    await fetch(`${this.host}garage/`)
-      .then((res) => res.json())
-      .then((res: CarType[]) => {
-        callback(res.length);
-      })
-      .catch(() => {
-        throw new Error();
-      });
-  }
-
   static async getCars(page: number, callback: (cars: CarType[]) => void) {
     await fetch(`${this.host}garage/?_limit=7&_page=${page}`)
       .then((res) => res.json())
@@ -50,6 +39,16 @@ class API {
       });
   }
 
+  static async createWinner(winner: { id: number; time: number; wins: number }) {
+    return fetch(`${this.host}winners/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(winner),
+    });
+  }
+
   static async removeCar(id: number, callback: () => void) {
     await fetch(`${this.host}garage/${id}`, {
       method: 'DELETE',
@@ -74,17 +73,44 @@ class API {
       });
   }
 
-  static async startEngine(id: number, callback: (engineSettings: EngineSettingsType) => void) {
-    await fetch(`${this.host}engine/${id}/?status='started'`, {
+  static async updateWinner(
+    id: number,
+    winner: {
+      time: number;
+      wins: number;
+    },
+  ) {
+    return fetch(`${this.host}winners/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(winner),
+    });
+  }
+
+  static async startEngine(id: number) {
+    return fetch(`${this.host}engine/?id=${id}&status=started`, {
       method: 'PATCH',
-    })
-      .then((res) => res.json())
-      .then((res: EngineSettingsType) => {
-        callback(res);
-      })
-      .catch(() => {
-        throw new Error();
-      });
+    });
+  }
+
+  static async driveMode(id: number) {
+    return fetch(`${this.host}engine/?id=${id}&status=drive`, {
+      method: 'PATCH',
+    });
+  }
+
+  static async stopEngine(id: number): Promise<Response> {
+    return fetch(`${this.host}engine/?id=${id}&status=stopped`, {
+      method: 'PATCH',
+    });
+  }
+
+  static async getWinners(): Promise<Response> {
+    return fetch(`${this.host}winners/`, {
+      method: 'GET',
+    });
   }
 }
 
