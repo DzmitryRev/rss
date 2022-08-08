@@ -49,7 +49,6 @@ class Winners extends Component<WinnersPropsType> {
   }
 
   render() {
-    console.log('aaa');
     this.props.bindGarageToWinners(this.getWinners.bind(this));
     const element = new VirtualNode('div', '', [
       new VirtualNode('h3', '', ['WINNERS']),

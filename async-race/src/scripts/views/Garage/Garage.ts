@@ -1,8 +1,7 @@
 import Component from '../../../core/component/Component';
-import createSvg from '../../../core/createSVG/createSvg';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import API from '../../API/Api';
-import { CarType, EngineSettingsType } from '../../API/types';
+import { CarType } from '../../API/types';
 import Button from '../../components/Button/Button';
 import Car from '../../components/Car/Car';
 import Form from '../../components/Form/Form';

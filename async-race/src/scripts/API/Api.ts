@@ -1,4 +1,4 @@
-import { CarType, EngineSettingsType } from './types';
+import { CarType } from './types';
 
 class API {
   static host = 'http://localhost:3000/';
@@ -106,7 +106,7 @@ class API {
     });
   }
 
-  static async getWinners(sort?: 'ASC' | 'DESC' | null): Promise<Response> {
+  static async getWinners(): Promise<Response> {
     return fetch(`${this.host}winners/`, {
       method: 'GET',
     });
