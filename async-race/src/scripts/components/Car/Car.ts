@@ -6,6 +6,7 @@ import './Car.css';
 import CarController from '../CarController/CarContaroller';
 import API from '../../API/Api';
 import { EngineSettingsType } from '../../API/types';
+import createSvg from '../../../core/createSVG/createSvg';
 
 interface ICarState {
   editMode: boolean;
@@ -33,17 +34,6 @@ class Car extends Component<CarPropsType> {
     input.element.minLength = 2;
     input.element.maxLength = 20;
     return input;
-  }
-
-  createSvg(color: string): SVGSVGElement {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    const useit = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-    useit.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', './assets/car.svg#svg2');
-    svg.style.fill = color;
-    svg.insertAdjacentElement('beforeend', useit);
-    svg.style.height = '40px';
-    svg.style.width = '60px';
-    return svg;
   }
 
   createAnimation(time: number, svg: SVGSVGElement): [() => void, () => void, () => void] {
@@ -81,9 +71,10 @@ class Car extends Component<CarPropsType> {
       'color',
       'color-input small small-color-input',
     );
-    const svg = this.createSvg(this.props.color);
+    const svg = createSvg(this.props.color);
 
     let animation: (() => void)[];
+
     const run = () => {
       API.startEngine(this.props.id)
         .then((res) => res.json())
@@ -93,11 +84,12 @@ class Car extends Component<CarPropsType> {
           const time = performance.now();
           API.driveMode(this.props.id).then((driveModeRes) => {
             if (!driveModeRes.ok) {
-              console.log('Engine broke');
-              animation[1]();
+              throw new Error('ENGINE BROKE!');
             } else if (this.props.raceMode) {
               this.props.setWinner(this.props.id, performance.now() - time);
             }
+          }).catch(() => {
+            animation[1]();
           });
         });
     };

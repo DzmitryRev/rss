@@ -1,4 +1,5 @@
 import Component from '../../../core/component/Component';
+import createSvg from '../../../core/createSVG/createSvg';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import API from '../../API/Api';
 import { CarType } from '../../API/types';
@@ -69,8 +70,12 @@ class Winners extends Component<WinnersPropsType> {
         ...this.state.winners.map(
           (item) => new VirtualNode('tr', '', [
             new VirtualNode('td', '', [`${item.id}`]),
-            new VirtualNode('td', '', [`${this.findCar(item.id) ? this.findCar(item.id).color : ''}`]),
-            new VirtualNode('td', '', [`${this.findCar(item.id) ? this.findCar(item.id).name : ''}`]),
+            new VirtualNode('td', '', [
+              this.findCar(item.id) ? createSvg(this.findCar(item.id).color) : '',
+            ]),
+            new VirtualNode('td', '', [
+              `${this.findCar(item.id) ? this.findCar(item.id).name : ''}`,
+            ]),
             new VirtualNode('td', '', [`${item.wins}`]),
             new VirtualNode('td', '', [`${item.time}`]),
           ]),

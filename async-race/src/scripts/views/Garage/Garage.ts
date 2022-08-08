@@ -99,9 +99,11 @@ class Garage extends Component {
     };
     const stopRace = () => {
       if (winner) {
-        this.setState({
-          ...this.state,
-          raceMode: false,
+        Promise.all(this.state.cars.map((car) => API.stopEngine(car.id))).then(() => {
+          this.setState({
+            ...this.state,
+            raceMode: false,
+          });
         });
       }
     };
