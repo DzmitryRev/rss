@@ -1,16 +1,11 @@
 /* eslint-disable class-methods-use-this */
 import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
-import { CarPropsType } from './Car.types';
-import './Car.css';
-import CarController from '../CarController/CarContaroller';
-import API from '../../API/Api';
-import { EngineSettingsType } from '../../API/types';
-import createSvg from '../../../core/createSVG/createSvg';
 
-interface ICarState {
-  editMode: boolean;
-}
+import CarButtonsSection from '../CarButtonsSection/CarButtonsSection';
+
+import { CarPropsType, ICarState } from './Car.types';
+import './Car.css';
 
 class Car extends Component<CarPropsType> {
   state: ICarState;
@@ -36,77 +31,13 @@ class Car extends Component<CarPropsType> {
     return input;
   }
 
-  createAnimation(time: number, svg: SVGSVGElement): [() => void, () => void, () => void] {
-    let animationId: number;
-    let start: number | null = null;
-    const svgCar = svg;
-    const animation = (timestamp: number) => {
-      if (!start) start = timestamp;
-      const progress = timestamp - start;
-      svgCar.style.transform = `translateX(${Math.min(
-        ((svgCar.parentElement.clientWidth - 200) / time) * progress,
-        svgCar.parentElement.clientWidth - 200,
-      )}px)`;
-      if (progress < time) {
-        animationId = requestAnimationFrame(animation);
-      }
-    };
-    const run = () => {
-      animationId = requestAnimationFrame(animation);
-    };
-    const stop = async () => {
-      cancelAnimationFrame(animationId);
-      start = null;
-    };
-    const moveCarToStart = () => {
-      svgCar.style.transform = 'translateX(0)';
-    };
-    return [run, stop, moveCarToStart];
-  }
-
-  render() {
+  render(): VirtualNode {
     const input = this.createInput(this.props.name, 'text', 'text-input small-text-input');
     const color = this.createInput(
       this.props.color,
       'color',
       'color-input small small-color-input',
     );
-    const svg = createSvg(this.props.color);
-
-    let animation: (() => void)[];
-
-    const run = () => {
-      API.startEngine(this.props.id)
-        .then((res) => res.json())
-        .then((res: EngineSettingsType) => {
-          animation = this.createAnimation(res.distance / res.velocity, svg);
-          animation[0]();
-          const time = performance.now();
-          API.driveMode(this.props.id).then((driveModeRes) => {
-            if (!driveModeRes.ok) {
-              throw new Error('ENGINE BROKE!');
-            } else if (this.props.raceMode) {
-              this.props.setWinner(this.props.id, performance.now() - time);
-            }
-          }).catch(() => {
-            animation[1]();
-          });
-        });
-    };
-
-    const stop = (cb: () => void) => {
-      API.stopEngine(this.props.id)
-        .then((res) => res)
-        .then(() => {
-          animation[1]();
-          animation[2]();
-          cb();
-        });
-    };
-
-    if (this.props.raceMode) {
-      run();
-    }
 
     const updateCar = () => {
       if (this.state.editMode) {
@@ -129,7 +60,7 @@ class Car extends Component<CarPropsType> {
     };
 
     const element = new VirtualNode('div', 'car', [
-      new CarController({
+      new CarButtonsSection({
         editMode: this.state.editMode,
         updateCar: () => {
           updateCar();
@@ -143,19 +74,13 @@ class Car extends Component<CarPropsType> {
             editMode: false,
           });
         },
-        runCar: () => {
-          run();
-        },
-        stopCar: (cb: () => void) => {
-          stop(() => {
-            cb();
-          });
-        },
+        startCar: this.props.startCar,
+        stopCar: this.props.stopCar,
         raceMode: this.props.raceMode,
       }).render(),
       new VirtualNode('div', 'car-container', [
         this.state.editMode ? input : new VirtualNode('span', 'car-name', [this.props.name]),
-        this.state.editMode ? color : svg,
+        this.state.editMode ? color : this.props.svg,
       ]),
     ]);
     if (!this.element) this.element = element;

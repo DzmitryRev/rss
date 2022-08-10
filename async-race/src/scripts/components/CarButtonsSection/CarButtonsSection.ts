@@ -2,36 +2,26 @@
 import Component from '../../../core/component/Component';
 import VirtualNode from '../../../core/virtual-node/VirtualNode';
 import Button from '../Button/Button';
+import { CarControllerPropsType, ICarState } from './CarButtonsSection.types';
 
-type CarControllerPropsType = {
-  editMode: boolean;
-  updateCar(): void;
-  deleteCar(): void;
-  cancelEdit(): void;
-  runCar(): void;
-  stopCar(cb: () => void): void;
-  raceMode: boolean;
-};
-
-class CarController extends Component<CarControllerPropsType> {
-  state: {
-    driveMode: boolean;
-  };
+class CarButtonsSection extends Component<CarControllerPropsType> {
+  state: ICarState;
 
   constructor(props: CarControllerPropsType) {
     super(props);
     this.state = {
       driveMode: false,
+      buttonStopRace: true,
     };
   }
 
-  render() {
+  render(): VirtualNode {
     const element = new VirtualNode('div', '', [
       new Button({
         title: this.props.editMode ? 'save' : 'edit',
         color: 'green',
         size: 'small',
-        disabled: this.props.raceMode,
+        disabled: this.state.driveMode || this.props.raceMode,
         event: () => {
           this.props.updateCar();
         },
@@ -50,7 +40,7 @@ class CarController extends Component<CarControllerPropsType> {
         title: 'delete',
         color: 'red',
         size: 'small',
-        disabled: this.props.raceMode,
+        disabled: this.state.driveMode || this.props.raceMode,
         event: () => {
           this.props.deleteCar();
         },
@@ -59,26 +49,32 @@ class CarController extends Component<CarControllerPropsType> {
         title: 'D',
         color: 'blue',
         size: 'small',
-        disabled: this.state.driveMode || this.props.raceMode,
+        disabled: this.props.editMode || this.state.driveMode || this.props.raceMode,
         event: () => {
           if (this.props.editMode) return;
           this.setState({
             ...this.state,
             driveMode: true,
           });
-          this.props.runCar();
+          this.props.startCar().then(() => {
+            this.setState({
+              ...this.state,
+              buttonStopRace: false,
+            });
+          });
         },
       }).render(),
       new Button({
         title: 'P',
         color: 'green',
         size: 'small',
-        disabled: !this.state.driveMode || this.props.raceMode,
+        disabled: this.props.editMode || this.state.buttonStopRace || this.props.raceMode,
         event: () => {
-          this.props.stopCar(() => {
+          this.props.stopCar().then(() => {
             this.setState({
               ...this.state,
               driveMode: false,
+              buttonStopRace: true,
             });
           });
         },
@@ -89,4 +85,4 @@ class CarController extends Component<CarControllerPropsType> {
   }
 }
 
-export default CarController;
+export default CarButtonsSection;
