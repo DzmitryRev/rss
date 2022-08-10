@@ -33,7 +33,7 @@ class Garage extends Component {
       .then((res) => {
         this.setState({
           ...this.state,
-          totalCarCount: +res.headers.get('X-Total-Count'),
+          totalCars: +res.headers.get('X-Total-Count'),
         });
         return res.json();
       })
@@ -53,7 +53,7 @@ class Garage extends Component {
           this.setState({
             ...this.state,
             cars: newCar,
-            page,
+            currentPage: page,
           });
         }
       });
@@ -120,7 +120,7 @@ class Garage extends Component {
     });
   }
 
-  deleteCar(id: number): void {
+  deleteCar(id: number) {
     API.removeCar(id).then(() => {
       API.removeWinner(id).then(() => {
         this.getCars(this.state.currentPage);
